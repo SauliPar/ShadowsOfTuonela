@@ -1,0 +1,9 @@
+/*
+/*/
+!.gitignore
+!.gitattributes
+!/Assets/
+!/ProjectSettings/
+!/Packages
+/Assets/Photon/Fusion/Resources/PhotonAppSettings.asset
+/Assets/Photon/Fusion/Resources/Oispakaljaa.txt
