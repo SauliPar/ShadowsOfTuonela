@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 7715429116478913268}
   - component: {fileID: 4782971595610692083}
   - component: {fileID: 5866972591979287935}
-  - component: {fileID: 571411790328480253}
   - component: {fileID: 5929583097301650141}
   m_Layer: 0
   m_Name: PlayerCharacter
@@ -70,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 846609e7289284449bcb70175cd8a9e9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,19 +174,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &571411790328480253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032383306573747423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b070d415615d5048ba116e98157cdd0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerPrefab: {fileID: 1032383306573747423}
 --- !u!114 &5929583097301650141
 MonoBehaviour:
   m_ObjectHideFlags: 0
