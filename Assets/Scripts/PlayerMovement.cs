@@ -1,4 +1,5 @@
 using Fusion;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class PlayerMovement : NetworkBehaviour
@@ -19,8 +20,9 @@ public class PlayerMovement : NetworkBehaviour
     {
         if (HasStateAuthority)
         {
-            Camera = Camera.main;
-            Camera.GetComponent<FirstPersonCamera>().Target = transform;
+            var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
+            cinemachineCamera.LookAt = transform;
+            cinemachineCamera.Follow = transform;
         }
     }
     private void Awake()
