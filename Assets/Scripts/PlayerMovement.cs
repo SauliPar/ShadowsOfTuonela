@@ -1,11 +1,11 @@
+using System;
 using Fusion;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerMovement : NetworkBehaviour
 {
-    public Camera Camera;
-    
     private Vector3 _velocity;
     private bool _jumpPressed;
 
@@ -15,6 +15,9 @@ public class PlayerMovement : NetworkBehaviour
 
     public float JumpForce = 5f;
     public float GravityValue = -9.81f;
+
+    public NavMeshAgent Agent;
+    private Vector3 _movePosition;
 
     public override void Spawned()
     {
@@ -30,41 +33,45 @@ public class PlayerMovement : NetworkBehaviour
         _controller = GetComponent<CharacterController>();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetButtonDown("Jump"))
+        if (HasStateAuthority == false)
         {
-            _jumpPressed = true;
+            return;
+        }
+        
+        if (Input.GetMouseButtonDown(0))
+        {
+            // Create a ray from the mouse cursor on screen in the direction of the camera
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
+            // Check if the ray hits anything in the game world
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Print the position in world space
+                Debug.Log("World position: " + hit.point);
+                _movePosition = hit.point;        
+                MoveCharacter();
+            }
         }
     }
 
     public override void FixedUpdateNetwork()
     {
         // Only move own player and not every other player. Each player controls its own player object.
-        if (HasStateAuthority == false)
-        {
-            return;
-        }
+       
+        
+        // Check for left mouse button press
+ 
+    }
 
-        if (_controller.isGrounded)
-        {
-            _velocity = new Vector3(0, -1, 0);
-        }
+    private void MoveCharacter()
+    {
+        // Vector3 moveValue = clickPosition * Runner.DeltaTime * PlayerSpeed;
 
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * Runner.DeltaTime * PlayerSpeed;
+        Agent.SetDestination(_movePosition);
 
-        _velocity.y += GravityValue * Runner.DeltaTime;
-        if (_jumpPressed && _controller.isGrounded)
-        {
-            _velocity.y += JumpForce;
-        }
-        _controller.Move(move + _velocity * Runner.DeltaTime);
-
-        if (move != Vector3.zero)
-        {
-            gameObject.transform.forward = move;
-        }
-
-        _jumpPressed = false;
+        // _controller.Move(moveValue);
     }
 }
