@@ -871,7 +871,8 @@ PlayerSettings:
   metroDefaultTileSize: 1
   metroTileForegroundText: 2
   metroTileBackgroundColor: {r: 0.13333334, g: 0.17254902, b: 0.21568628, a: 0}
-  metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628, a: 1}
+  metroSplashScreenBackgroundColor: {r: 0.12941177, g: 0.17254902, b: 0.21568628,
+    a: 1}
   metroSplashScreenUseBackgroundColor: 0
   syncCapabilities: 0
   platformCapabilities: {}
@@ -930,11 +931,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: ee9e7103-e706-40e8-b401-73d5c24e9d86
+  cloudProjectId: 38e5e095-1acf-4277-82a1-58e493cea3d4
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Shadows Of Tuonela
-  organizationId: empires-sauli
+  projectName: Shadows of Tuonela
+  organizationId: bad-ass-games
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
