@@ -8,7 +8,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
     [SerializeField] private Button endGameButton;
 
     private readonly string _gameSceneString = "GameScene";
-    private void Awake()
+    private void Start()
     {
         startGameButton.onClick.AddListener(StartGame);
         endGameButton.onClick.AddListener(EndGame);
