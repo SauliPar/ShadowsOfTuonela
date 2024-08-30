@@ -11,6 +11,8 @@ public class PlayerController : NetworkBehaviour
 
     public void Start()
     {
+        if (!IsOwner) return;
+
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
         cinemachineCamera.LookAt = transform;
         cinemachineCamera.Follow = transform;
@@ -18,10 +20,7 @@ public class PlayerController : NetworkBehaviour
     
     private void Update()
     {
-        // if (HasStateAuthority == false)
-        // {
-        //     return;
-        // }
+        if (!IsOwner) return;
         
         if (Input.GetMouseButtonDown(0))
         {
