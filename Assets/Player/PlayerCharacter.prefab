@@ -227,6 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Agent: {fileID: 5574996073812775374}
+  playerParentTransform: {fileID: 4616035790092633369}
+  animator: {fileID: 2264063771217579109}
 --- !u!114 &538069785490196717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,14 +244,14 @@ MonoBehaviour:
   AuthorityMode: 1
   UseUnreliableDeltas: 0
   SyncPositionX: 1
-  SyncPositionY: 1
+  SyncPositionY: 0
   SyncPositionZ: 1
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -333,6 +335,12 @@ PrefabInstance:
 --- !u!4 &1252226001002511942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5628018141983903106, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
+    type: 3}
+  m_PrefabInstance: {fileID: 6879934833928483780}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2264063771217579109 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4616719885696106401, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
     type: 3}
   m_PrefabInstance: {fileID: 6879934833928483780}
   m_PrefabAsset: {fileID: 0}

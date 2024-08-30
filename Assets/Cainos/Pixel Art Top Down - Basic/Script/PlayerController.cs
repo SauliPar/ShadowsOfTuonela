@@ -6,6 +6,8 @@ using UnityEngine.AI;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField] private NavMeshAgent Agent;
+    [SerializeField] private Animator animator;
+    
     
     private Vector3 _movePosition;
 
@@ -16,6 +18,9 @@ public class PlayerController : NetworkBehaviour
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
         cinemachineCamera.LookAt = transform;
         cinemachineCamera.Follow = transform;
+        
+        Agent.updateRotation = false;
+        Agent.angularSpeed = 0;
     }
     
     private void Update()
@@ -37,8 +42,45 @@ public class PlayerController : NetworkBehaviour
                 MoveCharacter();
             }
         }
+
+        UpdateAnimator();
     }
-    
+
+    private void UpdateAnimator()
+    {
+        Vector3 desiredVelocity = Agent.desiredVelocity;
+        
+        // check if we're going vertical
+        if (Mathf.Abs(desiredVelocity.z) > Mathf.Abs(desiredVelocity.x))
+        {
+            // going north xd
+            if (desiredVelocity.z > desiredVelocity.x)
+            {
+                animator.SetInteger("Direction", 1);
+            }
+
+            // going south xd
+            if (desiredVelocity.z < desiredVelocity.x)
+            {
+                animator.SetInteger("Direction", 0);
+            }
+        }
+        else
+        {
+            // going east xd
+            if (desiredVelocity.x > desiredVelocity.z)
+            {
+                animator.SetInteger("Direction", 2);
+            }
+
+            // going west xd
+            if (desiredVelocity.x < desiredVelocity.z)
+            {
+                animator.SetInteger("Direction", 3);
+            }
+        }
+    }
+
     private void MoveCharacter()
     {
         Agent.SetDestination(_movePosition);
