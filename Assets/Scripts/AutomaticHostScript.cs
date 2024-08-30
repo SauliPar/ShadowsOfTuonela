@@ -6,20 +6,22 @@ public class AutomaticHostScript : MonoBehaviour
 {
     private void Start()
     {
+        // InvokeRepeating(nameof(StartHost), 2f, 2f);
+    }
+
+    public void StartHost()
+    {
         if (NetworkManager.Singleton != null)
         {
-            StartHost();
-        }
-        else
-        {
-            Debug.Log("Networkmanager wasn't ready, trying again in 2 seconds");
-            InvokeRepeating(nameof(StartHost), 2f, 2f);
+            NetworkManager.Singleton.StartHost();
         }
     }
 
-    private void StartHost()
+    public void StartClient()
     {
-        NetworkManager.Singleton.StartHost();
-        CancelInvoke();
+        if (NetworkManager.Singleton != null)
+        {
+            NetworkManager.Singleton.StartClient();
+        }
     }
 }
