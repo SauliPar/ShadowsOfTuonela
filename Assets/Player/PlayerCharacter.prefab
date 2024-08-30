@@ -12,12 +12,10 @@ GameObject:
   - component: {fileID: 3615441113540305919}
   - component: {fileID: 3890452083281870053}
   - component: {fileID: 8092520422278155231}
-  - component: {fileID: 7715429116478913268}
-  - component: {fileID: 4782971595610692083}
   - component: {fileID: 5866972591979287935}
-  - component: {fileID: 5929583097301650141}
   - component: {fileID: 1593785812216092936}
   - component: {fileID: 5574996073812775374}
+  - component: {fileID: 8511636616815181730}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -117,41 +115,6 @@ CapsuleCollider:
   m_Height: 1.36
   m_Direction: 1
   m_Center: {x: 0, y: -0.32, z: 0}
---- !u!114 &7715429116478913268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032383306573747423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 914702362
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 4782971595610692083}
-  - {fileID: 5929583097301650141}
---- !u!114 &4782971595610692083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032383306573747423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
 --- !u!143 &5866972591979287935
 CharacterController:
   m_ObjectHideFlags: 0
@@ -177,22 +140,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5929583097301650141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032383306573747423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a2f3dc97ba8774ba9ee13cf0caa2c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerSpeed: 2
-  JumpForce: 5
-  GravityValue: -9.81
-  Agent: {fileID: 5574996073812775374}
 --- !u!54 &1593785812216092936
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -242,6 +189,29 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &8511636616815181730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032383306573747423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 0
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1001 &6879934833928483780
 PrefabInstance:
   m_ObjectHideFlags: 0
