@@ -18,7 +18,7 @@ MonoBehaviour:
   m_PlatformBuildProfile:
     rid: 1473493582141718528
   m_Scenes:
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/Scenes/MainMenuScene.unity
   - m_enabled: 1
     m_path: Assets/Scenes/GameScene.unity
@@ -31,7 +31,7 @@ MonoBehaviour:
     - rid: 1473493582141718528
       type: {class: LinuxPlatformSettings, ns: UnityEditor.LinuxStandalone, asm: UnityEditor.LinuxStandalone.Extensions}
       data:
-        m_Development: 1
+        m_Development: 0
         m_ConnectProfiler: 0
         m_BuildWithDeepProfilingSupport: 0
         m_AllowDebugging: 0
