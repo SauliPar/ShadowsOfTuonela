@@ -60,7 +60,7 @@ public class MultiplayerManager : MonoBehaviour
             {
                 _serverQueryHandler.CurrentPlayers = (ushort)NetworkManager.Singleton.ConnectedClientsIds.Count;
                 
-                Debug.Log("CurrentPlayers are: " + _serverQueryHandler.CurrentPlayers);
+                // Debug.Log("CurrentPlayers are: " + _serverQueryHandler.CurrentPlayers);
 
                 _serverQueryHandler.UpdateServerCheck();
             }

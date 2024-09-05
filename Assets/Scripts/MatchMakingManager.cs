@@ -20,9 +20,29 @@ public class MatchMakingManager : MonoBehaviour
     private bool _isDeallocating = false;
     private bool deallocatingCancellationToken = false;
     
+    private string _serverIp;
+    private ushort _serverPort;
+
     private async void Start()
     {
-        if (Application.platform != RuntimePlatform.LinuxEditor)
+        if (Application.platform == RuntimePlatform.LinuxServer)
+        {
+            while (UnityServices.State == ServicesInitializationState.Uninitialized ||
+                   UnityServices.State == ServicesInitializationState.Initializing)
+            {
+                await Task.Yield();
+            }
+            
+            var config = MultiplayService.Instance.ServerConfig;
+            _serverIp = config.IpAddress;
+            _serverPort = config.Port;
+            
+            _matchmakerService = MatchmakerService.Instance;
+            _payloadAllocation = await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<PayloadAllocation>();
+            _backfillTicketId = _payloadAllocation.BackfillTicketId;
+            Debug.Log("backfillticketid: " + _backfillTicketId);
+        }
+        else
         {
             await UnityServices.InitializeAsync();
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -31,43 +51,36 @@ public class MatchMakingManager : MonoBehaviour
             //
             // await ClientJoin();
         }
-        else
-        {
-            while (UnityServices.State == ServicesInitializationState.Uninitialized ||
-                   UnityServices.State == ServicesInitializationState.Initializing)
-            {
-                await Task.Yield();
-            }
-            
-            _matchmakerService = MatchmakerService.Instance;
-            _payloadAllocation = await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<PayloadAllocation>();
-            _backfillTicketId = _payloadAllocation.BackfillTicketId;
-        }
     }
 
     private async void Update()
     {
         if (Application.platform == RuntimePlatform.LinuxServer)
         {
-            if (NetworkManager.Singleton.ConnectedClientsList.Count != 0 || !_isDeallocating)
+            if (NetworkManager.Singleton.ConnectedClientsList.Count == 0 && !_isDeallocating)
             {
                 _isDeallocating = true;
                 deallocatingCancellationToken = false;
                 Deallocate();
             }
 
-            if (NetworkManager.Singleton.ConnectedClientsList.Count != 0)
+            if (NetworkManager.Singleton.ConnectedClientsList.Count > 0)
             {
                 _isDeallocating = false;
                 deallocatingCancellationToken = true;
             }
 
-            if (_backfillTicketId != null && NetworkManager.Singleton.ConnectedClientsList.Count < 10)
+            if (string.IsNullOrEmpty(_backfillTicketId))
             {
-                BackfillTicket newBackfillTicket =
-                    await MatchmakerService.Instance.ApproveBackfillTicketAsync(_backfillTicketId);
-                _backfillTicketId = newBackfillTicket.Id;
+                _backfillTicketId = await CreateABackfillTicket();
             }
+
+            // if (!string.IsNullOrEmpty(_backfillTicketId) && NetworkManager.Singleton.ConnectedClientsList.Count < 10)
+            // {
+            //     BackfillTicket newBackfillTicket =
+            //         await MatchmakerService.Instance.ApproveBackfillTicketAsync(_backfillTicketId);
+            //     _backfillTicketId = newBackfillTicket.Id;
+            // }
 
             await Task.Delay(1000);
         }
@@ -87,6 +100,7 @@ public class MatchMakingManager : MonoBehaviour
     {
         if (Application.platform == RuntimePlatform.LinuxServer)
         {
+            Debug.Log("ONPLAYERCONNECTED CALLED");
             UpdateBackfillTicket();
         }
     }
@@ -95,6 +109,7 @@ public class MatchMakingManager : MonoBehaviour
     {
         if (Application.platform == RuntimePlatform.LinuxServer)
         {
+            Debug.Log("ONPLAYERDISCONNECTED CALLED");
             UpdateBackfillTicket();
         }
     }
@@ -110,8 +125,15 @@ public class MatchMakingManager : MonoBehaviour
 
         MatchProperties matchProperties = new MatchProperties(null, players, _backfillTicketId);
 
-        await MatchmakerService.Instance.UpdateBackfillTicketAsync(_payloadAllocation.BackfillTicketId,
-            new BackfillTicket(_backfillTicketId, properties: new BackfillTicketProperties(matchProperties)));
+        if (!string.IsNullOrEmpty(_backfillTicketId))
+        {
+            await MatchmakerService.Instance.UpdateBackfillTicketAsync(_payloadAllocation.BackfillTicketId,
+                new BackfillTicket(_backfillTicketId, properties: new BackfillTicketProperties(matchProperties)));
+        }
+        else
+        {
+            Debug.Log("Backfillticketid is empty or null!");
+        }
     }
 
     public async void ClientJoin()
@@ -154,13 +176,12 @@ public class MatchMakingManager : MonoBehaviour
                     Debug.Log("Match found");
                     break;
                 case MultiplayAssignment.StatusOptions.InProgress:
-                    //...
                     Debug.Log("Match in progress");
                     break;
                 case MultiplayAssignment.StatusOptions.Failed:
                     gotAssignment = true;
                     Debug.LogError("Failed to get ticket status. Error: " + assignment.Message);
-                    UpdateBackfillTicket();
+                    StartClient(IpAddresses.IpAddress, IpAddresses.Port);
                     break;
                 case MultiplayAssignment.StatusOptions.Timeout:
                     gotAssignment = true;
@@ -171,6 +192,59 @@ public class MatchMakingManager : MonoBehaviour
             }
 
         } while (!gotAssignment);    
+    }
+
+
+    // private void InitializeBackfillProcedure9000(string assignmentIp, int? assignmentPort)
+    // {
+    //     CreateABackfillTicket(assignmentIp, assignmentPort);
+    // }
+
+    private async Task<string> CreateABackfillTicket()
+    {
+        // var teams = new List<Team>{
+        //     new Team( "Red", "9c8e302e-9cf3-4ad6-a005-b2604e6851e3", new List<string>{ "c9e6857b-a810-488f-bacc-08d18d253b0a"  } ),
+        //     new Team( "Blue", "e2d8f4fd-5db8-4153-bca7-72dfc9b2ac09", new List<string>{ "fe1a52cd-535a-4e34-bd24-d6db489eaa19"  } ),
+        // };
+
+        // Define the Players of the match with their data.
+                var players = new List<Player>
+                {
+                    new Player(
+                        "Player1")
+                        // new Dictionary<string, object>
+                        // {
+                        //     { "Team", "Red" }
+                        // }),
+                    // new Player(
+                    //     "fe1a52cd-535a-4e34-bd24-d6db489eaa19",
+                    //     new Dictionary<string, object>
+                    //     {
+                    //         { "Team", "Blue" }
+                    //     })
+                };
+
+                var matchProperties = new MatchProperties(null, players);
+
+
+                var backfillTicketProperties = new BackfillTicketProperties(matchProperties);
+
+                var connection = $"{_serverIp}:{_serverPort}";
+        // Set options for matchmaking
+                var options = new CreateBackfillTicketOptions("TestQueue", connection, new Dictionary<string, object>(), backfillTicketProperties);
+
+
+        // Create backfill ticket
+                string ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync
+                    (options);
+
+        // Print the created ticket id
+                Debug.Log(ticketId);
+
+                // approve that shit
+                var backfillTicket = await MatchmakerService.Instance.ApproveBackfillTicketAsync(ticketId);
+
+                return backfillTicket.Id;
     }
 
     // private async void CreateABackfillTicket()
@@ -212,6 +286,17 @@ public class MatchMakingManager : MonoBehaviour
     {
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(assignment.Ip, ushort.Parse(assignment.Port.ToString()));
+
+        Debug.LogError("server ip: " + assignment.Ip + ", and port: " + assignment.Port);
+
+        NetworkManager.Singleton.StartClient();
+    }
+    private void StartClient(string ip, string port)
+    {
+        UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+        transport.SetConnectionData(ip, ushort.Parse(port));
+
+        // Debug.LogError("server ip: " + assignment.Ip + ", and port: " + assignment.Port);
 
         NetworkManager.Singleton.StartClient();
     }

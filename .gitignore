@@ -6,3 +6,4 @@
 !/ProjectSettings/
 !/Packages
 /Assets/Photon/Fusion/Resources/PhotonAppSettings.asset
+/Assets/Scripts/IpAddresses.cs
