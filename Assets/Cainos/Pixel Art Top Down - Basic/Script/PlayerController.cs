@@ -10,6 +10,7 @@ public class PlayerController : NetworkBehaviour
     
     
     private Vector3 _movePosition;
+    private bool _menuIsOn;
 
     public void Start()
     {
@@ -26,8 +27,41 @@ public class PlayerController : NetworkBehaviour
     private void Update()
     {
         if (!IsOwner) return;
-        
+
+        CheckMouseButtons();
+
+        UpdateAnimator();
+    }
+
+    private void CheckMouseButtons()
+    {
+        // check left click
         if (Input.GetMouseButtonDown(0))
+        {
+            if (_menuIsOn)
+            {
+                InteractionUIMenu.Instance.HideInteractionUIMenu();
+                _menuIsOn = false;
+            }
+            else
+            {
+                // Create a ray from the mouse cursor on screen in the direction of the camera
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
+                // Check if the ray hits anything in the game world
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    // Print the position in world space
+                    Debug.Log("World position: " + hit.point);
+                    _movePosition = hit.point;        
+                    MoveCharacter();
+                }
+            }
+        }
+        
+        // check right click
+        if (Input.GetMouseButtonDown(1))
         {
             // Create a ray from the mouse cursor on screen in the direction of the camera
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -37,13 +71,12 @@ public class PlayerController : NetworkBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 // Print the position in world space
-                Debug.Log("World position: " + hit.point);
-                _movePosition = hit.point;        
-                MoveCharacter();
+                Debug.Log("Click position: " + hit.point);
+                
+                InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition);
+                _menuIsOn = true;
             }
         }
-
-        UpdateAnimator();
     }
 
     private void UpdateAnimator()

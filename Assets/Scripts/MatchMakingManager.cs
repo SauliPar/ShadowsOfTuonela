@@ -287,7 +287,7 @@ public class MatchMakingManager : MonoBehaviour
         UnityTransport transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
         transport.SetConnectionData(assignment.Ip, ushort.Parse(assignment.Port.ToString()));
 
-        Debug.LogError("server ip: " + assignment.Ip + ", and port: " + assignment.Port);
+        // Debug.LogError("server ip: " + assignment.Ip + ", and port: " + assignment.Port);
 
         NetworkManager.Singleton.StartClient();
     }
