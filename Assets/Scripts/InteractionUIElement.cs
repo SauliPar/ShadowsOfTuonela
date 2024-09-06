@@ -11,13 +11,16 @@ public class InteractionUIElement : MonoBehaviour
     public void InitializeTheElement(string elementText, UnityAction callback)
     {
         text.text = elementText;
-        
-        // if(button != null && callback != null)
-        // {
-            button.onClick.AddListener(() =>
-            {
-                callback.Invoke();
-            });
-        // }
+  
+        button.onClick.AddListener(() =>
+        {
+            callback.Invoke();
+        });
+    }
+
+    public void RemoveElement()
+    {
+        button.onClick.RemoveAllListeners();
+        Destroy(gameObject);
     }
 }

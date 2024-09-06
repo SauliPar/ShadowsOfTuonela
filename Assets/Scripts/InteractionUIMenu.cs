@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InteractionUIMenu : Singleton<InteractionUIMenu>
@@ -7,8 +8,12 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
     public Transform parentContainer;
 
     [SerializeField] private GameObject interactionUIElement;
+    private List<InteractionUIElement> uiElements = new List<InteractionUIElement>();
     public void ShowInteractionUIMenu(Vector2 clickPosition)
     {
+        ClearUIElements();
+        
+
         CanvasGroup.alpha = 1f;
 
         RectTransform.position = clickPosition;
@@ -16,15 +21,30 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         InitializeInteractionUIMenu();
     }
 
+    private void ClearUIElements()
+    {
+        foreach (var uiElement in uiElements)
+        {
+            uiElement.RemoveElement();
+        }
+        
+        uiElements.Clear();
+    }
+
     private void InitializeInteractionUIMenu()
     {
+        string randomWord = "Kalijjaa";
+
         var uiElement = Instantiate(interactionUIElement, parentContainer);
-        uiElement.GetComponent<InteractionUIElement>().InitializeTheElement("Olutta", ButtonPressed);
+        var interactionUIScript = uiElement.GetComponent<InteractionUIElement>();
+        interactionUIScript.InitializeTheElement(randomWord, ButtonPressed);
+        
+        uiElements.Add(interactionUIScript);
     }
 
     public void ButtonPressed()
     {
-        Debug.Log("painoit olutta :D");
+        Debug.Log("painoit nabbia :D");
     }
 
     public void HideInteractionUIMenu()
