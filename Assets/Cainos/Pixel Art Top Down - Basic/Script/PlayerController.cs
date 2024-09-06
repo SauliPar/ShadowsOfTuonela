@@ -52,9 +52,17 @@ public class PlayerController : NetworkBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
-                    // Print the position in world space
-                    // Debug.Log("World position: " + hit.point);
-                    // _movePosition = hit.point;        
+                    // let's see where we hit
+                    if (hit.collider.CompareTag("Player"))
+                    {
+                        // Is the player not us?
+                        if (!hit.transform.GetComponent<NetworkObject>().IsLocalPlayer)
+                        {
+                            StartFight();
+                            return;
+                        }
+                    }
+                    
                     MoveCharacter(hit.point);
                 }
             }
@@ -70,8 +78,20 @@ public class PlayerController : NetworkBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                // Print the position in world space
-                // Debug.Log("Click position: " + hit.point);
+                // let's see where we hit
+                if (hit.collider.CompareTag("Player"))
+                {
+                    // Is the player not us?
+                    if (!hit.transform.GetComponent<NetworkObject>().IsLocalPlayer)
+                    {
+              
+                        Transform enemyPlayerTransform = hit.transform;
+                        InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition, hit.point, this, enemyPlayerTransform);
+
+                        _menuIsOn = true;
+                        return;
+                    }
+                }
                 
                 InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition, hit.point, this);
                 _menuIsOn = true;
@@ -114,9 +134,16 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    public void StartFight()
+    {
+        Debug.Log("you tried to fight someone else :D good for you");
+    }
+
     public void MoveCharacter(Vector3 clickPosition)
     {
         if (!IsOwner) return;
+
+        Agent.SetDestination(transform.position);
 
         // Debug.Log("painoit: " + clickPosition);
         Agent.SetDestination(clickPosition);

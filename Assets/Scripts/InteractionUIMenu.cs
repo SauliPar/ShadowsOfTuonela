@@ -14,6 +14,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
 
     public InteractionType MyInteractionType;
     private PlayerController _controller;
+    private Transform _enemyPlayerTransform;
 
     public enum InteractionType
     {
@@ -23,7 +24,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         Examine,
     }
     
-    public void ShowInteractionUIMenu(Vector2 clickPosition, Vector3 worldClickPosition, PlayerController controller)
+    public void ShowInteractionUIMenu(Vector2 clickPosition, Vector3 worldClickPosition, PlayerController controller, Transform enemyPlayerTransform = null)
     {
         ClearUIElements();
         
@@ -33,6 +34,15 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         RectTransform.position = clickPosition;
 
         _controller = controller;
+
+        if (enemyPlayerTransform != null)
+        {
+            _enemyPlayerTransform = enemyPlayerTransform;
+        }
+        else
+        {
+            _enemyPlayerTransform = null;
+        }
 
         InitializeInteractionUIMenu();
     }
@@ -57,7 +67,15 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         
         interactionUIScript.InitializeTheElement("Walk here", ButtonPressed, InteractionType.Walk);
 
-
+        // then we fite, for the horde!
+        if (_enemyPlayerTransform)
+        {
+            var fightUIElement = Instantiate(interactionUIElement, parentContainer);
+            var interactionUIScript2 = fightUIElement.GetComponent<InteractionUIElement>();
+            uiElements.Add(interactionUIScript2);
+            interactionUIScript2.InitializeTheElement("Fight", ButtonPressed,
+                InteractionType.Fight);
+        }
         
         // string randomWord = "Kalijjaa";
         //
@@ -68,7 +86,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
 
     public void ButtonPressed(InteractionUIElement interactionUIElement)
     {
-        Debug.Log("painoit nabbia :D");
+        // Debug.Log("painoit nabbia :D");
 
         InteractionType interactionType = interactionUIElement.InteractionType;
         
@@ -76,6 +94,9 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         {
             case InteractionType.Walk:
                 _controller.MoveCharacter(_lastClickPosition);
+                break;
+            case InteractionType.Fight:
+                _controller.StartFight();
                 break;
             default:
                 Debug.Log("ei tämmösiä oo vielä devattu hölmö :D");

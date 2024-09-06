@@ -712,7 +712,7 @@ GameObject:
   - component: {fileID: 196766532}
   m_Layer: 0
   m_Name: Environment
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5324,7 +5324,7 @@ GameObject:
   - component: {fileID: 1598966416}
   m_Layer: 0
   m_Name: Ground
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6004,6 +6004,7 @@ MonoBehaviour:
   parentContainer: {fileID: 534174210}
   interactionUIElement: {fileID: 5565116085956605265, guid: 47e839ebcd64d10468160d3a8b427904,
     type: 3}
+  MyInteractionType: 0
 --- !u!1 &1715793668
 GameObject:
   m_ObjectHideFlags: 0
@@ -6463,7 +6464,7 @@ GameObject:
   - component: {fileID: 1791389302}
   m_Layer: 0
   m_Name: Walls
-  m_TagString: Untagged
+  m_TagString: Environment
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
