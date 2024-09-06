@@ -9,7 +9,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private Animator animator;
     
     
-    private Vector3 _movePosition;
+    // private Vector3 _movePosition;
     private bool _menuIsOn;
 
     public void Start()
@@ -53,9 +53,9 @@ public class PlayerController : NetworkBehaviour
                 if (Physics.Raycast(ray, out hit))
                 {
                     // Print the position in world space
-                    Debug.Log("World position: " + hit.point);
-                    _movePosition = hit.point;        
-                    MoveCharacter();
+                    // Debug.Log("World position: " + hit.point);
+                    // _movePosition = hit.point;        
+                    MoveCharacter(hit.point);
                 }
             }
         }
@@ -71,9 +71,9 @@ public class PlayerController : NetworkBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 // Print the position in world space
-                Debug.Log("Click position: " + hit.point);
+                // Debug.Log("Click position: " + hit.point);
                 
-                InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition);
+                InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition, hit.point, this);
                 _menuIsOn = true;
             }
         }
@@ -114,8 +114,11 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    private void MoveCharacter()
+    public void MoveCharacter(Vector3 clickPosition)
     {
-        Agent.SetDestination(_movePosition);
+        if (!IsOwner) return;
+
+        // Debug.Log("painoit: " + clickPosition);
+        Agent.SetDestination(clickPosition);
     }
 }

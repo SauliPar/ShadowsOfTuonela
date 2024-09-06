@@ -7,14 +7,16 @@ public class InteractionUIElement : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Button button;
+    public InteractionUIMenu.InteractionType InteractionType;
     
-    public void InitializeTheElement(string elementText, UnityAction callback)
+    public void InitializeTheElement(string elementText, UnityAction<InteractionUIElement> callback, InteractionUIMenu.InteractionType interactionType)
     {
         text.text = elementText;
+        InteractionType = interactionType;
   
         button.onClick.AddListener(() =>
         {
-            callback.Invoke();
+            callback.Invoke(this);
         });
     }
 
