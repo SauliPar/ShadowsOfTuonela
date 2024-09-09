@@ -75,6 +75,8 @@ public class DoorScript : NetworkBehaviour
         // this will cause a replication over the network
         // and ultimately invoke `OnValueChanged` on receivers
         State.Value = !State.Value;
+        
+        Invoke(nameof(CloseDoor), 5f);
 
         Debug.Log("toggleserverrpc kutsuttiin :D hyvää työtä ame :D");
     }
