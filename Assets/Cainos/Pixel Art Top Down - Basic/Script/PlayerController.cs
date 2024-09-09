@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 
 public class PlayerController : NetworkBehaviour
@@ -8,6 +9,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] private NavMeshAgent Agent;
     [SerializeField] private Animator animator;
     
+    [SerializeField] private HealthBarScript healthBarScript;
     
     // private Vector3 _movePosition;
     private bool _menuIsOn;
@@ -15,13 +17,15 @@ public class PlayerController : NetworkBehaviour
     public void Start()
     {
         if (!IsOwner) return;
-
+        
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
         cinemachineCamera.LookAt = transform;
         cinemachineCamera.Follow = transform;
         
         Agent.updateRotation = false;
         Agent.angularSpeed = 0;
+        
+        EventManager.StartListening(Events.DamageEvent, OnDamageTaken);
     }
     
     private void Update()
@@ -154,5 +158,12 @@ public class PlayerController : NetworkBehaviour
 
         // Debug.Log("painoit: " + clickPosition);
         Agent.SetDestination(clickPosition);
+    }
+
+    public void OnDamageTaken(object data)
+    {
+        var damageNumber = (int)data;
+        
+        healthBarScript.SubtractHealth(damageNumber);
     }
 }
