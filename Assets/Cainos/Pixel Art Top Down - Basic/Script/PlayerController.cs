@@ -62,6 +62,13 @@ public class PlayerController : NetworkBehaviour
                             return;
                         }
                     }
+
+                    if (hit.collider.CompareTag("Door"))
+                    {
+                        Debug.Log("osuit oveen :D");
+                        
+                        hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
+                    }
                     
                     MoveCharacter(hit.point);
                 }
