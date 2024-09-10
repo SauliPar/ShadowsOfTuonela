@@ -25,6 +25,16 @@ public class DamageTakenScript : MonoBehaviour
         
         Invoke(nameof(HideDamageTakenUI), 1f);
     }
+    
+    public void ShowDamage(int damageNumber)
+    {
+        CancelInvoke();
+        
+        textMeshProUGUI.text = damageNumber.ToString();
+        canvasGroup.alpha = 1f;
+        
+        Invoke(nameof(HideDamageTakenUI), 1f);
+    }
 
     private void HideDamageTakenUI()
     {

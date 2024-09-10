@@ -121,6 +121,7 @@ GameObject:
   - component: {fileID: 8511636616815181730}
   - component: {fileID: 4185434927725585788}
   - component: {fileID: 538069785490196717}
+  - component: {fileID: 7217769283050025774}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -365,6 +366,22 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &7217769283050025774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032383306573747423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd3aa01aef9d834ead950b7bc82131d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health:
+    m_InternalValue: 100
+  HealthBarScript: {fileID: 9178722404641493586}
+  DamageTakenScript: {fileID: 5892770400978942593}
 --- !u!1 &3319840439349982536
 GameObject:
   m_ObjectHideFlags: 0

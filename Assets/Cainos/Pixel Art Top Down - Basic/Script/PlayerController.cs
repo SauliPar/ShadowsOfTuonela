@@ -74,6 +74,13 @@ public class PlayerController : NetworkBehaviour
                         hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
                     }
                     
+                    if (hit.collider.CompareTag("DuelingNPC"))
+                    {
+                        Debug.Log("haastat riitaa NPC:n kanssa, aika tyylikästä :D");
+                        
+                        // hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
+                    }
+                    
                     MoveCharacter(hit.point);
                 }
             }

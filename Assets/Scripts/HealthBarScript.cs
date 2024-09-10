@@ -6,8 +6,8 @@ public class HealthBarScript : MonoBehaviour
 {
     [SerializeField] private Slider slider;
 
-    private float _defaultHealthValue = 100;
-    private float _healthValue;
+    private int _defaultHealthValue = 100;
+    private int _healthValue;
 
     private void Start()
     {
@@ -15,13 +15,13 @@ public class HealthBarScript : MonoBehaviour
         slider.value = _healthValue;
     }
 
-    public void SetHealthBarValue(float healthValue)
+    public void SetHealthBarValue(int healthValue)
     {
         _healthValue = healthValue;
         slider.value = _healthValue;
     }
 
-    public void SubtractHealth(float subtractValue)
+    public void SubtractHealth(int subtractValue)
     {
         _healthValue -= subtractValue;
         slider.value = _healthValue;
