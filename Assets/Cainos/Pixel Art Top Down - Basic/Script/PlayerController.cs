@@ -13,10 +13,18 @@ public class PlayerController : NetworkBehaviour
     
     // private Vector3 _movePosition;
     private bool _menuIsOn;
+    public ControllerState MyPlayerState;
+    public enum ControllerState
+    {
+        Default,
+        Combat,
+    }
 
     public void Start()
     {
         if (!IsOwner) return;
+
+        MyPlayerState = ControllerState.Default;
         
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
         cinemachineCamera.LookAt = transform;
@@ -77,7 +85,10 @@ public class PlayerController : NetworkBehaviour
                     if (hit.collider.CompareTag("DuelingNPC"))
                     {
                         Debug.Log("haastat riitaa NPC:n kanssa, aika tyylikästä :D");
-                        
+
+                        var npcNetworkObject = hit.transform.GetComponent<NetworkObject>();
+                        SendCombatRequestServerRPC(GetComponent<NetworkObject>(), npcNetworkObject);
+
                         // hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
                     }
                     
@@ -154,6 +165,9 @@ public class PlayerController : NetworkBehaviour
 
     public void StartFight()
     {
+        if (!IsOwner) return;
+
+        // MyPlayerState = PlayerState.Combat;
         Debug.Log("you tried to fight someone else :D good for you");
     }
 
@@ -172,5 +186,20 @@ public class PlayerController : NetworkBehaviour
         var damageNumber = (int)data;
         
         healthBarScript.SubtractHealth(damageNumber);
+    }
+    
+    [Rpc(SendTo.Server)]
+    public void SendCombatRequestServerRPC(NetworkObjectReference  player1, NetworkObjectReference player2)
+    {
+        Debug.Log("tultiin sendcombatrequestiin");
+
+        if (player1.TryGet(out NetworkObject player1NetworkObject) &&
+            player2.TryGet(out NetworkObject player2NetworkObject))
+        {
+            if (CombatManager.Instance.CheckCombatEligibility(player1NetworkObject, player2NetworkObject))
+            {
+                StartFight();
+            }
+        }
     }
 }

@@ -365,6 +365,7 @@ GameObject:
   - component: {fileID: 1831465989212718670}
   - component: {fileID: 9053281370422905231}
   - component: {fileID: 7780627655978972454}
+  - component: {fileID: 9181641473395095616}
   m_Layer: 0
   m_Name: BotToneppa
   m_TagString: DuelingNPC
@@ -547,6 +548,22 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &9181641473395095616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4158994812373202644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd3aa01aef9d834ead950b7bc82131d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health:
+    m_InternalValue: 100
+  HealthBarScript: {fileID: 8117171941894208579}
+  DamageTakenScript: {fileID: 7216093242921797171}
 --- !u!1 &4288424452585621933
 GameObject:
   m_ObjectHideFlags: 0

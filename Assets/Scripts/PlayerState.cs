@@ -20,7 +20,7 @@ public class PlayerState : NetworkBehaviour
         if (IsServer)
         {
             Debug.Log("Tultiin PlayerStaten server-osioon");
-            StartCoroutine(StartChangingNetworkVariable());
+            // StartCoroutine(StartChangingNetworkVariable());
         }
         else
         {
@@ -32,6 +32,7 @@ public class PlayerState : NetworkBehaviour
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
     {
+        Debug.Log("onhealthvaluechanged");
         HealthBarScript.SetHealthBarValue(newvalue);
         DamageTakenScript.ShowDamage(previousvalue - newvalue);
     }
