@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Environment
   - Door
+  - DuelingNPC
   layers:
   - Default
   - TransparentFX
