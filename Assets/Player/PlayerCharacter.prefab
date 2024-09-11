@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3772218058162891601}
   - component: {fileID: 7273326688351447884}
   - component: {fileID: 2471903795363239452}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,13 +116,12 @@ GameObject:
   - component: {fileID: 3890452083281870053}
   - component: {fileID: 8092520422278155231}
   - component: {fileID: 5866972591979287935}
-  - component: {fileID: 1593785812216092936}
   - component: {fileID: 5574996073812775374}
   - component: {fileID: 8511636616815181730}
   - component: {fileID: 4185434927725585788}
   - component: {fileID: 538069785490196717}
   - component: {fileID: 7217769283050025774}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlayerCharacter
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -209,11 +208,11 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 10
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
@@ -247,33 +246,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &1593785812216092936
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1032383306573747423}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!195 &5574996073812775374
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -295,7 +267,7 @@ NavMeshAgent:
   m_Height: 1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!114 &8511636616815181730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,6 +306,7 @@ MonoBehaviour:
   Agent: {fileID: 5574996073812775374}
   animator: {fileID: 2264063771217579109}
   healthBarScript: {fileID: 9178722404641493586}
+  MyPlayerState: 0
 --- !u!114 &538069785490196717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,7 +367,7 @@ GameObject:
   - component: {fileID: 1345930680731604794}
   - component: {fileID: 5892770400978942593}
   - component: {fileID: 6640414479231145379}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: DamageTaken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -466,7 +439,7 @@ GameObject:
   - component: {fileID: 5475859888646696607}
   - component: {fileID: 2121266773411861666}
   - component: {fileID: 938289774580650749}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: DamageBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -539,7 +512,7 @@ GameObject:
   - component: {fileID: 4951416028674589173}
   - component: {fileID: 1953279688939574316}
   - component: {fileID: 4992881860045093484}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -675,7 +648,7 @@ GameObject:
   - component: {fileID: 2444364058998732620}
   - component: {fileID: 538530538244244864}
   - component: {fileID: 1770508213633969183}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -748,7 +721,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3519360666323906977}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -786,7 +759,7 @@ GameObject:
   - component: {fileID: 4116868765562244954}
   - component: {fileID: 8993647586042730099}
   - component: {fileID: 9178722404641493586}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -889,7 +862,7 @@ GameObject:
   - component: {fileID: 354471844784053091}
   - component: {fileID: 7116276620177731383}
   - component: {fileID: 4295137278531240074}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -961,10 +934,20 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4616035790092633369}
     m_Modifications:
+    - target: {fileID: 5628018140324151388, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5628018141983903104, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
         type: 3}
       propertyPath: m_Name
       value: PF Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5628018141983903104, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5628018141983903106, guid: ef67ba864d1ecc042b5f4cf48455c0a6,
         type: 3}

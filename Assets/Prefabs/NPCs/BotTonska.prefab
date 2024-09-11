@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 847377281907701796}
   - component: {fileID: 4412135988195593929}
   - component: {fileID: 2138910870367953555}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: DamageBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 5380951247256891479}
   - component: {fileID: 3298632518337408595}
   - component: {fileID: 4708813296147194698}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: DamageTaken
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 3900237243149506601}
   - component: {fileID: 1524477835571954278}
   - component: {fileID: 307627888817341662}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   - component: {fileID: 5726911031864425897}
   - component: {fileID: 2777414045707492174}
   - component: {fileID: 7777537449929999355}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 613774923751928849}
   - component: {fileID: 5786027311357461422}
   - component: {fileID: 3930319899877343708}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,13 +411,12 @@ GameObject:
   - component: {fileID: 1617033795489931572}
   - component: {fileID: 7884144342953036289}
   - component: {fileID: 1702964128557941787}
-  - component: {fileID: 1650143681192567600}
   - component: {fileID: 8058309882331009753}
   - component: {fileID: 1150672427062914965}
   - component: {fileID: 1911547362615438689}
   - component: {fileID: 2243662133029553636}
   - component: {fileID: 3489620176711241798}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BotTonska
   m_TagString: DuelingNPC
   m_Icon: {fileID: 0}
@@ -504,11 +503,11 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 10
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
@@ -517,33 +516,6 @@ CapsuleCollider:
   m_Height: 1.36
   m_Direction: 1
   m_Center: {x: 0, y: 0.62, z: 0}
---- !u!54 &1650143681192567600
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4273360142929194460}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 0
 --- !u!195 &8058309882331009753
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -565,7 +537,7 @@ NavMeshAgent:
   m_Height: 1
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_ObstacleAvoidanceType: 0
 --- !u!114 &1150672427062914965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -578,7 +550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2867835407
+  GlobalObjectIdHash: 2351662851
   InScenePlacedSourceGlobalObjectIdHash: 2050153527
   DeferredDespawnTick: 0
   Ownership: 1
@@ -663,7 +635,7 @@ GameObject:
   - component: {fileID: 1665494954169642376}
   - component: {fileID: 583442977269712127}
   - component: {fileID: 1265234711934200592}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +738,7 @@ GameObject:
   - component: {fileID: 5542381888101124482}
   - component: {fileID: 5247104867474529596}
   - component: {fileID: 182428383708847087}
-  m_Layer: 6
+  m_Layer: 3
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +875,7 @@ GameObject:
   - component: {fileID: 4663425432325609079}
   - component: {fileID: 6301969032925838040}
   - component: {fileID: 5170791360317577273}
-  m_Layer: 20
+  m_Layer: 3
   m_Name: PF Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1027,7 +999,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9182143509665852315}
   - component: {fileID: 790916031277333195}
-  m_Layer: 20
+  m_Layer: 3
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1113,7 +1085,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 143029255037616198}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
