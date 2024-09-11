@@ -27,26 +27,23 @@ public class PlayerState : NetworkBehaviour
             Debug.Log("Tultiin PlayerStaten client-osioon");
         }
         
-        Health.OnValueChanged += OnHealthValueChanged;
+        // Health.OnValueChanged += OnHealthValueChanged;
     }
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
     {
         Debug.Log("onhealthvaluechanged");
         HealthBarScript.SetHealthBarValue(newvalue);
+        
+        Debug.Log("damagenumber 1: " + (previousvalue - newvalue));
+
         DamageTakenScript.ShowDamage(previousvalue - newvalue);
     }
 
-    private IEnumerator StartChangingNetworkVariable()
+    public void DecreaseHealthPoints(int damageValue)
     {
-        // Debug.Log("Tultiin co-routineen");
-
-        var count = 0;
-        var updateFrequency = new WaitForSeconds(2f);
-        while (count < 4)
-        {
-            Health.Value -= Random.Range(0, 10);
-            yield return updateFrequency;
-        }
+        Health.Value -= damageValue;
+        HealthBarScript.SubtractHealth(damageValue);
+        DamageTakenScript.ShowDamage(damageValue);
     }
 }

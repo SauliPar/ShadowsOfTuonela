@@ -105,8 +105,12 @@ public class Combat
         var updateFrequency = new WaitForSeconds(2f);
         while (count < 4)
         {
-            player1State.Health.Value -= Random.Range(0, 10);
-            player2State.Health.Value -= Random.Range(0, 10);
+            // player1State.Health.Value -= Random.Range(0, 10);
+            // player2State.Health.Value -= Random.Range(0, 10);
+            
+            player1State.DecreaseHealthPoints(Random.Range(0, 10));
+            player2State.DecreaseHealthPoints(Random.Range(0, 10));
+            
             yield return updateFrequency;
         }
     }
