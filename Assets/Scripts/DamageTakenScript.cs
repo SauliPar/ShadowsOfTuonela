@@ -9,7 +9,7 @@ public class DamageTakenScript : MonoBehaviour
     private void Start()
     {
         HideDamageTakenUI();
-        EventManager.StartListening(Events.DamageEvent, ShowDamage);
+        // EventManager.StartListening(Events.DamageEvent, ShowDamage);
     }
 
     private void ShowDamage(object data)
@@ -29,6 +29,8 @@ public class DamageTakenScript : MonoBehaviour
     public void ShowDamage(int damageNumber)
     {
         CancelInvoke();
+
+        Debug.Log("damagenumber 2: " + damageNumber);
         
         textMeshProUGUI.text = damageNumber.ToString();
         canvasGroup.alpha = 1f;
@@ -43,6 +45,6 @@ public class DamageTakenScript : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.StopListening(Events.DamageEvent, ShowDamage);
+        // EventManager.StopListening(Events.DamageEvent, ShowDamage);
     }
 }
