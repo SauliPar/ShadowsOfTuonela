@@ -1,31 +1,75 @@
 using System.Collections;
 using Unity.Netcode;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
 {
     private const float maximumDuelInitiateDistance = 2f;
+    private Vector3 _fightInitiatorPosition = new Vector3(2, 0 ,0);
+    private Vector3 _fightReceiverPosition = new Vector3(-2, 0 ,0);
     
-    public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
+    public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2, bool isPlayer)
     {
         Debug.Log("tultiin checkcombateligibilityyn");
 
         if (Vector3.Distance(player1.transform.position, player2.transform.position) >
             maximumDuelInitiateDistance) return false;
 
-        var player1ControllerState = player1.GetComponent<PlayerController>().MyPlayerState;
-        var player2ControllerState = PlayerController.ControllerState.Default;
+        // player1 components
+        var player1Controller = player1.GetComponent<PlayerController>();
+        var player1State = player1Controller.MyPlayerState;
+        
+        // check if player1 is ready for combat
+        if (player1State != ControllerState.Default) return false;
 
-        if (player1ControllerState != PlayerController.ControllerState.Default ||
-            player2ControllerState != PlayerController.ControllerState.Default) return false;
+        PlayerController player2Controller = null;
+        BotMovementScript npcController = null;
+        var player2State = ControllerState.Default;
 
+        // player2 components
+        if (isPlayer)
+        {
+            player2Controller = player2.GetComponent<PlayerController>();
+            player2State = player2Controller.MyPlayerState;
+
+            // check if player2 is ready for combat
+        }
+        else
+        {
+            npcController = player2.GetComponent<BotMovementScript>();
+            player2State = npcController.MyNPCState;
+        }
+        
+        if (player2State != ControllerState.Default) return false;
+        
         Debug.Log("combat seems eligible");
+        
+        if (isPlayer)
+        {
+            ForcePlayerControllers(player1Controller, player2Controller, player2.transform.position);
+        }
+        else
+        {
+            ForcePlayerAndNPCControllers(player1Controller, npcController, player2.transform.position);
+        }
         
         // we create instance of combat
         Combat combat = new Combat(player1, player2);
         combat.StartCombat();
-
+        
         return true;
+    }
+
+    private void ForcePlayerControllers(PlayerController player1Controller, PlayerController player2Controller, Vector3 fightPosition)
+    {
+        player1Controller.StartFight(fightPosition + _fightInitiatorPosition, 3);
+        player2Controller.StartFight(fightPosition + _fightReceiverPosition, 2);
+    }
+    private void ForcePlayerAndNPCControllers(PlayerController player1Controller, BotMovementScript botMovementScript, Vector3 fightPosition)
+    {
+        player1Controller.StartFight(fightPosition + _fightInitiatorPosition, 3);
+        botMovementScript.StartFight(fightPosition + _fightReceiverPosition, 2);
     }
 }
 

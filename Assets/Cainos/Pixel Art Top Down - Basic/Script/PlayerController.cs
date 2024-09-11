@@ -14,11 +14,6 @@ public class PlayerController : NetworkBehaviour
     // private Vector3 _movePosition;
     private bool _menuIsOn;
     public ControllerState MyPlayerState;
-    public enum ControllerState
-    {
-        Default,
-        Combat,
-    }
 
     public void Start()
     {
@@ -33,7 +28,7 @@ public class PlayerController : NetworkBehaviour
         Agent.updateRotation = false;
         Agent.angularSpeed = 0;
         
-        EventManager.StartListening(Events.DamageEvent, OnDamageTaken);
+        // EventManager.StartListening(Events.DamageEvent, OnDamageTaken);
     }
     
     private void Update()
@@ -47,6 +42,8 @@ public class PlayerController : NetworkBehaviour
 
     private void CheckMouseButtons()
     {
+        if (MyPlayerState != ControllerState.Default) return;
+        
         // check left click
         if (Input.GetMouseButtonDown(0))
         {
@@ -70,7 +67,8 @@ public class PlayerController : NetworkBehaviour
                         // Is the player not us?
                         if (!hit.transform.GetComponent<NetworkObject>().IsLocalPlayer)
                         {
-                            StartFight();
+                            var playerNetworkObject = hit.transform.GetComponent<NetworkObject>();
+                            SendPlayerCombatRequestServerRPC(GetComponent<NetworkObject>(), playerNetworkObject);
                             return;
                         }
                     }
@@ -87,7 +85,7 @@ public class PlayerController : NetworkBehaviour
                         Debug.Log("haastat riitaa NPC:n kanssa, aika tyylikästä :D");
 
                         var npcNetworkObject = hit.transform.GetComponent<NetworkObject>();
-                        SendCombatRequestServerRPC(GetComponent<NetworkObject>(), npcNetworkObject);
+                        SendNPCCombatRequestServerRPC(GetComponent<NetworkObject>(), npcNetworkObject);
 
                         // hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
                     }
@@ -163,12 +161,28 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    public void StartFight()
+    public void StartFight(Vector3 fightPosition, int faceIndex)
     {
-        if (!IsOwner) return;
+        if (!IsServer) return;
 
-        // MyPlayerState = PlayerState.Combat;
+        MyPlayerState = ControllerState.Combat;
+        
+        ForcePlayerPosition(fightPosition);
+        ForcePlayerRotation(faceIndex);
+        
         Debug.Log("you tried to fight someone else :D good for you");
+    }
+
+    private void ForcePlayerRotation(int faceIndex)
+    {
+        animator.SetInteger("Direction", faceIndex);
+    }
+
+    private void ForcePlayerPosition(Vector3 fightPosition)
+    {
+        if (MyPlayerState != ControllerState.Combat) return;
+        
+        MoveCharacter(fightPosition);
     }
 
     public void MoveCharacter(Vector3 clickPosition)
@@ -189,17 +203,38 @@ public class PlayerController : NetworkBehaviour
     }
     
     [Rpc(SendTo.Server)]
-    public void SendCombatRequestServerRPC(NetworkObjectReference  player1, NetworkObjectReference player2)
+    public void SendNPCCombatRequestServerRPC(NetworkObjectReference  player1, NetworkObjectReference player2)
+    {
+        Debug.Log("tultiin npc sendcombatrequestiin");
+
+        if (player1.TryGet(out NetworkObject player1NetworkObject) &&
+            player2.TryGet(out NetworkObject player2NetworkObject))
+        {
+            if (CombatManager.Instance.CheckCombatEligibility(player1NetworkObject, player2NetworkObject, false))
+            {
+                // StartFight();
+            }
+        }
+    }
+    
+    [Rpc(SendTo.Server)]
+    public void SendPlayerCombatRequestServerRPC(NetworkObjectReference  player1, NetworkObjectReference player2)
     {
         Debug.Log("tultiin sendcombatrequestiin");
 
         if (player1.TryGet(out NetworkObject player1NetworkObject) &&
             player2.TryGet(out NetworkObject player2NetworkObject))
         {
-            if (CombatManager.Instance.CheckCombatEligibility(player1NetworkObject, player2NetworkObject))
+            if (CombatManager.Instance.CheckCombatEligibility(player1NetworkObject, player2NetworkObject, true))
             {
-                StartFight();
+                // StartFight();
             }
         }
     }
+}
+
+public enum ControllerState
+{
+    Default,
+    Combat,
 }

@@ -96,7 +96,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
                 _controller.MoveCharacter(_lastClickPosition);
                 break;
             case InteractionType.Fight:
-                _controller.StartFight();
+                // _controller.StartFight();
                 break;
             default:
                 Debug.Log("ei tämmösiä oo vielä devattu hölmö :D");
