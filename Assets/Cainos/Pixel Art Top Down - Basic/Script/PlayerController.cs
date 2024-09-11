@@ -88,6 +88,7 @@ public class PlayerController : NetworkBehaviour
                         SendNPCCombatRequestServerRPC(GetComponent<NetworkObject>(), npcNetworkObject);
 
                         // hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
+                        return;
                     }
                     
                     MoveCharacter(hit.point);
@@ -190,8 +191,8 @@ public class PlayerController : NetworkBehaviour
         if (!IsOwner) return;
 
         // Agent.SetDestination(transform.position);
-
-        // Debug.Log("painoit: " + clickPosition);
+        // Debug.Log("painoit paikassa 2: " + clickPosition);
+        
         Agent.SetDestination(clickPosition);
     }
 

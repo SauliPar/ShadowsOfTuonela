@@ -30,7 +30,7 @@ public class DamageTakenScript : MonoBehaviour
     {
         CancelInvoke();
 
-        Debug.Log("damagenumber 2: " + damageNumber);
+        // Debug.Log("damagenumber 2: " + damageNumber);
         
         textMeshProUGUI.text = damageNumber.ToString();
         canvasGroup.alpha = 1f;

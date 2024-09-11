@@ -1,13 +1,12 @@
 using System.Collections;
 using Unity.Netcode;
-using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
 {
     private const float maximumDuelInitiateDistance = 2f;
-    private Vector3 _fightInitiatorPosition = new Vector3(2, 0 ,0);
-    private Vector3 _fightReceiverPosition = new Vector3(-2, 0 ,0);
+    private Vector3 _fightInitiatorPosition = new Vector3(1, 0 ,0);
+    private Vector3 _fightReceiverPosition = new Vector3(-1, 0 ,0);
     
     public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2, bool isPlayer)
     {
@@ -63,11 +62,17 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ForcePlayerControllers(PlayerController player1Controller, PlayerController player2Controller, Vector3 fightPosition)
     {
+        // Debug.Log("player1 posi paikassa 1: " + fightPosition + _fightInitiatorPosition);
+        // Debug.Log("player2 posi paikassa 1: " + fightPosition + _fightReceiverPosition);
+        
         player1Controller.StartFight(fightPosition + _fightInitiatorPosition, 3);
         player2Controller.StartFight(fightPosition + _fightReceiverPosition, 2);
     }
     private void ForcePlayerAndNPCControllers(PlayerController player1Controller, BotMovementScript botMovementScript, Vector3 fightPosition)
     {
+        // Debug.Log("player1 posi paikassa 1: " + fightPosition + _fightInitiatorPosition);
+        // Debug.Log("player2 posi paikassa 1: " + fightPosition + _fightReceiverPosition);
+        
         player1Controller.StartFight(fightPosition + _fightInitiatorPosition, 3);
         botMovementScript.StartFight(fightPosition + _fightReceiverPosition, 2);
     }

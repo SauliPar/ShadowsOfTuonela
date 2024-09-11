@@ -32,10 +32,10 @@ public class PlayerState : NetworkBehaviour
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
     {
-        Debug.Log("onhealthvaluechanged");
+        // Debug.Log("onhealthvaluechanged");
         HealthBarScript.SetHealthBarValue(newvalue);
         
-        Debug.Log("damagenumber 1: " + (previousvalue - newvalue));
+        // Debug.Log("damagenumber 1: " + (previousvalue - newvalue));
 
         DamageTakenScript.ShowDamage(previousvalue - newvalue);
     }

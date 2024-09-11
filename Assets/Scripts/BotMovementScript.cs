@@ -42,8 +42,8 @@ public class BotMovementScript : NetworkBehaviour
     public void MoveNPC(Vector3 clickPosition)
     {
         // Agent.SetDestination(transform.position);
-
-        // Debug.Log("painoit: " + clickPosition);
+        // Debug.Log("NPC painoi paikassa 2: " + clickPosition);
+        
         Agent.SetDestination(clickPosition);
     }
 }
