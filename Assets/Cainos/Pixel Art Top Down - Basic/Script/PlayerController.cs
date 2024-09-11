@@ -189,7 +189,7 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        Agent.SetDestination(transform.position);
+        // Agent.SetDestination(transform.position);
 
         // Debug.Log("painoit: " + clickPosition);
         Agent.SetDestination(clickPosition);
