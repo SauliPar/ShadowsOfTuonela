@@ -1,0 +1,73 @@
+using Unity.Netcode;
+using Unity.Netcode.Components;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class BaseController : NetworkBehaviour
+{
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected Animator animator;
+    [SerializeField] protected NetworkTransform networkTransform;
+    
+    public ControllerState CharacterState;
+
+    protected virtual void Start()
+    {
+        CharacterState = ControllerState.Default;
+        
+        agent.updateRotation = false;
+        agent.angularSpeed = 0;
+    }
+    
+    public void StartFight(Vector3 fightPosition, int faceIndex)
+    {
+        if (!IsServer) return;
+
+        CharacterState = ControllerState.Combat;
+        
+        ForcePosition(fightPosition);
+        ForceRotation(faceIndex);
+    }
+    
+    protected void ForceRotation(int faceIndex)
+    {
+        animator.SetInteger("Direction", faceIndex);
+    }
+
+    protected void ForcePosition(Vector3 fightPosition)
+    {
+        if (CharacterState != ControllerState.Combat) return;
+        
+        Move(fightPosition);
+    }
+
+    protected void Move(Vector3 clickPosition)
+    {
+        agent.SetDestination(clickPosition);
+    }
+    
+    public void OnDeath()
+    {
+        // Debug.Log("tultiin ondeathiin");
+
+        agent.ResetPath();
+        TeleportCharacter(Vector3.zero);
+        Invoke(nameof(ResetPlayerController), 1f);
+    }
+    public void OnVictory()
+    {
+        // Debug.Log("tultiin onvictoryyn");
+        
+        ResetPlayerController();
+    }
+
+    protected void ResetPlayerController()
+    {
+        CharacterState = ControllerState.Default;
+    }
+
+    protected void TeleportCharacter(Vector3 teleportPosition)
+    {
+        networkTransform.Teleport(teleportPosition, Quaternion.identity, Vector3.one);
+    }
+}

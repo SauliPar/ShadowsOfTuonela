@@ -1,66 +1,41 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
 {
-    private const float maximumDuelInitiateDistance = 2f;
+    private const float MaximumDuelInitiateDistance = 2f;
     private Vector3 _fightInitiatorPosition = new Vector3(1, 0 ,0);
     private Vector3 _fightReceiverPosition = new Vector3(-1, 0 ,0);
-    
-    public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2, bool isPlayer)
+
+    public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
         Debug.Log("tultiin checkcombateligibilityyn");
 
-        if (Vector3.Distance(player1.transform.position, player2.transform.position) >
-            maximumDuelInitiateDistance) return false;
-
+        if (Vector3.Distance(player1.transform.position, player2.transform.position) > MaximumDuelInitiateDistance) return false;
+        
         // player1 components
         var player1Controller = player1.GetComponent<PlayerController>();
-        var player1State = player1Controller.MyPlayerState;
-        
-        // check if player1 is ready for combat
-        if (player1State != ControllerState.Default) return false;
-
-        PlayerController player2Controller = null;
-        BotMovementScript npcController = null;
-        var player2State = ControllerState.Default;
+        if (player1Controller.CharacterState != ControllerState.Default) return false;
 
         // player2 components
-        if (isPlayer)
-        {
-            player2Controller = player2.GetComponent<PlayerController>();
-            player2State = player2Controller.MyPlayerState;
+        var player2Controller = player2.GetComponent<BaseController>();
+        if (player2Controller.CharacterState != ControllerState.Default) return false;
 
-            // check if player2 is ready for combat
-        }
-        else
-        {
-            npcController = player2.GetComponent<BotMovementScript>();
-            player2State = npcController.MyNPCState;
-        }
-        
-        if (player2State != ControllerState.Default) return false;
-        
         Debug.Log("combat seems eligible");
         
-        if (isPlayer)
-        {
-            ForcePlayerControllers(player1Controller, player2Controller, player2.transform.position);
-        }
-        else
-        {
-            ForcePlayerAndNPCControllers(player1Controller, npcController, player2.transform.position);
-        }
+        // we can use null-coalescing operator (??) to simplify conditional logic
+        ForceControllers(player1Controller, player2Controller, player2.transform.position);
         
         // we create instance of combat
-        Combat combat = new Combat(player1, player2);
+        var combat = new Combat(player1, player2);
         combat.StartCombat();
         
         return true;
     }
 
-    private void ForcePlayerControllers(PlayerController player1Controller, PlayerController player2Controller, Vector3 fightPosition)
+    private void ForceControllers(BaseController player1Controller, BaseController player2Controller, Vector3 fightPosition)
     {
         // Debug.Log("player1 posi paikassa 1: " + fightPosition + _fightInitiatorPosition);
         // Debug.Log("player2 posi paikassa 1: " + fightPosition + _fightReceiverPosition);
@@ -84,39 +59,61 @@ public class Combat
     public NetworkObject player2;
     public PlayerState player1State;
     public PlayerState player2State;
+    
+    private bool didAnyPlayerDie = false;
 
     public Combat(NetworkObject inputPlayer1, NetworkObject inputPlayer2)
     {
-        Debug.Log("tehtiin uusi combat");
+        // Debug.Log("tehtiin uusi combat");
 
         player1 = inputPlayer1;
         player2 = inputPlayer2;
 
         player1State = inputPlayer1.GetComponent<PlayerState>();
-        player2State = inputPlayer2.GetComponent<PlayerState>();;
+        player2State = inputPlayer2.GetComponent<PlayerState>();
     }
 
     public void StartCombat()
     {
-        Debug.Log("starting combat");
+        Debug.Log("Starting combat...");
 
         player1.StartCoroutine(StartChangingNetworkVariable());
     }
     
     private IEnumerator StartChangingNetworkVariable()
     {
-        Debug.Log("aloitettiin combat coroutine");
-        var count = 0;
-        var updateFrequency = new WaitForSeconds(2f);
-        while (count < 4)
+        Debug.Log("Starting combat coroutine");
+        bool playerDied = false;
+
+        List<PlayerState> players = new List<PlayerState>();
+        players.Add(player1State);
+        players.Add(player2State);
+        int playerIndex = 0;
+
+        while (!playerDied)
         {
-            // player1State.Health.Value -= Random.Range(0, 10);
-            // player2State.Health.Value -= Random.Range(0, 10);
+            playerIndex++;
+            if (playerIndex > 1) playerIndex = 0;
             
-            player1State.DecreaseHealthPoints(Random.Range(0, 10));
-            player2State.DecreaseHealthPoints(Random.Range(0, 10));
-            
-            yield return updateFrequency;
+            playerDied = players[playerIndex].DecreaseHealthPoints(Random.Range(0, 10));
+        
+            yield return new WaitForSeconds(1);
+        }
+        
+        // Debug.Log("häviäjän playerindex oli " + playerIndex);
+
+
+        if (playerIndex == 0)
+        {
+            player1.GetComponent<BaseController>().OnDeath();
+            player1State.ResetHealth();
+            player2.GetComponent<BaseController>().OnVictory();
+        }
+        else if (playerIndex == 1)
+        {
+            player1.GetComponent<BaseController>().OnVictory();
+            player2State.ResetHealth();
+            player2.GetComponent<BaseController>().OnDeath();
         }
     }
 }

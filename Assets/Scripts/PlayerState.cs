@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class PlayerState : NetworkBehaviour
 {
-    private const int DefaultHealth = 100;
     /// <summary>
     /// Default Permissions: Everyone can read, server can only write
     /// Player health is typically something determined (updated/written to) on the server
     ///  side, but a value everyone should be synchronized with (that is, read permissions).
     /// </summary>
-    public NetworkVariable<int> Health = new NetworkVariable<int>(DefaultHealth);
+    ///
+    /// 
+    public NetworkVariable<int> Health = new NetworkVariable<int>(GlobalSettings.DefaultHealth);
 
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
+    public BaseController BaseController;
     
     private void Start()
     {
@@ -40,10 +42,24 @@ public class PlayerState : NetworkBehaviour
         DamageTakenScript.ShowDamage(previousvalue - newvalue);
     }
 
-    public void DecreaseHealthPoints(int damageValue)
+    public bool DecreaseHealthPoints(int damageValue)
     {
         Health.Value -= damageValue;
         HealthBarScript.SubtractHealth(damageValue);
         DamageTakenScript.ShowDamage(damageValue);
+
+        if (Health.Value <= 0)
+        {
+            Debug.Log("healthvalue meni nolliin");
+            return true;
+        }
+
+        return false;
+    }
+
+    public void ResetHealth()
+    {
+        Health.Value = GlobalSettings.DefaultHealth;
+        HealthBarScript.SetHealthBarValue(Health.Value);
     }
 }
