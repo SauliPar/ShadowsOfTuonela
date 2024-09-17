@@ -15,18 +15,21 @@ public class CombatManager : Singleton<CombatManager>
 
         if (Vector3.Distance(player1.transform.position, player2.transform.position) > MaximumDuelInitiateDistance) return false;
         
+        var player1State = player1.GetComponent<PlayerState>();
+        var player2State = player2.GetComponent<PlayerState>();
+        
         // player1 components
-        var player1Controller = player1.GetComponent<PlayerController>();
-        if (player1Controller.CharacterState != ControllerState.Default) return false;
+        // var player1Controller = player1.GetComponent<PlayerController>();
+        if (player1State.CharacterState.Value != ControllerState.Default) return false;
 
         // player2 components
-        var player2Controller = player2.GetComponent<BaseController>();
-        if (player2Controller.CharacterState != ControllerState.Default) return false;
+        // var player2Controller = player2.GetComponent<BaseController>();
+        if (player2State.CharacterState.Value != ControllerState.Default) return false;
 
         Debug.Log("combat seems eligible");
         
         // we can use null-coalescing operator (??) to simplify conditional logic
-        ForceControllers(player1Controller, player2Controller, player2.transform.position);
+        ForcePlayerMovement(player1State, player2State, player2.transform.position);
         
         // we create instance of combat
         var combat = new Combat(player1, player2);
@@ -35,13 +38,16 @@ public class CombatManager : Singleton<CombatManager>
         return true;
     }
 
-    private void ForceControllers(BaseController player1Controller, BaseController player2Controller, Vector3 fightPosition)
+    private void ForcePlayerMovement(PlayerState player1State, PlayerState player2State, Vector3 fightPosition)
     {
         // Debug.Log("player1 posi paikassa 1: " + fightPosition + _fightInitiatorPosition);
         // Debug.Log("player2 posi paikassa 1: " + fightPosition + _fightReceiverPosition);
+
+        player1State.CharacterState.Value = ControllerState.Combat;
+        player2State.CharacterState.Value = ControllerState.Combat;
         
-        player1Controller.StartFight(fightPosition + _fightInitiatorPosition, 3);
-        player2Controller.StartFight(fightPosition + _fightReceiverPosition, 2);
+        player1State.StartCombatRpc(fightPosition + _fightInitiatorPosition, 3);
+        player2State.StartCombatRpc(fightPosition + _fightReceiverPosition, 2);
     }
     private void ForcePlayerAndNPCControllers(PlayerController player1Controller, BotMovementScript botMovementScript, Vector3 fightPosition)
     {
@@ -119,7 +125,7 @@ public class Combat
             // player2.GetComponent<BaseController>().TeleportCharacter(Vector3.zero);
         }
 
-        // player1State.IsDead.Value = false;
-        // player2State.IsDead.Value = false;
+        player1State.CharacterState.Value = ControllerState.Default;
+        player2State.CharacterState.Value = ControllerState.Default;
     }
 }

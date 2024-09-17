@@ -312,6 +312,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health:
     m_InternalValue: 20
+  CharacterState:
+    m_InternalValue: 0
   HealthBarScript: {fileID: 8722647788654735245}
   DamageTakenScript: {fileID: 7622729455652930024}
   BaseController: {fileID: 906611508030754441}
@@ -345,7 +347,7 @@ MonoBehaviour:
   agent: {fileID: 8058309882331009753}
   animator: {fileID: 6301969032925838040}
   networkTransform: {fileID: 1911547362615438689}
-  CharacterState: 0
+  playerState: {fileID: 2243662133029553636}
 --- !u!1 &6807991485434704353
 GameObject:
   m_ObjectHideFlags: 0

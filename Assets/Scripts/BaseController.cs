@@ -8,12 +8,13 @@ public class BaseController : NetworkBehaviour
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
     [SerializeField] protected NetworkTransform networkTransform;
-    
-    public ControllerState CharacterState;
+    [SerializeField] protected PlayerState playerState;
+
+    // public ControllerState CharacterState;
 
     protected virtual void Start()
     {
-        CharacterState = ControllerState.Default;
+        // CharacterState = playerState.CharacterState.Value;
         
         agent.updateRotation = false;
         agent.angularSpeed = 0;
@@ -21,9 +22,12 @@ public class BaseController : NetworkBehaviour
     
     public void StartFight(Vector3 fightPosition, int faceIndex)
     {
-        if (!IsServer) return;
+        // if (!IsServer) return;
 
-        CharacterState = ControllerState.Combat;
+        // if (IsServer)
+        // {
+        //     CharacterState = ControllerState.Combat;
+        // }
         
         ForcePosition(fightPosition);
         ForceRotation(faceIndex);
@@ -36,7 +40,7 @@ public class BaseController : NetworkBehaviour
 
     protected void ForcePosition(Vector3 fightPosition)
     {
-        if (CharacterState != ControllerState.Combat) return;
+        // if (CharacterState != ControllerState.Combat) return;
         
         Move(fightPosition);
     }
@@ -63,7 +67,7 @@ public class BaseController : NetworkBehaviour
 
     protected void ResetPlayerController()
     {
-        CharacterState = ControllerState.Default;
+        // CharacterState = ControllerState.Default;
     }
 
     public void TeleportCharacter(Vector3 teleportPosition)

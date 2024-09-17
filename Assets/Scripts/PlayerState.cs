@@ -14,6 +14,8 @@ public class PlayerState : NetworkBehaviour
     public NetworkVariable<int> Health = new NetworkVariable<int>(GlobalSettings.DefaultHealth);
     // public NetworkVariable<int> Damage = new NetworkVariable<int>(0);
     // public NetworkVariable<bool> IsDead = new NetworkVariable<bool>(false);
+    
+    public NetworkVariable<ControllerState> CharacterState = new NetworkVariable<ControllerState>(ControllerState.Default);
 
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
@@ -32,16 +34,13 @@ public class PlayerState : NetworkBehaviour
         }
         
         // IsDead.OnValueChanged += OnDeath;
+        CharacterState.OnValueChanged += OnCharacterStateChanged;
         Health.OnValueChanged += OnHealthValueChanged;
     }
 
-    private void OnDeath(bool previousvalue, bool newvalue)
+    private void OnCharacterStateChanged(ControllerState previousvalue, ControllerState newvalue)
     {
-        // if (newvalue)
-        // {
-            BaseController.OnDeath();
-            BaseController.TeleportCharacter(Vector3.zero);
-        // }
+        // BaseController.CharacterState = newvalue;
     }
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
@@ -93,5 +92,11 @@ public class PlayerState : NetworkBehaviour
             BaseController.OnDeath();
             BaseController.TeleportCharacter(Vector3.zero);
         }
+    }
+
+    [Rpc(SendTo.Owner)]
+    public void StartCombatRpc(Vector3 fightPosition, int faceIndex)
+    {
+        BaseController.StartFight(fightPosition, faceIndex);
     }
 }

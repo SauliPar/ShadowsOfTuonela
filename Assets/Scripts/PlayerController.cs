@@ -31,7 +31,7 @@ public class PlayerController : BaseController
 
     private void CheckMouseButtons()
     {
-        if (CharacterState != ControllerState.Default) return;
+        if (playerState.CharacterState.Value != ControllerState.Default) return;
         
         // check left click
         if (Input.GetMouseButtonDown(0))
