@@ -35,6 +35,7 @@ public class BaseController : NetworkBehaviour
     
     protected void ForceRotation(int faceIndex)
     {
+        Debug.Log("faceindex: " + faceIndex);
         animator.SetInteger("Direction", faceIndex);
     }
 
@@ -42,10 +43,10 @@ public class BaseController : NetworkBehaviour
     {
         // if (CharacterState != ControllerState.Combat) return;
         
-        Move(fightPosition);
+        Move(fightPosition, true);
     }
 
-    protected void Move(Vector3 clickPosition)
+    public virtual void Move(Vector3 clickPosition, bool forceMovement = false)
     {
         agent.SetDestination(clickPosition);
     }

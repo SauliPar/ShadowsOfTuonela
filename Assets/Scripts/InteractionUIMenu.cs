@@ -93,7 +93,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         switch (interactionType)
         {
             case InteractionType.Walk:
-                _controller.MoveCharacter(_lastClickPosition);
+                _controller.Move(_lastClickPosition, false);
                 break;
             case InteractionType.Fight:
                 // _controller.StartFight();

@@ -1,9 +1,6 @@
 using Unity.Cinemachine;
 using Unity.Netcode;
-using Unity.Netcode.Components;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.AI;
 
 public class PlayerController : BaseController
 {
@@ -25,8 +22,6 @@ public class PlayerController : BaseController
         if (!IsOwner) return;
 
         CheckMouseButtons();
-
-        UpdateAnimator();
     }
 
     private void CheckMouseButtons()
@@ -80,7 +75,7 @@ public class PlayerController : BaseController
                         return;
                     }
                     
-                    MoveCharacter(hit.point);
+                    Move(hit.point, false);
                 }
             }
         }
@@ -114,61 +109,56 @@ public class PlayerController : BaseController
                 _menuIsOn = true;
             }
         }
+        
+        // UpdateAnimator();
     }
 
-    private void UpdateAnimator()
+    private void UpdateAnimator(Vector3 clickPosition)
     {
-        Vector3 desiredVelocity = agent.desiredVelocity;
-        
+        Vector3 moveVector = clickPosition - transform.position;
+    
+        // Normalize the moveVector to obtain the direction
+        Vector3 moveDirection = moveVector.normalized;
+
         // check if we're going vertical
-        if (Mathf.Abs(desiredVelocity.z) > Mathf.Abs(desiredVelocity.x))
+        if (Mathf.Abs(moveDirection.z) > Mathf.Abs(moveDirection.x))
         {
-            // going north xd
-            if (desiredVelocity.z > desiredVelocity.x)
+            // going north
+            if (moveDirection.z > 0)
             {
                 animator.SetInteger("Direction", 1);
             }
 
-            // going south xd
-            if (desiredVelocity.z < desiredVelocity.x)
+            // going south
+            if (moveDirection.z < 0)
             {
                 animator.SetInteger("Direction", 0);
             }
         }
         else
         {
-            // going east xd
-            if (desiredVelocity.x > desiredVelocity.z)
+            // going east
+            if (moveDirection.x > 0)
             {
                 animator.SetInteger("Direction", 2);
             }
 
-            // going west xd
-            if (desiredVelocity.x < desiredVelocity.z)
+            // going west
+            if (moveDirection.x < 0)
             {
                 animator.SetInteger("Direction", 3);
             }
         }
     }
 
-    // private void ForcePlayerRotation(int faceIndex)
-    // {
-    //     animator.SetInteger("Direction", faceIndex);
-    // }
-    //
-    // private void ForcePlayerPosition(Vector3 fightPosition)
-    // {
-    //     if (CharacterState != ControllerState.Combat) return;
-    //     
-    //     MoveCharacter(fightPosition);
-    // }
-
-    public void MoveCharacter(Vector3 clickPosition)
+    public override void Move(Vector3 clickPosition, bool forceMovement = false)
     {
         if (!IsOwner) return;
 
-        // Agent.SetDestination(transform.position);
-        // Debug.Log("painoit paikassa 2: " + clickPosition);
+        if (!forceMovement)
+        {
+            UpdateAnimator(clickPosition);   
+        }
         
         agent.SetDestination(clickPosition);
     }
