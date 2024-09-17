@@ -106,6 +106,7 @@ public class Combat
         if (playerIndex == 0)
         {
             player1.GetComponent<BaseController>().OnDeath();
+            player1State.DeathRpc();
             player1State.ResetHealth();
             player2.GetComponent<BaseController>().OnVictory();
         }
@@ -113,7 +114,12 @@ public class Combat
         {
             player1.GetComponent<BaseController>().OnVictory();
             player2State.ResetHealth();
+            player2State.DeathRpc();
             player2.GetComponent<BaseController>().OnDeath();
+            // player2.GetComponent<BaseController>().TeleportCharacter(Vector3.zero);
         }
+
+        // player1State.IsDead.Value = false;
+        // player2State.IsDead.Value = false;
     }
 }

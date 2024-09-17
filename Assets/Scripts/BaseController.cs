@@ -48,11 +48,11 @@ public class BaseController : NetworkBehaviour
     
     public void OnDeath()
     {
-        // Debug.Log("tultiin ondeathiin");
-
-        agent.ResetPath();
-        TeleportCharacter(Vector3.zero);
-        Invoke(nameof(ResetPlayerController), 1f);
+        // if (IsOwner)
+        // {
+            agent.ResetPath();
+            Invoke(nameof(ResetPlayerController), 1f);
+        // }
     }
     public void OnVictory()
     {
@@ -66,8 +66,11 @@ public class BaseController : NetworkBehaviour
         CharacterState = ControllerState.Default;
     }
 
-    protected void TeleportCharacter(Vector3 teleportPosition)
+    public void TeleportCharacter(Vector3 teleportPosition)
     {
-        networkTransform.Teleport(teleportPosition, Quaternion.identity, Vector3.one);
+        if (IsOwner)
+        {
+            networkTransform.Teleport(teleportPosition, Quaternion.identity, Vector3.one);
+        }
     }
 }

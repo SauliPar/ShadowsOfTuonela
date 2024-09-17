@@ -12,6 +12,8 @@ public class PlayerState : NetworkBehaviour
     ///
     /// 
     public NetworkVariable<int> Health = new NetworkVariable<int>(GlobalSettings.DefaultHealth);
+    // public NetworkVariable<int> Damage = new NetworkVariable<int>(0);
+    // public NetworkVariable<bool> IsDead = new NetworkVariable<bool>(false);
 
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
@@ -29,28 +31,47 @@ public class PlayerState : NetworkBehaviour
             Debug.Log("Tultiin PlayerStaten client-osioon");
         }
         
-        // Health.OnValueChanged += OnHealthValueChanged;
+        // IsDead.OnValueChanged += OnDeath;
+        Health.OnValueChanged += OnHealthValueChanged;
+    }
+
+    private void OnDeath(bool previousvalue, bool newvalue)
+    {
+        // if (newvalue)
+        // {
+            BaseController.OnDeath();
+            BaseController.TeleportCharacter(Vector3.zero);
+        // }
     }
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
     {
-        // Debug.Log("onhealthvaluechanged");
-        HealthBarScript.SetHealthBarValue(newvalue);
+        // if (IsOwner)
+        // {
+            var substractValue = previousvalue - newvalue;
+            HealthBarScript.SetHealthBarValue(newvalue);
+            
+            if (substractValue < 0) return;
+           
+            DamageTakenScript.ShowDamage(substractValue);
+        // }
+       
         
-        // Debug.Log("damagenumber 1: " + (previousvalue - newvalue));
-
-        DamageTakenScript.ShowDamage(previousvalue - newvalue);
+        // // Debug.Log("onhealthvaluechanged");
+        // HealthBarScript.SetHealthBarValue(newvalue);
+        //
+        // // Debug.Log("damagenumber 1: " + (previousvalue - newvalue));
+        //
+        // DamageTakenScript.ShowDamage(previousvalue - newvalue);
     }
 
     public bool DecreaseHealthPoints(int damageValue)
     {
         Health.Value -= damageValue;
-        HealthBarScript.SubtractHealth(damageValue);
-        DamageTakenScript.ShowDamage(damageValue);
+        // Damage.Value = damageValue;
 
         if (Health.Value <= 0)
         {
-            Debug.Log("healthvalue meni nolliin");
             return true;
         }
 
@@ -61,5 +82,16 @@ public class PlayerState : NetworkBehaviour
     {
         Health.Value = GlobalSettings.DefaultHealth;
         HealthBarScript.SetHealthBarValue(Health.Value);
+    }
+    
+    [Rpc(SendTo.Everyone)]
+    public void DeathRpc()
+    {
+        if (IsOwner)
+        {
+            Debug.Log("oltiin owner ja toistettiin RPC");
+            BaseController.OnDeath();
+            BaseController.TeleportCharacter(Vector3.zero);
+        }
     }
 }
