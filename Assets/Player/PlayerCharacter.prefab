@@ -307,6 +307,7 @@ MonoBehaviour:
   animator: {fileID: 2264063771217579109}
   networkTransform: {fileID: 538069785490196717}
   playerState: {fileID: 1267814839038010953}
+  networkObject: {fileID: 8511636616815181730}
 --- !u!114 &538069785490196717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Health:
     m_InternalValue: 20
-  CharacterState:
+  CombatState:
     m_InternalValue: 0
   HealthBarScript: {fileID: 9178722404641493586}
   DamageTakenScript: {fileID: 5892770400978942593}

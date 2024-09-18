@@ -71,10 +71,12 @@ public class PlayerState : NetworkBehaviour
 
         if (Health.Value <= 0)
         {
-            return true;
+            // should combat continue?
+            return false;
         }
 
-        return false;
+        // should combat continue?
+        return true;
     }
 
     public void ResetHealth()

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
 {
-    private List<Combat> _combatList;
+    private List<Combat> _combatList = new List<Combat>();
     public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
         // Debug.Log("tultiin checkcombateligibilityyn");
@@ -68,7 +68,7 @@ public class Combat
     public PlayerState player1State;
     public PlayerState player2State;
     
-    private bool _didAnyPlayerDie = false;
+    private bool _combatIsOn = false;
     private int _hitcounter;
 
     public Combat(NetworkObject inputPlayer1, NetworkObject inputPlayer2, PlayerState inputPlayer1State, PlayerState inputPlayer2State)
@@ -84,6 +84,7 @@ public class Combat
     {
         Debug.Log("ending combat");
 
+        _combatIsOn = false;
         player1.StopCoroutine(StartChangingNetworkVariable());
         
         player1State.CombatState.Value = CombatState.Default;
@@ -99,16 +100,20 @@ public class Combat
     
     private IEnumerator StartChangingNetworkVariable()
     {
-        bool playerDied = false;
         int playerIndex = 0;
 
         PlayerState[] players = { player1State, player2State };
 
-        while (!playerDied)
-        {
-            playerDied = players[playerIndex].DecreaseHealthPoints(Random.Range(0, 10));
+        _combatIsOn = true;
 
-            if (playerDied)
+        while (_combatIsOn)
+        {
+            playerIndex++;
+            if (playerIndex >= players.Length) playerIndex = 0;
+            
+            _combatIsOn = players[playerIndex].DecreaseHealthPoints(Random.Range(0, 10));
+
+            if (!_combatIsOn)
             {
                 HandlePlayerDeath(playerIndex, players);
                 yield break;
@@ -116,9 +121,6 @@ public class Combat
 
             HitCounter();
             yield return new WaitForSeconds(1);
-
-            playerIndex++;
-            if (playerIndex >= players.Length) playerIndex = 0;
         }
     }
 
@@ -127,15 +129,11 @@ public class Combat
         PlayerState losingPlayerState = players[playerIndex];
         PlayerState winningPlayerState = players[playerIndex==0?1:0];
 
-        // BaseController losingPlayerController = losingPlayerState.GetComponent<BaseController>();
-        BaseController winningPlayerController = winningPlayerState.GetComponent<BaseController>();
-
         // what happens to losing side
         losingPlayerState.DeathRpc();
         losingPlayerState.ResetHealth();
         
         // what happens to winning side
-        winningPlayerController.OnVictory();
 
         EndCombat();
     }
