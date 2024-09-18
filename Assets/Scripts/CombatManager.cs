@@ -1,30 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
 {
-    private const float MaximumDuelInitiateDistance = 2f;
-    private Vector3 _fightInitiatorPosition = new Vector3(1, 0 ,0);
-    private Vector3 _fightReceiverPosition = new Vector3(-1, 0 ,0);
-
+    private List<Combat> _combatList;
     public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
-        Debug.Log("tultiin checkcombateligibilityyn");
+        // Debug.Log("tultiin checkcombateligibilityyn");
 
-        if (Vector3.Distance(player1.transform.position, player2.transform.position) > MaximumDuelInitiateDistance) return false;
+        if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return false;
         
+        // first we get playerState components
         var player1State = player1.GetComponent<PlayerState>();
         var player2State = player2.GetComponent<PlayerState>();
         
-        // player1 components
-        // var player1Controller = player1.GetComponent<PlayerController>();
-        if (player1State.CharacterState.Value != ControllerState.Default) return false;
-
-        // player2 components
-        // var player2Controller = player2.GetComponent<BaseController>();
-        if (player2State.CharacterState.Value != ControllerState.Default) return false;
+        // then we check if the combat states are "fightable"
+        if (player1State.CombatState.Value != CombatState.Default) return false;
+        if (player2State.CombatState.Value != CombatState.Default) return false;
 
         Debug.Log("combat seems eligible");
         
@@ -32,30 +27,37 @@ public class CombatManager : Singleton<CombatManager>
         ForcePlayerMovement(player1State, player2State, player2.transform.position);
         
         // we create instance of combat
-        var combat = new Combat(player1, player2);
+        var combat = new Combat(player1, player2, player1State, player2State);
+        // we store the combat into a list for future use
+        _combatList.Add(combat);
+        // we start the combat
         combat.StartCombat();
         
         return true;
     }
 
+    public void RequestFlee(NetworkObject playerTryingToFlee)
+    {
+        foreach (var combat in _combatList)
+        {
+            if (combat.player1 == playerTryingToFlee || combat.player2 == playerTryingToFlee)
+            {
+                // we found a matching fight
+                combat.EndCombat();
+
+                _combatList.Remove(combat);
+                break;
+            }
+        }
+    }
+
     private void ForcePlayerMovement(PlayerState player1State, PlayerState player2State, Vector3 fightPosition)
     {
-        // Debug.Log("player1 posi paikassa 1: " + fightPosition + _fightInitiatorPosition);
-        // Debug.Log("player2 posi paikassa 1: " + fightPosition + _fightReceiverPosition);
-
-        player1State.CharacterState.Value = ControllerState.Combat;
-        player2State.CharacterState.Value = ControllerState.Combat;
+        player1State.CombatState.Value = CombatState.Combat;
+        player2State.CombatState.Value = CombatState.Combat;
         
-        player1State.StartCombatRpc(fightPosition + _fightInitiatorPosition, 3);
-        player2State.StartCombatRpc(fightPosition + _fightReceiverPosition, 2);
-    }
-    private void ForcePlayerAndNPCControllers(PlayerController player1Controller, BotMovementScript botMovementScript, Vector3 fightPosition)
-    {
-        // Debug.Log("player1 posi paikassa 1: " + fightPosition + _fightInitiatorPosition);
-        // Debug.Log("player2 posi paikassa 1: " + fightPosition + _fightReceiverPosition);
-        
-        player1Controller.StartFight(fightPosition + _fightInitiatorPosition, 3);
-        botMovementScript.StartFight(fightPosition + _fightReceiverPosition, 2);
+        player1State.StartCombatRpc(fightPosition + GlobalSettings.FightInitiatorPosition, 3);
+        player2State.StartCombatRpc(fightPosition + GlobalSettings.FightReceiverPosition, 2);
     }
 }
 
@@ -66,66 +68,85 @@ public class Combat
     public PlayerState player1State;
     public PlayerState player2State;
     
-    private bool didAnyPlayerDie = false;
+    private bool _didAnyPlayerDie = false;
+    private int _hitcounter;
 
-    public Combat(NetworkObject inputPlayer1, NetworkObject inputPlayer2)
+    public Combat(NetworkObject inputPlayer1, NetworkObject inputPlayer2, PlayerState inputPlayer1State, PlayerState inputPlayer2State)
     {
-        // Debug.Log("tehtiin uusi combat");
-
         player1 = inputPlayer1;
         player2 = inputPlayer2;
 
-        player1State = inputPlayer1.GetComponent<PlayerState>();
-        player2State = inputPlayer2.GetComponent<PlayerState>();
+        player1State = inputPlayer1State;
+        player2State = inputPlayer2State;
+    }
+
+    public void EndCombat()
+    {
+        Debug.Log("ending combat");
+
+        player1.StopCoroutine(StartChangingNetworkVariable());
+        
+        player1State.CombatState.Value = CombatState.Default;
+        player2State.CombatState.Value = CombatState.Default;
     }
 
     public void StartCombat()
     {
-        Debug.Log("Starting combat...");
+        // Debug.Log("Starting combat...");
 
         player1.StartCoroutine(StartChangingNetworkVariable());
     }
     
     private IEnumerator StartChangingNetworkVariable()
     {
-        Debug.Log("Starting combat coroutine");
         bool playerDied = false;
-
-        List<PlayerState> players = new List<PlayerState>();
-        players.Add(player1State);
-        players.Add(player2State);
         int playerIndex = 0;
+
+        PlayerState[] players = { player1State, player2State };
 
         while (!playerDied)
         {
-            playerIndex++;
-            if (playerIndex > 1) playerIndex = 0;
-            
             playerDied = players[playerIndex].DecreaseHealthPoints(Random.Range(0, 10));
-        
+
+            if (playerDied)
+            {
+                HandlePlayerDeath(playerIndex, players);
+                yield break;
+            }
+
+            HitCounter();
             yield return new WaitForSeconds(1);
+
+            playerIndex++;
+            if (playerIndex >= players.Length) playerIndex = 0;
         }
+    }
+
+    private void HandlePlayerDeath(int playerIndex, PlayerState[] players)
+    {
+        PlayerState losingPlayerState = players[playerIndex];
+        PlayerState winningPlayerState = players[playerIndex==0?1:0];
+
+        // BaseController losingPlayerController = losingPlayerState.GetComponent<BaseController>();
+        BaseController winningPlayerController = winningPlayerState.GetComponent<BaseController>();
+
+        // what happens to losing side
+        losingPlayerState.DeathRpc();
+        losingPlayerState.ResetHealth();
         
-        // Debug.Log("häviäjän playerindex oli " + playerIndex);
+        // what happens to winning side
+        winningPlayerController.OnVictory();
 
+        EndCombat();
+    }
 
-        if (playerIndex == 0)
+    private void HitCounter()
+    {
+        _hitcounter++;
+        if (_hitcounter >= 6)
         {
-            player1.GetComponent<BaseController>().OnDeath();
-            player1State.DeathRpc();
-            player1State.ResetHealth();
-            player2.GetComponent<BaseController>().OnVictory();
+            player1State.CombatState.Value = CombatState.Flee;
+            player2State.CombatState.Value = CombatState.Flee;
         }
-        else if (playerIndex == 1)
-        {
-            player1.GetComponent<BaseController>().OnVictory();
-            player2State.ResetHealth();
-            player2State.DeathRpc();
-            player2.GetComponent<BaseController>().OnDeath();
-            // player2.GetComponent<BaseController>().TeleportCharacter(Vector3.zero);
-        }
-
-        player1State.CharacterState.Value = ControllerState.Default;
-        player2State.CharacterState.Value = ControllerState.Default;
     }
 }

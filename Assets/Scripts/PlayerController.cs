@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerController : BaseController
 {
     private bool _menuIsOn;
+    
+    private float _timer;
+    private float _timeOut = .5f;
 
     protected override void Start()
     {
@@ -21,14 +24,45 @@ public class PlayerController : BaseController
     {
         if (!IsOwner) return;
 
-        CheckMouseButtons();
+        HandleInputs();
     }
 
-    private void CheckMouseButtons()
+    private void HandleInputs()
     {
-        if (playerState.CharacterState.Value != ControllerState.Default) return;
-        
-        // check left click
+        switch (playerState.CombatState.Value)
+        {
+            case CombatState.Combat:
+                return;
+            case CombatState.Default:
+                DoDefaultStuff();
+                break;
+            case CombatState.Flee:
+                UpdateTimeoutTimer();
+                DoFleeStuff();
+                break;
+        }
+    }
+
+    private void UpdateTimeoutTimer()
+    {
+        _timer += Time.deltaTime;
+    }
+
+    private void DoFleeStuff()
+    {
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
+        {
+            if(_timer < _timeOut) return;
+
+            SendFleeRequestToServerRpc(networkObject);
+
+            _timer = 0f;
+        }
+    }
+
+    private void DoDefaultStuff()
+    {
+         // check left click
         if (Input.GetMouseButtonDown(0))
         {
             if (_menuIsOn)
@@ -109,8 +143,6 @@ public class PlayerController : BaseController
                 _menuIsOn = true;
             }
         }
-        
-        // UpdateAnimator();
     }
 
     private void UpdateAnimator(Vector3 clickPosition)
@@ -192,10 +224,10 @@ public class PlayerController : BaseController
             }
         }
     }
-}
-
-public enum ControllerState
-{
-    Default,
-    Combat,
+    
+    [Rpc(SendTo.Server)]
+    private void SendFleeRequestToServerRpc(NetworkObjectReference playerTryingToFlee)
+    {
+        CombatManager.Instance.RequestFlee(playerTryingToFlee);
+    }
 }

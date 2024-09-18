@@ -9,6 +9,7 @@ public class BaseController : NetworkBehaviour
     [SerializeField] protected Animator animator;
     [SerializeField] protected NetworkTransform networkTransform;
     [SerializeField] protected PlayerState playerState;
+    [SerializeField] protected NetworkObject networkObject;
 
     // public ControllerState CharacterState;
 
