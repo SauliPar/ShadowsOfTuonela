@@ -7391,11 +7391,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrackerSettings:
     BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
+    PositionDamping: {x: 0, y: 0, z: 0}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 3, z: -5}
+  FollowOffset: {x: -0.5, y: 3, z: -5}
 --- !u!114 &1949172660
 MonoBehaviour:
   m_ObjectHideFlags: 0
