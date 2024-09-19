@@ -12,6 +12,7 @@ public class CombatManager : Singleton<CombatManager>
         // Debug.Log("tultiin checkcombateligibilityyn");
 
         if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return false;
+        if (player2.transform.position.x > GlobalSettings.SafeZoneXValue) return false;
         
         // first we get playerState components
         var player1State = player1.GetComponent<PlayerState>();
