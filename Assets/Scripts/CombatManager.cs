@@ -68,6 +68,8 @@ public class Combat
     public NetworkObject player2;
     public PlayerState player1State;
     public PlayerState player2State;
+    public PlayerStatistics player1Statistics;
+    public PlayerStatistics player2Statistics;
     
     private bool _combatIsOn = false;
     private int _hitcounter;
@@ -79,6 +81,9 @@ public class Combat
 
         player1State = inputPlayer1State;
         player2State = inputPlayer2State;
+
+        player1Statistics = inputPlayer1.GetComponent<PlayerStatistics>();
+        player2Statistics = inputPlayer2.GetComponent<PlayerStatistics>();
     }
 
     public void EndCombat()
@@ -111,8 +116,9 @@ public class Combat
         {
             playerIndex++;
             if (playerIndex >= players.Length) playerIndex = 0;
-            
-            _combatIsOn = players[playerIndex].DecreaseHealthPoints(Random.Range(0, 10));
+
+            int calculatedDamage = CalculateDamage(playerIndex);
+            _combatIsOn = players[playerIndex].DecreaseHealthPoints(calculatedDamage);
 
             if (!_combatIsOn)
             {
@@ -123,6 +129,46 @@ public class Combat
             HitCounter();
             yield return new WaitForSeconds(1);
         }
+    }
+
+    private int CalculateDamage(int playerIndex)
+    {
+        int defenseValue = 1;
+        int attackValue = 1;
+        int strengthValue = 1;
+        
+        if (playerIndex == 0)
+        {
+            defenseValue = player1Statistics.Defense;
+            attackValue = player2Statistics.Attack;
+            strengthValue = player2Statistics.Strength;
+        }
+        else if (playerIndex == 1)
+        {
+            defenseValue = player2Statistics.Defense;
+            attackValue = player1Statistics.Attack;
+            strengthValue = player1Statistics.Strength;
+        }
+
+        Debug.Log("str_att_def: " + strengthValue + ", " + attackValue + ", " + defenseValue );
+
+        float hitChance = (float)attackValue / defenseValue;
+        hitChance = Mathf.Clamp(hitChance, 0.1f, 1f);
+        
+        Debug.Log("hitchance: " + hitChance);
+
+
+        var randomNumber = Random.Range(0f, 1f);
+        Debug.Log("randomNumber: " + randomNumber);
+
+        if (randomNumber <= hitChance)
+        {
+            var maxDamageNumber = 5 + (strengthValue / 5);
+            
+            return Random.Range(1, maxDamageNumber);
+        }
+        
+        return 0;
     }
 
     private void HandlePlayerDeath(int playerIndex, PlayerState[] players)

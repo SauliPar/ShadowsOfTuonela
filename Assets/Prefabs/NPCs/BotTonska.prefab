@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 1911547362615438689}
   - component: {fileID: 2243662133029553636}
   - component: {fileID: 906611508030754441}
+  - component: {fileID: 8621658395802839620}
   m_Layer: 3
   m_Name: BotTonska
   m_TagString: DuelingNPC
@@ -333,6 +334,18 @@ MonoBehaviour:
   networkTransform: {fileID: 1911547362615438689}
   playerState: {fileID: 2243662133029553636}
   networkObject: {fileID: 1150672427062914965}
+--- !u!114 &8621658395802839620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4273360142929194460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aed110803c4f220448e47d921f583b0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6807991485434704353
 GameObject:
   m_ObjectHideFlags: 0

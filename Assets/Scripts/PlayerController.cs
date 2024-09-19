@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : BaseController
 {
+    [SerializeField] private StatsUIHandler statsUIHandler;
+    
     private bool _menuIsOn;
     
     private float _timer;
@@ -18,6 +20,8 @@ public class PlayerController : BaseController
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
         cinemachineCamera.LookAt = transform;
         cinemachineCamera.Follow = transform;
+        
+        statsUIHandler.Initialize();
     }
     
     private void Update()
