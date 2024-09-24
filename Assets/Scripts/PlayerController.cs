@@ -29,6 +29,7 @@ public class PlayerController : BaseController
         if (!IsOwner) return;
 
         HandleInputs();
+        animator.SetFloat("Speed", Mathf.Clamp(agent.speed, 0, 1f));
     }
 
     private void HandleInputs()
