@@ -29,7 +29,10 @@ public class PlayerController : BaseController
         if (!IsOwner) return;
 
         HandleInputs();
-        animator.SetFloat("Speed", Mathf.Clamp(agent.speed, 0, 1f));
+        Debug.Log("agent.speed clämpättynä: " + Mathf.Clamp(agent.velocity.magnitude, 0, 1f));
+        
+        animator.SetFloat("Speed", Mathf.Clamp(agent.velocity.magnitude, 0, 1f));
+        // animator.speed = Mathf.Clamp(agent.speed, 0, 1f);
     }
 
     private void HandleInputs()
