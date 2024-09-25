@@ -1,6 +1,7 @@
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
@@ -29,10 +30,8 @@ public class PlayerController : BaseController
         if (!IsOwner) return;
 
         HandleInputs();
-        Debug.Log("agent.speed clämpättynä: " + Mathf.Clamp(agent.velocity.magnitude, 0, 1f));
         
         animator.SetFloat("Speed", Mathf.Clamp(agent.velocity.magnitude, 0, 1f));
-        // animator.speed = Mathf.Clamp(agent.speed, 0, 1f);
     }
 
     private void HandleInputs()
@@ -80,6 +79,8 @@ public class PlayerController : BaseController
             }
             else
             {
+                if (EventSystem.current.IsPointerOverGameObject()) return;     
+                
                 // Create a ray from the mouse cursor on screen in the direction of the camera
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             
@@ -125,6 +126,8 @@ public class PlayerController : BaseController
         // check right click
         if (Input.GetMouseButtonDown(1))
         {
+            if (EventSystem.current.IsPointerOverGameObject()) return;     
+
             // Create a ray from the mouse cursor on screen in the direction of the camera
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             

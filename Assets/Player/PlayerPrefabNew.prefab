@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 320559211427988956}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1361,7 +1361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 728746238
+  GlobalObjectIdHash: 4287488041
   InScenePlacedSourceGlobalObjectIdHash: 2450922218
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1504,7 +1504,7 @@ GameObject:
   - component: {fileID: 764939331018062392}
   - component: {fileID: 6499833377458027045}
   - component: {fileID: 2056446786914109301}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: HealthCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2711,11 +2711,11 @@ RectTransform:
   - {fileID: 2952345199783104835}
   m_Father: {fileID: 5972716560103173366}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -155.8}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 1, y: 1}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &12880316088765853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2886,7 +2886,7 @@ GameObject:
   - component: {fileID: 6692396603758791900}
   - component: {fileID: 1145572396799431235}
   - component: {fileID: 3662094058878982045}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: TestCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3125,6 +3125,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: DamageTaken
       objectReference: {fileID: 0}
+    - target: {fileID: 2346148941837511787, guid: ac02444537da27b40a0f1407c8550d7f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3910315326073227739, guid: ac02444537da27b40a0f1407c8550d7f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014821573228065681, guid: ac02444537da27b40a0f1407c8550d7f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9199981882283168107, guid: ac02444537da27b40a0f1407c8550d7f,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3276,6 +3291,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1464334305316164118}
     m_Modifications:
+    - target: {fileID: 1086683912564860553, guid: 163c48796d5b02944995773c61153d0b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1946354637520967113, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
       propertyPath: m_Value
@@ -3286,10 +3306,20 @@ PrefabInstance:
       propertyPath: m_MaxValue
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 3541776643573353855, guid: 163c48796d5b02944995773c61153d0b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4227156478616038101, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
       propertyPath: m_Name
       value: HealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4227156478616038101, guid: 163c48796d5b02944995773c61153d0b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5053370587043771638, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
@@ -3300,6 +3330,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6786643740656255308, guid: 163c48796d5b02944995773c61153d0b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
