@@ -7,6 +7,26 @@ public class PlayerController : BaseController
 {
     [SerializeField] private StatsUIHandler statsUIHandler;
     
+    private static StandaloneInputModuleV2 currentInput;
+    
+    private StandaloneInputModuleV2 CurrentInput
+    {
+        get
+        {
+            if (currentInput == null)
+            {
+                currentInput = EventSystem.current.currentInputModule as StandaloneInputModuleV2;
+                if (currentInput == null)
+                {
+                    Debug.LogError("Missing StandaloneInputModuleV2.");
+                    // some error handling
+                }
+            }
+
+            return currentInput;
+        }
+    }
+    
     private bool _menuIsOn;
     
     private float _timer;
@@ -79,11 +99,12 @@ public class PlayerController : BaseController
             }
             else
             {
-                if (EventSystem.current.IsPointerOverGameObject()) return;     
-                
                 // Create a ray from the mouse cursor on screen in the direction of the camera
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             
+                var currentGO = CurrentInput.GameObjectUnderPointer();
+                if (currentGO != null && currentGO.layer == LayerMask.NameToLayer("UI")) return;
+                
                 // Check if the ray hits anything in the game world
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
@@ -126,8 +147,6 @@ public class PlayerController : BaseController
         // check right click
         if (Input.GetMouseButtonDown(1))
         {
-            if (EventSystem.current.IsPointerOverGameObject()) return;     
-
             // Create a ray from the mouse cursor on screen in the direction of the camera
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             

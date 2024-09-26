@@ -1390,6 +1390,9 @@ MonoBehaviour:
   playerState: {fileID: 3412654241834530592}
   networkObject: {fileID: 5249904666953346763}
   statsUIHandler: {fileID: 12880316088765853}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 7340123
 --- !u!114 &4157837910022887812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1441,6 +1444,9 @@ MonoBehaviour:
   HealthBarScript: {fileID: 4730291951893594939}
   DamageTakenScript: {fileID: 7999329068969077736}
   BaseController: {fileID: 347242223949722645}
+  DroppedItemPrefab: {fileID: 5703866165846414287, guid: a9d22931115ca6242b2ea51c0aacf186,
+    type: 3}
+  DroppedItem: {fileID: 11400000, guid: 399390ee089de3f4b813bd0069fab38e, type: 2}
 --- !u!114 &5969292346422927972
 MonoBehaviour:
   m_ObjectHideFlags: 0
