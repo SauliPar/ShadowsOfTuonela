@@ -7,6 +7,7 @@ using UnityEngine;
 public class CombatManager : Singleton<CombatManager>
 {
     private List<Combat> _combatList = new List<Combat>();
+   
     public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
         // Debug.Log("tultiin checkcombateligibilityyn");
@@ -181,6 +182,7 @@ public class Combat
         losingPlayerState.ResetHealth();
         
         // what happens to winning side
+        winningPlayerState.DropItemToPlayerRpc();
 
         EndCombat();
     }

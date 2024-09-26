@@ -20,6 +20,8 @@ public class PlayerState : NetworkBehaviour
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
     public BaseController BaseController;
+    public GameObject DroppedItemPrefab;
+    public Item DroppedItem;
     
     private void Start()
     {
@@ -100,5 +102,12 @@ public class PlayerState : NetworkBehaviour
     public void StartCombatRpc(Vector3 fightPosition, int faceIndex)
     {
         BaseController.StartFight(fightPosition, faceIndex);
+    }
+    
+    [Rpc(SendTo.Owner)]
+    public void DropItemToPlayerRpc()
+    {
+        var drop = Instantiate(DroppedItemPrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
+        drop.GetComponent<DroppedItem>().SetupDroppedItem(DroppedItem);
     }
 }
