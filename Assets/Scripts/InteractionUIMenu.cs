@@ -65,7 +65,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         var interactionUIScript = walkUIElement.GetComponent<InteractionUIElement>();
         uiElements.Add(interactionUIScript);
         
-        interactionUIScript.InitializeTheElement("Walk here", ButtonPressed, InteractionType.Walk);
+        interactionUIScript.InitializeElement("Walk here", ButtonPressed, InteractionType.Walk);
 
         // then we fite, for the horde!
         if (_enemyPlayerTransform)
@@ -73,7 +73,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
             var fightUIElement = Instantiate(interactionUIElement, parentContainer);
             var interactionUIScript2 = fightUIElement.GetComponent<InteractionUIElement>();
             uiElements.Add(interactionUIScript2);
-            interactionUIScript2.InitializeTheElement("Fight", ButtonPressed,
+            interactionUIScript2.InitializeElement("Fight", ButtonPressed,
                 InteractionType.Fight);
         }
         

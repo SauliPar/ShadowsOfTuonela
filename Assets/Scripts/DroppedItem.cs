@@ -13,8 +13,9 @@ public class DroppedItem : MonoBehaviour
         spriteRenderer.sprite = inputItem.ItemIcon;
     }
 
-    public Item PickUpItem()
+    public void PickUpItem()
     {
-        return item;
+        InventoryManager.Instance.OnItemPickup(item);
+        Destroy(gameObject);
     }
 }

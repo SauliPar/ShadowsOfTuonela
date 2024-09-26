@@ -9,7 +9,7 @@ public class InteractionUIElement : MonoBehaviour
     [SerializeField] private Button button;
     public InteractionUIMenu.InteractionType InteractionType;
     
-    public void InitializeTheElement(string elementText, UnityAction<InteractionUIElement> callback, InteractionUIMenu.InteractionType interactionType)
+    public void InitializeElement(string elementText, UnityAction<InteractionUIElement> callback, InteractionUIMenu.InteractionType interactionType)
     {
         text.text = elementText;
         InteractionType = interactionType;

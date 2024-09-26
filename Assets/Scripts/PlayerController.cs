@@ -109,6 +109,22 @@ public class PlayerController : BaseController
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
+                    if (hit.collider.CompareTag("DroppedItem"))
+                    {
+                        if (Vector3.Distance(transform.position, hit.collider.transform.position) < GlobalSettings.MaximumLootDistance)
+                        {
+                            Debug.Log("koetat kerää itemiä :D");
+
+                            var droppedItem = hit.collider.GetComponent<DroppedItem>();
+                            if (droppedItem != null)
+                            {
+                                // Handle interaction with dropped item
+                                // For example, pick up the item
+                                droppedItem.PickUpItem();
+                            }
+                        }
+                    }
+                    
                     // let's see where we hit
                     if (hit.collider.CompareTag("Player"))
                     {
