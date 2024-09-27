@@ -1,4 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,35 +18,74 @@ public class PlayerState : NetworkBehaviour
     // public NetworkVariable<int> Damage = new NetworkVariable<int>(0);
     // public NetworkVariable<bool> IsDead = new NetworkVariable<bool>(false);
     
-    public NetworkVariable<CombatState> CombatState = new NetworkVariable<CombatState>(global::CombatState.Default);
+    public NetworkVariable<CombatState> CombatState = new();
+
+    public NetworkList<int> InventoryList = new();
 
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
     public BaseController BaseController;
     public GameObject DroppedItemPrefab;
     public Item DroppedItem;
+    public NetworkObject MyNetworkObject;
+
+    public Inventory Inventory;
     
-    private void Start()
+    private Dictionary<string, Item> itemDictionary;
+
+    private async void Start()
     {
         if (IsServer)
         {
             Debug.Log("Tultiin PlayerStaten server-osioon");
-            // StartCoroutine(StartChangingNetworkVariable());
+            // load inventory from cloud, and initialize it to the list
+            itemDictionary = await LoadPlayerInventory();
+            foreach (var item in itemDictionary.Values)
+            {
+                InventoryList.Add(item.Id);
+            }
         }
         else
         {
             Debug.Log("Tultiin PlayerStaten client-osioon");
         }
         
-        // IsDead.OnValueChanged += OnDeath;
         CombatState.OnValueChanged += OnCharacterStateChanged;
         Health.OnValueChanged += OnHealthValueChanged;
+        InventoryList.OnListChanged += OnInventoryListChanged;
+    }
+
+    private void OnInventoryListChanged(NetworkListEvent<int> changeevent)
+    {
+        Debug.Log("oninventorylistchanged");
+        
+        Inventory.SetupInventorySlots(InventoryList);
+    }
+
+    private Task<Dictionary<string, Item>> LoadPlayerInventory()
+    {
+        Dictionary<string, Item> newDictionary = new Dictionary<string, Item>();
+        newDictionary.Add("1", ItemCatalogManager.Instance.GetItemById(1));
+        newDictionary.Add("2", ItemCatalogManager.Instance.GetItemById(2));
+        return Task.FromResult(newDictionary);
     }
 
     private void OnCharacterStateChanged(CombatState previousvalue, CombatState newvalue)
     {
         // BaseController.CharacterState = newvalue;
     }
+    
+    // private void OnInventoryListChanged(List<int> previousvalue, List<int> newvalue)
+    // {
+    //     // List<Item> itemList = new List<Item>();
+    //     // foreach (var itemId in newvalue)
+    //     // {
+    //     //     itemList.Add(ItemCatalogManager.Instance.GetItemById(itemId));
+    //     // }
+    //     //
+    //     // Inventory.SetupInventorySlots(itemList);
+    // }
+
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
     {
@@ -103,11 +145,42 @@ public class PlayerState : NetworkBehaviour
     {
         BaseController.StartFight(fightPosition, faceIndex);
     }
-    
+
+    [Rpc(SendTo.Server)]
+    public void UseItemRpc(int index)
+    {
+        if (index >= 0 && index < InventoryList.Count)
+        {
+            var item = ItemCatalogManager.Instance.GetItemById(InventoryList[index]);
+
+            switch (item.ItemType)
+            {
+                case ItemType.Consumable:
+                    Health.Value += 10;
+                    InventoryList.RemoveAt(index);
+                    break;
+                case ItemType.Equipment:
+                    ItemIsEligibleToUseRpc(index);
+                    break;
+            }
+        }
+        else
+        {
+            // ban player for cheating inventory :D
+        }
+    }
+
     [Rpc(SendTo.Owner)]
-    public void DropItemToPlayerRpc()
+    private void ItemIsEligibleToUseRpc(int index)
+    {
+        Inventory.EquipItem(index);
+    }
+
+    [Rpc(SendTo.Owner)]
+    public void DropItemToPlayerRpc(int droppedItemId)
     {
         var drop = Instantiate(DroppedItemPrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
-        drop.GetComponent<DroppedItem>().SetupDroppedItem(DroppedItem);
+        // drop.GetComponent<NetworkObject>().SpawnWithOwnership(MyNetworkObject.NetworkObjectId);
+        drop.GetComponent<DroppedItem>().SetupDroppedItem(ItemCatalogManager.Instance.GetItemById(droppedItemId));
     }
 }

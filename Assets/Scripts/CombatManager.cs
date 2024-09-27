@@ -156,11 +156,11 @@ public class Combat
         float hitChance = (float)attackValue / defenseValue;
         hitChance = Mathf.Clamp(hitChance, 0.1f, 1f);
         
-        Debug.Log("hitchance: " + hitChance);
+        // Debug.Log("hitchance: " + hitChance);
 
 
         var randomNumber = Random.Range(0f, 1f);
-        Debug.Log("randomNumber: " + randomNumber);
+        // Debug.Log("randomNumber: " + randomNumber);
 
         if (randomNumber <= hitChance)
         {
@@ -182,7 +182,7 @@ public class Combat
         losingPlayerState.ResetHealth();
         
         // what happens to winning side
-        winningPlayerState.DropItemToPlayerRpc();
+        InventoryManager.Instance.StartDroppingItem(winningPlayerState.GetComponent<NetworkObject>(), winningPlayerState);
 
         EndCombat();
     }

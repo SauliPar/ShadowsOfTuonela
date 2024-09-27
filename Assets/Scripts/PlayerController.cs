@@ -7,6 +7,14 @@ public class PlayerController : BaseController
 {
     [SerializeField] private StatsUIHandler statsUIHandler;
     
+    // inventory related gameobjects
+    // [Header("Inventory Stuff")]
+    // [SerializeField] private GameObject inventoryParentPrefab;
+    // [SerializeField] private GameObject inventoryButtonPrefab;
+    // [SerializeField] private Transform instantiateParent;
+
+    private InventoryManager inventoryManager;
+    
     private static StandaloneInputModuleV2 currentInput;
     
     private StandaloneInputModuleV2 CurrentInput
@@ -29,7 +37,7 @@ public class PlayerController : BaseController
     
     private bool _menuIsOn;
     
-    private float _timer;
+    private float _timer = .5f;
     private float _timeOut = .5f;
 
     protected override void Start()
@@ -37,14 +45,32 @@ public class PlayerController : BaseController
         if (!IsOwner) return;
         
         base.Start();
+
+        SetupComponents();
+        HandleInitializations();
+    }
+
+    private void HandleInitializations()
+    {
+        // handle inventory instantiation
+
+        // var inventoryButton = Instantiate(inventoryButtonPrefab, instantiateParent);
+        // var inventoryParent = Instantiate(inventoryParentPrefab, instantiateParent);
         
-        var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
-        cinemachineCamera.LookAt = transform;
-        cinemachineCamera.Follow = transform;
+        // inventoryButton.GetComponent<InventoryButton>().Initialize(inventoryParent.GetComponent<Inventory>());
+        // inventoryManager = inventoryParent.GetComponent<InventoryManager>();
+        // inventoryParent.GetComponent<NetworkObject>().Spawn();
         
         statsUIHandler.Initialize();
     }
-    
+
+    private void SetupComponents()
+    {
+        var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
+        cinemachineCamera.LookAt = transform;
+        cinemachineCamera.Follow = transform;
+    }
+
     private void Update()
     {
         if (!IsOwner) return;
@@ -120,6 +146,7 @@ public class PlayerController : BaseController
                             {
                                 // Handle interaction with dropped item
                                 // For example, pick up the item
+                                TryToPickUpItemServerRpc(networkObject, droppedItem.item.Id);
                                 droppedItem.PickUpItem();
                             }
                         }
@@ -274,6 +301,18 @@ public class PlayerController : BaseController
     [Rpc(SendTo.Server)]
     private void SendFleeRequestToServerRpc(NetworkObjectReference playerTryingToFlee)
     {
-        CombatManager.Instance.RequestFlee(playerTryingToFlee);
+        if (playerTryingToFlee.TryGet(out NetworkObject networkObjectTryingToFlee))
+        {
+            CombatManager.Instance.RequestFlee(networkObjectTryingToFlee);
+        }
+    }
+    
+    [Rpc(SendTo.Server)]
+    private void TryToPickUpItemServerRpc(NetworkObjectReference networkObjectReference, int itemId)
+    {
+        if (networkObjectReference.TryGet(out NetworkObject playerNetworkObject))
+        {
+            InventoryManager.Instance.TryToPickUpItem(playerNetworkObject, itemId);
+        }
     }
 }

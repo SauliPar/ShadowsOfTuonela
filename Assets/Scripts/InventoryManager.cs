@@ -1,71 +1,72 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Unity.Netcode;
+using Unity.Services.Matchmaker.Models;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
-    [SerializeField] private Transform inventoryContainer;
-    [SerializeField] private GameObject inventorySlotPrefab;
-    [SerializeField] private Item rune2h;
-    [SerializeField] private Item lobster;
+    // data structure to load and save from cloud
+    private Dictionary<string, Item> inventoryDictionary = new Dictionary<string, Item>();
+    // actual inventory that is in the player's inventory
+    private List<InventoryItem> inventoryItems = new List<InventoryItem>();
 
-    private List<InventorySlot> inventorySlots = new List<InventorySlot>();
-    private async void Start()
+    private List<DropData> droppedItems = new List<DropData>();
+    
+    // private void Start()
+    // {
+    // }
+    //
+    // private async void SaveInventory()
+    // {
+    //     inventoryDictionary.Clear();
+    //
+    //     foreach (var item in inventoryItems)
+    //     {
+    //         inventoryDictionary.Add(item.item.Id, item.item);
+    //     }
+    //     
+    //     await SaveToCloud(inventoryDictionary);
+    // }
+    //
+    // private async Task SaveToCloud(Dictionary<string, Item> dictionary)
+    // {
+    //     Debug.Log("tallensit pilveen :D hyvä homma");
+    // }
+
+    public void StartDroppingItem(NetworkObject networkObject, PlayerState playerState)
     {
-        // load stuff from cloud
-        var dictionary = await LoadFromCloud();
-        // we get dictionary, which we parse into item list or something
+        DropData dropData = new DropData();
+        dropData.PlayerWhoGotTheDrop = networkObject;
+        dropData.ItemIdThatDropped = ItemCatalogManager.Instance.GetRandomItemFromDatabase();
+        dropData.DropWorldPosition = networkObject.transform.position;
+        
+        droppedItems.Add(dropData);
+        
+        playerState.DropItemToPlayerRpc(dropData.ItemIdThatDropped);
+    }
 
-        if (dictionary.Count > 0)
+    public void TryToPickUpItem(NetworkObject playerNetworkObject, int itemId)
+    {
+        if (droppedItems.Any())
         {
-            SetupInventorySlots(dictionary);
+            var dropData = droppedItems.FirstOrDefault(x => x.PlayerWhoGotTheDrop == playerNetworkObject);
+            if (dropData != null)
+            {
+                if (dropData.ItemIdThatDropped == itemId)
+                {
+                    Debug.Log("kokeillaan lisätä itemiä :D");
+                    playerNetworkObject.GetComponent<PlayerState>().InventoryList.Add(itemId);
+                }
+            }
         }
     }
+}
 
-    private void SetupInventorySlots(Dictionary<int, Item> dictionary)
-    {
-        foreach (KeyValuePair<int, Item> entry in dictionary)
-        {
-            var itemSlot = Instantiate(inventorySlotPrefab, inventoryContainer);
-            var component = itemSlot.GetComponent<InventorySlot>();
-            component.InitializeElement(entry.Value, OnButtonPress);
-            
-            inventorySlots.Add(component);
-        }
-    }
-
-    private void OnButtonPress(InventorySlot inventorySlot)
-    {
-        ItemType itemType = inventorySlot.item.ItemType;
-
-        switch (itemType)
-        {
-            case ItemType.Consumable:
-                Debug.Log("hiilasit xd");
-                inventorySlots.Remove(inventorySlot);
-                inventorySlot.RemoveElement();
-                break;
-            case ItemType.Equipment:
-                Debug.Log("yritit equippaa :D");
-                break;
-        }
-    }
-
-    private Task<Dictionary<int, Item>> LoadFromCloud()
-    {
-        Dictionary<int, Item> newDictionary = new Dictionary<int, Item>();
-        newDictionary.Add(1, rune2h);
-        newDictionary.Add(2, lobster);
-        return Task.FromResult(newDictionary);
-    }
-
-    public void OnItemPickup(Item item)
-    {
-        var itemSlot = Instantiate(inventorySlotPrefab, inventoryContainer);
-        var component = itemSlot.GetComponent<InventorySlot>();
-        component.InitializeElement(item, OnButtonPress);
-            
-        inventorySlots.Add(component);
-    }
+public class DropData
+{
+    public NetworkObject PlayerWhoGotTheDrop;
+    public int ItemIdThatDropped;
+    public Vector3 DropWorldPosition;
 }

@@ -6,7 +6,7 @@ public class Item : ScriptableObject
 {
     public string ItemName;
     public Sprite ItemIcon;
-    public string Id;
+    public int Id;
     public ItemType ItemType;
     public int StackSize = 1;
 }
