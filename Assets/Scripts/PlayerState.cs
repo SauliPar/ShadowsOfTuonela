@@ -37,7 +37,6 @@ public class PlayerState : NetworkBehaviour
     {
         if (IsServer)
         {
-            Debug.Log("Tultiin PlayerStaten server-osioon");
             // load inventory from cloud, and initialize it to the list
             itemDictionary = await LoadPlayerInventory();
             foreach (var item in itemDictionary.Values)
@@ -47,12 +46,21 @@ public class PlayerState : NetworkBehaviour
         }
         else
         {
-            Debug.Log("Tultiin PlayerStaten client-osioon");
+            // Debug.Log("Tultiin PlayerStaten client-osioon");
         }
         
         CombatState.OnValueChanged += OnCharacterStateChanged;
         Health.OnValueChanged += OnHealthValueChanged;
         InventoryList.OnListChanged += OnInventoryListChanged;
+    }
+
+    public override void OnDestroy()
+    {
+        CombatState.OnValueChanged -= OnCharacterStateChanged;
+        Health.OnValueChanged -= OnHealthValueChanged;
+        InventoryList.OnListChanged -= OnInventoryListChanged;
+
+        if (IsServer) InventoryList = null;
     }
 
     private void OnInventoryListChanged(NetworkListEvent<int> changeevent)

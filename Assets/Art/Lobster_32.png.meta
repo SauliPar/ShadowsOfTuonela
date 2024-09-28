@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Lobster_32_0: 2934918282418161000
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

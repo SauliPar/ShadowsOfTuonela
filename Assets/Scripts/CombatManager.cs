@@ -6,26 +6,23 @@ using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
 {
-    private List<Combat> _combatList = new List<Combat>();
+    private HashSet<Combat> _combatList = new HashSet<Combat>();
    
-    public bool CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
+    public void CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
-        // Debug.Log("tultiin checkcombateligibilityyn");
-
-        if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return false;
-        if (player2.transform.position.x > GlobalSettings.SafeZoneXValue) return false;
+        if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return;
+        if (player2.transform.position.x > GlobalSettings.SafeZoneXValue) return;
         
         // first we get playerState components
         var player1State = player1.GetComponent<PlayerState>();
         var player2State = player2.GetComponent<PlayerState>();
         
         // then we check if the combat states are "fightable"
-        if (player1State.CombatState.Value != CombatState.Default) return false;
-        if (player2State.CombatState.Value != CombatState.Default) return false;
+        if (player1State.CombatState.Value != CombatState.Default) return;
+        if (player2State.CombatState.Value != CombatState.Default) return;
 
         Debug.Log("combat seems eligible");
         
-        // we can use null-coalescing operator (??) to simplify conditional logic
         ForcePlayerMovement(player1State, player2State, player2.transform.position);
         
         // we create instance of combat
@@ -34,12 +31,12 @@ public class CombatManager : Singleton<CombatManager>
         _combatList.Add(combat);
         // we start the combat
         combat.StartCombat();
-        
-        return true;
     }
 
     public void RequestFlee(NetworkObject playerTryingToFlee)
     {
+        Combat combatToRemove = null;
+
         foreach (var combat in _combatList)
         {
             if (combat.player1 == playerTryingToFlee || combat.player2 == playerTryingToFlee)
@@ -47,9 +44,14 @@ public class CombatManager : Singleton<CombatManager>
                 // we found a matching fight
                 combat.EndCombat();
 
-                _combatList.Remove(combat);
+                combatToRemove = combat;
                 break;
             }
+        }
+
+        if (combatToRemove != null)
+        {
+            _combatList.Remove(combatToRemove);
         }
     }
 
@@ -151,7 +153,7 @@ public class Combat
             strengthValue = player1Statistics.Strength;
         }
 
-        Debug.Log("str_att_def: " + strengthValue + ", " + attackValue + ", " + defenseValue );
+        // Debug.Log("str_att_def: " + strengthValue + ", " + attackValue + ", " + defenseValue );
 
         float hitChance = (float)attackValue / defenseValue;
         hitChance = Mathf.Clamp(hitChance, 0.1f, 1f);

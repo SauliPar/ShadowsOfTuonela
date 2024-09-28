@@ -186,7 +186,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Rune_2h_icon_32_0: 906854510009571906
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

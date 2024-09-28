@@ -10,40 +10,26 @@ public class BaseController : NetworkBehaviour
     [SerializeField] protected NetworkTransform networkTransform;
     [SerializeField] protected PlayerState playerState;
     [SerializeField] protected NetworkObject networkObject;
-
-    // public ControllerState CharacterState;
-
+    
     protected virtual void Start()
     {
-        // CharacterState = playerState.CharacterState.Value;
-        
         agent.updateRotation = false;
         agent.angularSpeed = 0;
     }
     
     public void StartFight(Vector3 fightPosition, int faceIndex)
     {
-        // if (!IsServer) return;
-
-        // if (IsServer)
-        // {
-        //     CharacterState = ControllerState.Combat;
-        // }
-        
         ForcePosition(fightPosition);
         ForceRotation(faceIndex);
     }
     
     protected void ForceRotation(int faceIndex)
     {
-        Debug.Log("faceindex: " + faceIndex);
         animator.SetInteger("Direction", faceIndex);
     }
 
     protected void ForcePosition(Vector3 fightPosition)
     {
-        // if (CharacterState != ControllerState.Combat) return;
-        
         Move(fightPosition, true);
     }
 
@@ -56,18 +42,6 @@ public class BaseController : NetworkBehaviour
     {
         agent.ResetPath();
     }
-    
-    // public void OnVictory()
-    // {
-    //     // Debug.Log("tultiin onvictoryyn");
-    //     
-    //     ResetPlayerController();
-    // }
-    //
-    // protected void ResetPlayerController()
-    // {
-    //     // CharacterState = ControllerState.Default;
-    // }
 
     public void TeleportCharacter(Vector3 teleportPosition)
     {

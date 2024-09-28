@@ -236,7 +236,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RS_character_front_animation_spritesheet_0: -4196207726735695506
+      RS_character_front_animation_spritesheet_1: 8456526257333485366
+      RS_character_front_animation_spritesheet_2: 4431315948333112414
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
