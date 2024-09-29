@@ -8,6 +8,7 @@ public class PlayerController : BaseController
     [SerializeField] private StatsUIHandler statsUIHandler;
 
     private InventoryManager inventoryManager;
+    public InteractionUIMenu InteractionUIMenu;
 
     private Transform _playerTransform;
     private bool _menuIsOn;
@@ -74,7 +75,7 @@ public class PlayerController : BaseController
         {
             if(_timer < _timeOut) return;
 
-            SendFleeRequestToServerRpc(networkObject);
+            SendFleeRequestToServerRpc(PlayerNetworkObject);
 
             _timer = 0f;
         }
@@ -93,7 +94,7 @@ public class PlayerController : BaseController
         
         if (_menuIsOn)
         {
-            InteractionUIMenu.Instance.HideInteractionUIMenu();
+            InteractionUIMenu.HideInteractionUIMenu();
             _menuIsOn = false;
             return;
         }
@@ -117,7 +118,7 @@ public class PlayerController : BaseController
                     {
                         // Handle interaction with dropped item
                         // For example, pick up the item
-                        TryToPickUpItemServerRpc(networkObject, droppedItem.item.Id);
+                        TryToPickUpItemServerRpc(PlayerNetworkObject, droppedItem.item.Id);
                         droppedItem.PickUpItem();
                     }
                 }
@@ -130,7 +131,7 @@ public class PlayerController : BaseController
                 if (!hit.transform.GetComponent<NetworkObject>().IsLocalPlayer)
                 {
                     var playerNetworkObject = hit.transform.GetComponent<NetworkObject>();
-                    SendPlayerCombatRequestServerRPC(GetComponent<NetworkObject>(), playerNetworkObject);
+                    SendPlayerCombatRequestServerRPC(PlayerNetworkObject, playerNetworkObject);
                     return;
                 }
             }
@@ -171,14 +172,34 @@ public class PlayerController : BaseController
                 if (!hit.transform.GetComponent<NetworkObject>().IsLocalPlayer)
                 {
                     Transform enemyPlayerTransform = hit.transform;
-                    InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition, hit.point, this, enemyPlayerTransform);
+                    InteractionUIMenu.ShowInteractionUIMenu(Input.mousePosition, hit.point, enemyPlayerTransform);
 
                     _menuIsOn = true;
                     return;
                 }
             }
+            if (hit.collider.CompareTag("DuelingNPC"))
+            {
+                Transform enemyPlayerTransform = hit.transform;
+                InteractionUIMenu.ShowInteractionUIMenu(Input.mousePosition, hit.point, enemyPlayerTransform);
+
+                _menuIsOn = true;
+                return;
+            }
+            if (hit.collider.CompareTag("DroppedItem"))
+            {
+                var droppedItem = hit.collider.GetComponent<DroppedItem>();
+                if (droppedItem != null)
+                {
+                    // Handle interaction with dropped item
+                    // For example, pick up the item
+                    InteractionUIMenu.ShowInteractionUIMenu(Input.mousePosition, hit.point, null, droppedItem);
+                    _menuIsOn = true;
+                    return;
+                }
+            }
             
-            InteractionUIMenu.Instance.ShowInteractionUIMenu(Input.mousePosition, hit.point, this);
+            InteractionUIMenu.ShowInteractionUIMenu(Input.mousePosition, hit.point);
             _menuIsOn = true;
         }
     }
@@ -245,8 +266,9 @@ public class PlayerController : BaseController
     }
     
     [Rpc(SendTo.Server)]
-    public void SendPlayerCombatRequestServerRPC(NetworkObjectReference  player1, NetworkObjectReference player2)
+    public void SendPlayerCombatRequestServerRPC(NetworkObjectReference player1, NetworkObjectReference player2)
     {
+        Debug.Log("tulit rpc-kutsuun :D");
         if (player1.TryGet(out NetworkObject player1NetworkObject) &&
             player2.TryGet(out NetworkObject player2NetworkObject))
         {
@@ -264,7 +286,7 @@ public class PlayerController : BaseController
     }
     
     [Rpc(SendTo.Server)]
-    private void TryToPickUpItemServerRpc(NetworkObjectReference networkObjectReference, int itemId)
+    public void TryToPickUpItemServerRpc(NetworkObjectReference networkObjectReference, int itemId)
     {
         if (networkObjectReference.TryGet(out NetworkObject playerNetworkObject))
         {

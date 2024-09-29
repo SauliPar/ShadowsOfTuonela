@@ -1,7 +1,8 @@
 using System;using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class InteractionUIMenu : Singleton<InteractionUIMenu>
+public class InteractionUIMenu : MonoBehaviour
 {
     public CanvasGroup CanvasGroup;
     public RectTransform RectTransform;
@@ -12,9 +13,9 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
 
     private Vector3 _lastClickPosition;
 
-    public InteractionType MyInteractionType;
-    private PlayerController _controller;
+    public PlayerController PlayerController;
     private Transform _enemyPlayerTransform;
+    private DroppedItem _droppedItem;
 
     public enum InteractionType
     {
@@ -24,7 +25,11 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         Examine,
     }
     
-    public void ShowInteractionUIMenu(Vector2 clickPosition, Vector3 worldClickPosition, PlayerController controller, Transform enemyPlayerTransform = null)
+    public void ShowInteractionUIMenu(
+        Vector2 clickPosition, 
+        Vector3 worldClickPosition, 
+        Transform enemyPlayerTransform = null,
+        DroppedItem droppedItem = null)
     {
         ClearUIElements();
         
@@ -32,9 +37,7 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
 
         _lastClickPosition = worldClickPosition;
         RectTransform.position = clickPosition;
-
-        _controller = controller;
-
+        
         if (enemyPlayerTransform != null)
         {
             _enemyPlayerTransform = enemyPlayerTransform;
@@ -42,6 +45,15 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
         else
         {
             _enemyPlayerTransform = null;
+        }
+
+        if (droppedItem != null)
+        {
+            _droppedItem = droppedItem;
+        }
+        else
+        {
+            _droppedItem = null;
         }
 
         InitializeInteractionUIMenu();
@@ -76,6 +88,14 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
             interactionUIScript2.InitializeElement("Fight", ButtonPressed,
                 InteractionType.Fight);
         }
+
+        if (_droppedItem)
+        {
+            var droppedItemUIElement = Instantiate(interactionUIElement, parentContainer);
+            var interactionUIScript3 = droppedItemUIElement.GetComponent<InteractionUIElement>();
+            uiElements.Add(interactionUIScript3);
+            interactionUIScript3.InitializeElement("Pick up", ButtonPressed, InteractionType.PickUp);
+        }
         
         // string randomWord = "Kalijjaa";
         //
@@ -86,17 +106,22 @@ public class InteractionUIMenu : Singleton<InteractionUIMenu>
 
     public void ButtonPressed(InteractionUIElement interactionUIElement)
     {
-        // Debug.Log("painoit nabbia :D");
+        Debug.Log("painoit nabbia :D");
 
         InteractionType interactionType = interactionUIElement.InteractionType;
         
         switch (interactionType)
         {
             case InteractionType.Walk:
-                _controller.Move(_lastClickPosition, false);
+                PlayerController.Move(_lastClickPosition, false);
                 break;
             case InteractionType.Fight:
-                // _controller.StartFight();
+                Debug.Log("painoit tappelua :D");
+                PlayerController.SendPlayerCombatRequestServerRPC(PlayerController.PlayerNetworkObject, _enemyPlayerTransform.GetComponent<NetworkObject>());
+                break;
+            case InteractionType.PickUp:
+                PlayerController.Move(_lastClickPosition, false);
+                PlayerController.TryToPickUpItemServerRpc(PlayerController.PlayerNetworkObject, _droppedItem.item.Id);
                 break;
             default:
                 Debug.Log("ei tämmösiä oo vielä devattu hölmö :D");
