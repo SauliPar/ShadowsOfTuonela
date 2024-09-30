@@ -116,10 +116,12 @@ public class PlayerController : BaseController
                     var droppedItem = hit.collider.GetComponent<DroppedItem>();
                     if (droppedItem != null)
                     {
+
+                        Debug.Log("playercontroller");
                         // Handle interaction with dropped item
                         // For example, pick up the item
-                        TryToPickUpItemServerRpc(PlayerNetworkObject, droppedItem.item.Id);
-                        droppedItem.PickUpItem();
+                        TryToPickUpItemServerRpc(droppedItem.NetworkObject.NetworkObjectId);
+                        // droppedItem.PickUpItem();
                     }
                 }
             }
@@ -286,12 +288,12 @@ public class PlayerController : BaseController
     }
     
     [Rpc(SendTo.Server)]
-    public void TryToPickUpItemServerRpc(NetworkObjectReference networkObjectReference, int itemId)
+    public void TryToPickUpItemServerRpc(ulong droppedItemId)
     {
-        if (networkObjectReference.TryGet(out NetworkObject playerNetworkObject))
-        {
-            InventoryManager.Instance.TryToPickUpItem(playerNetworkObject, itemId);
-        }
+        // if (networkObjectReference.TryGet(out NetworkObject playerNetworkObject))
+        // {
+            InventoryManager.Instance.TryToPickUpItem(droppedItemId);
+        // }
     }
     
     private static StandaloneInputModuleV2 currentInput;

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7144498655549216985}
   - component: {fileID: 364538745164344461}
   - component: {fileID: 6653621456844079920}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6276410456727400987}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,7 +122,8 @@ GameObject:
   - component: {fileID: 6840690464170069216}
   - component: {fileID: 1946354637520967113}
   - component: {fileID: 1777886706333913576}
-  m_Layer: 3
+  - component: {fileID: 8505615973534294578}
+  m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,8 +139,8 @@ RectTransform:
   m_GameObject: {fileID: 4227156478616038101}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.82, y: 0.82, z: 0.82}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7144498655549216985}
   - {fileID: 6276410456727400987}
@@ -214,6 +215,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 1946354637520967113}
+  canvasGroup: {fileID: 8505615973534294578}
+--- !u!225 &8505615973534294578
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4227156478616038101}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &6786643740656255308
 GameObject:
   m_ObjectHideFlags: 0
@@ -225,7 +239,7 @@ GameObject:
   - component: {fileID: 5053370587043771638}
   - component: {fileID: 6968250893045122618}
   - component: {fileID: 9178079002641772453}
-  m_Layer: 3
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

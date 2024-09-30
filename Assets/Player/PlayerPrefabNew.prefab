@@ -3693,35 +3693,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1464334305316164118}
     m_Modifications:
-    - target: {fileID: 1086683912564860553, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1946354637520967113, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_Value
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 1946354637520967113, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_MaxValue
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3541776643573353855, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 4227156478616038101, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
       propertyPath: m_Name
       value: HealthBar
-      objectReference: {fileID: 0}
-    - target: {fileID: 4227156478616038101, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5053370587043771638, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
@@ -3732,11 +3707,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6786643740656255308, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
@@ -3777,21 +3747,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.82
-      objectReference: {fileID: 0}
-    - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.82
-      objectReference: {fileID: 0}
-    - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.82
       objectReference: {fileID: 0}
     - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
         type: 3}
@@ -3852,11 +3807,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6840690464170069216, guid: 163c48796d5b02944995773c61153d0b,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

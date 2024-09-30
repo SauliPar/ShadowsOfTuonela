@@ -1,22 +1,29 @@
+using System;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DroppedItem : NetworkBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private NetworkObject networkObject;
+    [SerializeField] private Collider itemCollider;
     
-    [HideInInspector]
-    public Item item;
+    // [HideInInspector]
+    public NetworkVariable<int> itemId = new NetworkVariable<int>();
     
-    public void SetupDroppedItem(Item inputItem)
+
+    public void SetupDroppedItem(int inputItemId)
     {
-        item = inputItem;
-        spriteRenderer.sprite = inputItem.ItemIcon;
+        itemId.Value = inputItemId;
     }
 
-    public void PickUpItem()
+    public override void OnNetworkSpawn()
     {
-        Destroy(gameObject);
+        if (IsOwner)
+        {
+            spriteRenderer.sprite = ItemCatalogManager.Instance.GetItemById(itemId.Value).ItemIcon;
+            itemCollider.enabled = true;
+        }
     }
 }

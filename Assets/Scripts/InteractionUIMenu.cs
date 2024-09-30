@@ -121,7 +121,7 @@ public class InteractionUIMenu : MonoBehaviour
                 break;
             case InteractionType.PickUp:
                 PlayerController.Move(_lastClickPosition, false);
-                PlayerController.TryToPickUpItemServerRpc(PlayerController.PlayerNetworkObject, _droppedItem.item.Id);
+                // PlayerController.TryToPickUpItemServerRpc(droppedItem.NetworkObject.NetworkObjectId);
                 break;
             default:
                 Debug.Log("ei tämmösiä oo vielä devattu hölmö :D");

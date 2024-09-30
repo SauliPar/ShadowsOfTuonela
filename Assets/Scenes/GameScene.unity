@@ -6455,7 +6455,7 @@ MonoBehaviour:
   parentContainer: {fileID: 534174210}
   interactionUIElement: {fileID: 5565116085956605265, guid: 47e839ebcd64d10468160d3a8b427904,
     type: 3}
-  MyInteractionType: 0
+  PlayerController: {fileID: 0}
 --- !u!1 &1715793668
 GameObject:
   m_ObjectHideFlags: 0
@@ -7626,6 +7626,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c6f8bb1d4eb0db4d8da0f622f318e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DroppedItemPrefab: {fileID: 5703866165846414287, guid: a9d22931115ca6242b2ea51c0aacf186,
+    type: 3}
 --- !u!1 &2136157011
 GameObject:
   m_ObjectHideFlags: 0

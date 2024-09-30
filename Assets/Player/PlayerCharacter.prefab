@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 728746238
+  GlobalObjectIdHash: 2450922218
   InScenePlacedSourceGlobalObjectIdHash: 2450922218
   DeferredDespawnTick: 0
   Ownership: 1
@@ -484,8 +484,9 @@ MonoBehaviour:
   animator: {fileID: 2264063771217579109}
   networkTransform: {fileID: 538069785490196717}
   playerState: {fileID: 1267814839038010953}
-  networkObject: {fileID: 8511636616815181730}
+  PlayerNetworkObject: {fileID: 0}
   statsUIHandler: {fileID: 4533368384884202740}
+  InteractionUIMenu: {fileID: 0}
 --- !u!114 &538069785490196717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,6 +538,10 @@ MonoBehaviour:
   HealthBarScript: {fileID: 9178722404641493586}
   DamageTakenScript: {fileID: 5892770400978942593}
   BaseController: {fileID: 4185434927725585788}
+  DroppedItemPrefab: {fileID: 0}
+  DroppedItem: {fileID: 0}
+  MyNetworkObject: {fileID: 0}
+  Inventory: {fileID: 0}
 --- !u!114 &7787620757981213453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,7 +554,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aed110803c4f220448e47d921f583b0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxPoints: 30
 --- !u!1 &1325234301987536830
 GameObject:
   m_ObjectHideFlags: 0

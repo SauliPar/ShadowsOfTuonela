@@ -80,40 +80,27 @@ public class PlayerState : NetworkBehaviour
 
     private void OnCharacterStateChanged(CombatState previousvalue, CombatState newvalue)
     {
-        // BaseController.CharacterState = newvalue;
+        HealthBarScript.StopInvoking();
+        
+        if (newvalue == global::CombatState.Combat)
+        {
+            HealthBarScript.Show();
+        }
     }
-    
-    // private void OnInventoryListChanged(List<int> previousvalue, List<int> newvalue)
-    // {
-    //     // List<Item> itemList = new List<Item>();
-    //     // foreach (var itemId in newvalue)
-    //     // {
-    //     //     itemList.Add(ItemCatalogManager.Instance.GetItemById(itemId));
-    //     // }
-    //     //
-    //     // Inventory.SetupInventorySlots(itemList);
-    // }
 
 
     private void OnHealthValueChanged(int previousvalue, int newvalue)
     {
-        // if (IsOwner)
-        // {
-            var substractValue = previousvalue - newvalue;
-            HealthBarScript.SetHealthBarValue(newvalue);
-            
-            if (substractValue < 0) return;
-           
-            DamageTakenScript.ShowDamage(substractValue);
-        // }
-       
+        // HealthBarScript.StopInvoking();
         
-        // // Debug.Log("onhealthvaluechanged");
-        // HealthBarScript.SetHealthBarValue(newvalue);
-        //
-        // // Debug.Log("damagenumber 1: " + (previousvalue - newvalue));
-        //
-        // DamageTakenScript.ShowDamage(previousvalue - newvalue);
+        var substractValue = previousvalue - newvalue;
+        HealthBarScript.SetHealthBarValue(newvalue);
+        
+        if (substractValue < 0) return;
+       
+        DamageTakenScript.ShowDamage(substractValue);
+
+        // HealthBarScript.StartHiding();
     }
 
     public bool DecreaseHealthPoints(int damageValue)
@@ -187,8 +174,8 @@ public class PlayerState : NetworkBehaviour
     [Rpc(SendTo.Owner)]
     public void DropItemToPlayerRpc(int droppedItemId)
     {
-        var drop = Instantiate(DroppedItemPrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
-        // drop.GetComponent<NetworkObject>().SpawnWithOwnership(MyNetworkObject.NetworkObjectId);
-        drop.GetComponent<DroppedItem>().SetupDroppedItem(ItemCatalogManager.Instance.GetItemById(droppedItemId));
+        // var drop = Instantiate(DroppedItemPrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
+        // // drop.GetComponent<NetworkObject>().SpawnWithOwnership(MyNetworkObject.NetworkObjectId);
+        // drop.GetComponent<DroppedItem>().SetupDroppedItem(ItemCatalogManager.Instance.GetItemById(droppedItemId));
     }
 }
