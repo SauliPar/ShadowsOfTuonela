@@ -8,6 +8,9 @@ public class InventoryItem : MonoBehaviour
     public TextMeshProUGUI textMesh;
     public Image itemIcon;
     public Button button;
+    public GameObject backgroundImage;
+
+    private Color _defaultBackgroundColor;
 
     [HideInInspector]
     public Item item;
@@ -15,8 +18,13 @@ public class InventoryItem : MonoBehaviour
     public int index;
     private PlayerState playerState;
 
+    public bool ItemIsEquipped;
+
     public void InitializeElement(Item inputItem, PlayerState inputPlayerState, int inputIndex)
     {
+        // disable the red background by default
+        backgroundImage.SetActive(false);
+        
         item = inputItem;
         
         textMesh.text = "1";
@@ -31,6 +39,20 @@ public class InventoryItem : MonoBehaviour
     private void OnButtonPress()
     {
         playerState.UseItemRpc(index);
+    }
+
+    public void EquipItem()
+    {
+        ItemIsEquipped = true;
+        
+        backgroundImage.SetActive(true);
+    }
+
+    public void UnequipItem()
+    {
+        ItemIsEquipped = false;
+        
+        backgroundImage.SetActive(false);
     }
 
 

@@ -21,6 +21,8 @@ public class PlayerState : NetworkBehaviour
     public NetworkVariable<CombatState> CombatState = new();
 
     public NetworkList<int> InventoryList = new();
+    
+    public NetworkList<int> EquippedItems = new();
 
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
@@ -151,11 +153,13 @@ public class PlayerState : NetworkBehaviour
             switch (item.ItemType)
             {
                 case ItemType.Consumable:
-                    Health.Value += 10;
+                    var consumableItem = (Consumable)item;
+                    Health.Value += consumableItem.HealValue;
                     InventoryList.RemoveAt(index);
                     break;
                 case ItemType.Equipment:
-                    ItemIsEligibleToUseRpc(index);
+                    EquipItemCheck(index);
+                    // ItemIsEligibleToUseRpc(index);
                     break;
             }
         }
@@ -163,6 +167,21 @@ public class PlayerState : NetworkBehaviour
         {
             // ban player for cheating inventory :D
         }
+    }
+
+    private void EquipItemCheck(int index)
+    {
+        // first we see what item we're trying to equip
+        var itemToEquip = ItemCatalogManager.Instance.GetItemById(InventoryList[index]);
+
+        if (EquippedItems.Count > 0)
+        {
+            EquippedItems.Clear();
+        }   
+    
+        EquippedItems.Add(itemToEquip.Id);
+        
+        ItemIsEligibleToUseRpc(index);
     }
 
     [Rpc(SendTo.Owner)]

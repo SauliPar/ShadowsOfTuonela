@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
@@ -71,11 +72,11 @@ public class Combat
     public NetworkObject player2;
     public PlayerState player1State;
     public PlayerState player2State;
-    public PlayerStatistics player1Statistics;
-    public PlayerStatistics player2Statistics;
-    
+
     private bool _combatIsOn = false;
     private int _hitcounter;
+
+    private int[] _player1CombatStats, _player2CombatStats;
 
     public Combat(NetworkObject inputPlayer1, NetworkObject inputPlayer2, PlayerState inputPlayer1State, PlayerState inputPlayer2State)
     {
@@ -85,8 +86,28 @@ public class Combat
         player1State = inputPlayer1State;
         player2State = inputPlayer2State;
 
-        player1Statistics = inputPlayer1.GetComponent<PlayerStatistics>();
-        player2Statistics = inputPlayer2.GetComponent<PlayerStatistics>();
+        _player1CombatStats = ComputePlayerCombatStats(player1State.EquippedItems);
+        _player2CombatStats = ComputePlayerCombatStats(player2State.EquippedItems);
+    }
+
+    private int[] ComputePlayerCombatStats(NetworkList<int> equippedItemIds)
+    {
+        List<Equippable> equippedItems = new List<Equippable>();
+        foreach (var itemId in equippedItemIds)
+        {
+            var item = (Equippable)ItemCatalogManager.Instance.GetItemById(itemId);
+            equippedItems.Add(item);
+        }
+
+        int playerStr = 1, playerAtt = 1, playerDef = 1;
+        foreach (var equippable in equippedItems)
+        {
+            playerStr += equippable.StrengthValue;
+            playerAtt += equippable.AttackValue;
+            playerDef += equippable.DefenseValue;
+        }
+
+        return new[] { playerStr, playerAtt, playerDef };
     }
 
     public void EndCombat()
@@ -103,6 +124,11 @@ public class Combat
     public void StartCombat()
     {
         // Debug.Log("Starting combat...");
+
+        Debug.Log("------------------------");
+        Debug.Log("player1 stats: " + _player1CombatStats[0] + ", " + _player1CombatStats[1] + ", " + _player1CombatStats[2]);
+        Debug.Log("player2 stats: " + _player2CombatStats[0] + ", " + _player2CombatStats[1] + ", " + _player2CombatStats[2]);
+        Debug.Log("------------------------");
 
         player1.StartCoroutine(StartChangingNetworkVariable());
     }
@@ -136,31 +162,25 @@ public class Combat
 
     private int CalculateDamage(int playerIndex)
     {
-        int defenseValue = 1;
-        int attackValue = 1;
-        int strengthValue = 1;
+        int[] damageDealer = _player1CombatStats;
+        int[] damageReceiver = _player2CombatStats;
+
+        if (playerIndex == 1)
+        {
+            damageDealer = _player2CombatStats;
+            damageReceiver = _player1CombatStats;
+        }
         
-        if (playerIndex == 0)
-        {
-            defenseValue = player1Statistics.Defense;
-            attackValue = player2Statistics.Attack;
-            strengthValue = player2Statistics.Strength;
-        }
-        else if (playerIndex == 1)
-        {
-            defenseValue = player2Statistics.Defense;
-            attackValue = player1Statistics.Attack;
-            strengthValue = player1Statistics.Strength;
-        }
-
-        // Debug.Log("str_att_def: " + strengthValue + ", " + attackValue + ", " + defenseValue );
-
+        // we take str and att stats from attacker, and def value from defender
+        int strengthValue = damageReceiver[0];
+        int attackValue = damageReceiver[1];
+        int defenseValue = damageDealer[2];
+        
         float hitChance = (float)attackValue / defenseValue;
         hitChance = Mathf.Clamp(hitChance, 0.1f, 1f);
         
         // Debug.Log("hitchance: " + hitChance);
-
-
+        
         var randomNumber = Random.Range(0f, 1f);
         // Debug.Log("randomNumber: " + randomNumber);
 

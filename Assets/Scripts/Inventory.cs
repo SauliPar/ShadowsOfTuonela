@@ -44,9 +44,19 @@ public class Inventory : MonoBehaviour
             itemList.Add(ItemCatalogManager.Instance.GetItemById(itemId));
         }
 
+        // check if an item was equipped, we need to store it
+
+        bool itemWasEquipped = false;
+        int itemIndexWasEquipped = 0;
         inventoryItems.RemoveAll(x => x == null);
         foreach (var inventoryItem in inventoryItems)
         {
+            if (inventoryItem.ItemIsEquipped)
+            {
+                itemWasEquipped = true;
+                itemIndexWasEquipped = inventoryItem.index;
+            }
+          
             inventoryItem.RemoveElement();
         }
         
@@ -58,6 +68,11 @@ public class Inventory : MonoBehaviour
             var component = itemSlot.GetComponent<InventoryItem>();
             
             component.InitializeElement(item, playerState, index);
+
+            if (index == itemIndexWasEquipped && itemWasEquipped)
+            {
+                component.EquipItem();
+            }
             
             inventoryItems.Add(component);
 
@@ -65,13 +80,13 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    private Item FindItemWithIndex(int index)
+    private InventoryItem FindItemWithIndex(int index)
     {
         foreach (var inventoryItem in inventoryItems)
         {
             if (inventoryItem.index == index)
             {
-                return inventoryItem.item;
+                return inventoryItem;
             }
         }
 
@@ -80,58 +95,15 @@ public class Inventory : MonoBehaviour
 
     public void EquipItem(int index)
     {
+        inventoryItems.RemoveAll(x => x == null);
+        foreach (var inventoryItem in inventoryItems)
+        {
+            inventoryItem.UnequipItem();
+        }
+        
+        var inventorySlot = FindItemWithIndex(index);
+        
+        inventorySlot.EquipItem();
         Debug.Log("you equipped: " + FindItemWithIndex(index) + ", that was on slot: " + index);
     }
-
-    // [Rpc(SendTo.Server)]
-    // private void OnButtonPressServerRpc(int index)
-    // {
-    //     Item item = null;
-    //     InventoryItem selectedInventoryItem = null;
-    //     
-    //     foreach (var inventorySlot in inventoryItems)
-    //     {
-    //         if (inventorySlot.index == index)
-    //         {
-    //             selectedInventoryItem = inventorySlot;
-    //             item = inventorySlot.item;
-    //             break;
-    //         }
-    //     }
-    //
-    //     if (item == null || selectedInventoryItem == null) return;
-    //     
-    //     ItemType itemType = item.ItemType;
-    //
-    //     switch (itemType)
-    //     {
-    //         case ItemType.Consumable:
-    //             Debug.Log("hiilasit xd");
-    //             playerState.Health.Value += 10;
-    //             inventoryItems.Remove(selectedInventoryItem);
-    //             selectedInventoryItem.RemoveElement();
-    //             break;
-    //         case ItemType.Equipment:
-    //             Debug.Log("yritit equippaa :D");
-    //             break;
-    //     }
-    // }
-    //
-    // [ServerRpc]
-    // public void OnItemPickupServerRpc(string itemId)
-    // {
-    //     Item item = ItemCatalogManager.Instance.GetItemById(itemId);
-    //     var itemSlot = Instantiate(inventorySlotPrefab, inventoryContainer);
-    //     var component = itemSlot.GetComponent<InventoryItem>();
-    //     int index = 0;
-    //         
-    //     if (inventoryItems.Count > 0)
-    //     {
-    //         index = inventoryItems.Count - 1;
-    //     }
-    //         
-    //     component.InitializeElement(item, OnButtonPressServerRpc, index);
-    //         
-    //     inventoryItems.Add(component);
-    // }
 }

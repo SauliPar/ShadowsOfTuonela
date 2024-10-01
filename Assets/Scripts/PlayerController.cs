@@ -5,8 +5,6 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : BaseController
 {
-    [SerializeField] private StatsUIHandler statsUIHandler;
-
     private InventoryManager inventoryManager;
     public InteractionUIMenu InteractionUIMenu;
 
@@ -23,12 +21,6 @@ public class PlayerController : BaseController
         base.Start();
 
         SetupComponents();
-        HandleInitializations();
-    }
-
-    private void HandleInitializations()
-    {
-        statsUIHandler.Initialize();
     }
 
     private void SetupComponents()
