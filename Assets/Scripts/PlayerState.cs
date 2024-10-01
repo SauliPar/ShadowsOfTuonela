@@ -27,9 +27,9 @@ public class PlayerState : NetworkBehaviour
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
     public BaseController BaseController;
-    public GameObject DroppedItemPrefab;
-    public Item DroppedItem;
-    public NetworkObject MyNetworkObject;
+    // public GameObject DroppedItemPrefab;
+    // public Item DroppedItem;
+    // public NetworkObject MyNetworkObject;
 
     public Inventory Inventory;
     
