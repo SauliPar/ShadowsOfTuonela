@@ -31,7 +31,7 @@ public class PlayerState : NetworkBehaviour
 
     public Inventory Inventory;
     
-    private Dictionary<string, Item> itemDictionary;
+    private Dictionary<int, Item> itemDictionary;
 
     private async void Start()
     {
@@ -70,11 +70,11 @@ public class PlayerState : NetworkBehaviour
         Inventory.SetupInventorySlots(InventoryList);
     }
 
-    private Task<Dictionary<string, Item>> LoadPlayerInventory()
+    private Task<Dictionary<int, Item>> LoadPlayerInventory()
     {
-        Dictionary<string, Item> newDictionary = new Dictionary<string, Item>();
-        newDictionary.Add("1", ItemCatalogManager.Instance.GetItemById(1));
-        newDictionary.Add("2", ItemCatalogManager.Instance.GetItemById(2));
+        Dictionary<int, Item> newDictionary = new Dictionary<int, Item>();
+        newDictionary.Add(0, ItemCatalogManager.Instance.GetItemById(0));
+        newDictionary.Add(1, ItemCatalogManager.Instance.GetItemById(1));
         return Task.FromResult(newDictionary);
     }
 

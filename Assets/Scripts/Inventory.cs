@@ -50,20 +50,18 @@ public class Inventory : MonoBehaviour
             inventoryItem.RemoveElement();
         }
         
+        int index = 0;
+
         foreach (Item item in itemList)
         {
             var itemSlot = Instantiate(inventorySlotPrefab, inventoryContainer);
             var component = itemSlot.GetComponent<InventoryItem>();
-            int index = 0;
-            
-            if (itemList.Count > 0)
-            {
-                index = itemList.Count - 1;
-            }
             
             component.InitializeElement(item, playerState, index);
             
             inventoryItems.Add(component);
+
+            index++;
         }
     }
 

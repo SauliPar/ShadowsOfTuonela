@@ -15,6 +15,5 @@ MonoBehaviour:
   ItemName: Lobster
   ItemIcon: {fileID: 2934918282418161000, guid: 584baa239547b624492a3d6b1ec031da,
     type: 3}
-  Id: 2
+  Id: 0
   ItemType: 1
-  StackSize: 10
