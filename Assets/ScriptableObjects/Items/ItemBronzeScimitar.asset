@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8e6cdff745c6864db4713ec4a6c8262, type: 3}
-  m_Name: ItemRune2h
+  m_Name: ItemBronzeScimitar
   m_EditorClassIdentifier: 
-  ItemName: Rune 2h
-  ItemIcon: {fileID: 906854510009571906, guid: 958052c145ae9444fb92b51d9aabe701, type: 3}
-  Id: 0
+  ItemName: Bronze Scimitar
+  ItemIcon: {fileID: 8165431435635038343, guid: ddc57580462ee8d45a29dbc7e36465fc,
+    type: 3}
+  Id: 3
   ItemType: 0
   EquipType: 0
-  StrengthValue: 40
-  AttackValue: 5
-  DefenseValue: 0
+  StrengthValue: 10
+  AttackValue: 10
+  DefenseValue: 20

@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7319938a7cee6394f90eed807416dceb, type: 3}
-  m_Name: ItemLobster
+  m_Name: ItemShrimp
   m_EditorClassIdentifier: 
-  ItemName: Lobster
-  ItemIcon: {fileID: 2934918282418161000, guid: 584baa239547b624492a3d6b1ec031da,
-    type: 3}
-  Id: 1
+  ItemName: Shrimp
+  ItemIcon: {fileID: 21300000, guid: 3697f0a3ac31ae142abc3d27a8d700b4, type: 3}
+  Id: 2
   ItemType: 1
   UseDuration: 0
-  HealValue: 15
+  HealValue: 5
