@@ -9,11 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 026f1ff0f91b6b540b89a01fc3bf6d97, type: 3}
+  m_Script: {fileID: 11500000, guid: f8e6cdff745c6864db4713ec4a6c8262, type: 3}
   m_Name: ItemRune2h
   m_EditorClassIdentifier: 
   ItemName: Rune 2h
   ItemIcon: {fileID: 906854510009571906, guid: 958052c145ae9444fb92b51d9aabe701, type: 3}
-  Id: 1
+  Id: 0
   ItemType: 0
-  StackSize: 1
+  EquipType: 0
+  StrengthValue: 99
+  AttackValue: 50
+  DefenseValue: 0
