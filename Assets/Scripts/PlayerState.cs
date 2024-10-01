@@ -146,6 +146,8 @@ public class PlayerState : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void UseItemRpc(int index)
     {
+        if (CombatState.Value != global::CombatState.Default) return;
+        
         if (index >= 0 && index < InventoryList.Count)
         {
             var item = ItemCatalogManager.Instance.GetItemById(InventoryList[index]);

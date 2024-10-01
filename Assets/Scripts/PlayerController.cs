@@ -67,6 +67,9 @@ public class PlayerController : BaseController
         {
             if(_timer < _timeOut) return;
 
+            var currentGO = CurrentInput.GameObjectUnderPointer();
+            if (currentGO != null && currentGO.layer == LayerMask.NameToLayer("UI")) return;
+            
             SendFleeRequestToServerRpc(PlayerNetworkObject);
 
             _timer = 0f;
