@@ -460,7 +460,6 @@ MonoBehaviour:
   networkTransform: {fileID: 4157837910022887812}
   playerState: {fileID: 3412654241834530592}
   PlayerNetworkObject: {fileID: 5249904666953346763}
-  statsUIHandler: {fileID: 0}
   InteractionUIMenu: {fileID: 640029645201093652}
 --- !u!114 &4157837910022887812
 MonoBehaviour:
@@ -513,10 +512,6 @@ MonoBehaviour:
   HealthBarScript: {fileID: 4730291951893594939}
   DamageTakenScript: {fileID: 7999329068969077736}
   BaseController: {fileID: 347242223949722645}
-  DroppedItemPrefab: {fileID: 5703866165846414287, guid: a9d22931115ca6242b2ea51c0aacf186,
-    type: 3}
-  DroppedItem: {fileID: 11400000, guid: 399390ee089de3f4b813bd0069fab38e, type: 2}
-  MyNetworkObject: {fileID: 5249904666953346763}
   Inventory: {fileID: 5557391865261630022}
 --- !u!114 &5969292346422927972
 MonoBehaviour:

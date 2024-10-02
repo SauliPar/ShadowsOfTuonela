@@ -7825,6 +7825,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1009616050940276589, guid: e4107c7f786e7ca4d9f0defdb536424c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3268195258699114567, guid: e4107c7f786e7ca4d9f0defdb536424c,
         type: 3}
       propertyPath: m_Name
@@ -7884,11 +7889,6 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 377112533
-      objectReference: {fileID: 0}
-    - target: {fileID: 4051709765037989995, guid: e4107c7f786e7ca4d9f0defdb536424c,
-        type: 3}
-      propertyPath: InScenePlacedSourceGlobalObjectIdHash
-      value: 3956439024
       objectReference: {fileID: 0}
     - target: {fileID: 4376691332833002585, guid: e4107c7f786e7ca4d9f0defdb536424c,
         type: 3}

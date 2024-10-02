@@ -14,6 +14,8 @@ public class PlayerController : BaseController
     private float _timer = .5f;
     private float _timeOut = .5f;
 
+    private int _previousDirectionValue;
+
     protected override void Start()
     {
         if (!IsOwner) return;
@@ -205,6 +207,7 @@ public class PlayerController : BaseController
     private void UpdateAnimator(Vector3 clickPosition)
     {
         Vector3 moveVector = clickPosition - transform.position;
+        int directionValue = 0;
     
         // Normalize the moveVector to obtain the direction
         Vector3 moveDirection = moveVector.normalized;
@@ -215,13 +218,13 @@ public class PlayerController : BaseController
             // going north
             if (moveDirection.z > 0)
             {
-                animator.SetInteger("Direction", 1);
+                directionValue = 1;
             }
 
             // going south
             if (moveDirection.z < 0)
             {
-                animator.SetInteger("Direction", 0);
+                directionValue = 0;
             }
         }
         else
@@ -229,14 +232,23 @@ public class PlayerController : BaseController
             // going east
             if (moveDirection.x > 0)
             {
-                animator.SetInteger("Direction", 2);
+                directionValue = 2;
             }
 
             // going west
             if (moveDirection.x < 0)
             {
-                animator.SetInteger("Direction", 3);
+                directionValue = 3;
             }
+        }
+
+        if (directionValue != _previousDirectionValue)
+        {
+            
+            animator.SetInteger("Direction", directionValue);
+            _previousDirectionValue = directionValue;
+            
+            animator.SetTrigger("DirChange");
         }
     }
 
@@ -292,7 +304,7 @@ public class PlayerController : BaseController
     }
     
     private static StandaloneInputModuleV2 currentInput;
-    
+
     private StandaloneInputModuleV2 CurrentInput
     {
         get
