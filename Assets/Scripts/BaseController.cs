@@ -20,12 +20,27 @@ public class BaseController : NetworkBehaviour
     public void StartFight(Vector3 fightPosition, int faceIndex)
     {
         ForcePosition(fightPosition);
-        ForceRotation(faceIndex);
+        StartCombatAnimation(faceIndex);
     }
     
-    protected void ForceRotation(int faceIndex)
+    protected void StartCombatAnimation(int faceIndex)
     {
         animator.SetInteger("Direction", faceIndex);
+
+        var equippedItems = playerState.EquippedItems;
+        Equippable equippedWeapon = null;
+        foreach (var item in equippedItems)
+        {
+            Equippable myItem = (Equippable)ItemCatalogManager.Instance.GetItemById(item);
+            if (myItem.EquipType == EquipType.Weapon)
+            {
+                equippedWeapon = myItem;
+                break;
+            }
+        }
+
+        if (equippedWeapon == null) animator.SetTrigger(GlobalSettings.AnimationTriggers.FistFightTrigger.ToString());
+        else animator.SetTrigger(equippedWeapon.AnimationTrigger.ToString());
     }
 
     protected void ForcePosition(Vector3 fightPosition)

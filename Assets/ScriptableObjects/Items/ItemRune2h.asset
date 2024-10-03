@@ -17,6 +17,7 @@ MonoBehaviour:
   Id: 0
   ItemType: 0
   EquipType: 0
+  AnimationTrigger: 4
   StrengthValue: 40
   AttackValue: 5
   DefenseValue: 0

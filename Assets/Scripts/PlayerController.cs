@@ -7,6 +7,7 @@ public class PlayerController : BaseController
 {
     private InventoryManager inventoryManager;
     public InteractionUIMenu InteractionUIMenu;
+    public Collider PlayerCollider;
 
     private Transform _playerTransform;
     private bool _menuIsOn;
@@ -27,6 +28,7 @@ public class PlayerController : BaseController
 
     private void SetupComponents()
     {
+        PlayerCollider.enabled = false;
         _playerTransform = transform;
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();
         cinemachineCamera.LookAt = _playerTransform;
@@ -106,6 +108,7 @@ public class PlayerController : BaseController
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
+            // Debug.Log("collider peliobjectin nimi: " + hit.collider.gameObject.name);
             if (hit.collider.CompareTag("DroppedItem"))
             {
                 if (Vector3.Distance(transform.position, hit.collider.transform.position) < GlobalSettings.MaximumLootDistance)

@@ -10,4 +10,13 @@ public static class GlobalSettings
     public static Vector3 FightInitiatorPosition => new Vector3(1, 0, 0);
 
     public static Vector3 FightReceiverPosition => new Vector3(-1, 0, 0);
+
+    public enum AnimationTriggers
+    {
+        None,
+        DirChange,
+        FistFightTrigger,
+        BronzeScimitarFightTrigger,
+        Rune2hFightTrigger
+    }
 }

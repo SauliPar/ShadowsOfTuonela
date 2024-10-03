@@ -461,6 +461,7 @@ MonoBehaviour:
   playerState: {fileID: 3412654241834530592}
   PlayerNetworkObject: {fileID: 5249904666953346763}
   InteractionUIMenu: {fileID: 640029645201093652}
+  PlayerCollider: {fileID: 5659450643327834806}
 --- !u!114 &4157837910022887812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,6 +513,7 @@ MonoBehaviour:
   HealthBarScript: {fileID: 4730291951893594939}
   DamageTakenScript: {fileID: 7999329068969077736}
   BaseController: {fileID: 347242223949722645}
+  Animator: {fileID: 6266250102436267298}
   Inventory: {fileID: 5557391865261630022}
 --- !u!114 &5969292346422927972
 MonoBehaviour:

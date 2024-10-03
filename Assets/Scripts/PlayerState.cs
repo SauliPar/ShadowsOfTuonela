@@ -27,6 +27,8 @@ public class PlayerState : NetworkBehaviour
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
     public BaseController BaseController;
+
+    public Animator Animator;
     // public GameObject DroppedItemPrefab;
     // public Item DroppedItem;
     // public NetworkObject MyNetworkObject;
@@ -87,6 +89,10 @@ public class PlayerState : NetworkBehaviour
         if (newvalue == global::CombatState.Combat)
         {
             HealthBarScript.Show();
+        }
+        if (newvalue == global::CombatState.Default)
+        {
+            Animator.SetTrigger(GlobalSettings.AnimationTriggers.DirChange.ToString());
         }
     }
 

@@ -706,7 +706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 377112533
+  GlobalObjectIdHash: 1721491061
   InScenePlacedSourceGlobalObjectIdHash: 3956439024
   DeferredDespawnTick: 0
   Ownership: 1
@@ -768,6 +768,7 @@ MonoBehaviour:
   HealthBarScript: {fileID: 4588200736488298155}
   DamageTakenScript: {fileID: 7053485640706493623}
   BaseController: {fileID: 1051037018415100058}
+  Animator: {fileID: 8588949054571524328}
   Inventory: {fileID: 5207005408413626428}
 --- !u!114 &1051037018415100058
 MonoBehaviour:
