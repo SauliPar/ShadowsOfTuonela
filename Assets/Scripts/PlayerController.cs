@@ -8,6 +8,7 @@ public class PlayerController : BaseController
     private InventoryManager inventoryManager;
     public InteractionUIMenu InteractionUIMenu;
     public Collider PlayerCollider;
+    public GameObject PlayerCanvasTransform;
 
     private Transform _playerTransform;
     private bool _menuIsOn;
@@ -19,6 +20,8 @@ public class PlayerController : BaseController
 
     protected override void Start()
     {
+        PlayerCanvasTransform.SetActive(false);
+        
         if (!IsOwner) return;
         
         base.Start();
@@ -28,6 +31,8 @@ public class PlayerController : BaseController
 
     private void SetupComponents()
     {
+        PlayerCanvasTransform.SetActive(true);
+
         PlayerCollider.enabled = false;
         _playerTransform = transform;
         var cinemachineCamera = FindFirstObjectByType<CinemachineCamera>();

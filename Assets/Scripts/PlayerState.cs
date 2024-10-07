@@ -46,19 +46,15 @@ public class PlayerState : NetworkBehaviour
         Debug.Log("tultiin playerstaten startiin");
         if (IsServer)
         {
-            // if (IsBot)
-            // {
+            if (IsBot)
+            {
                 Debug.Log("oltiin botti :D");
                 itemDictionary = await LoadBotInventory();
                 foreach (var item in itemDictionary.Values)
                 {
                     InventoryList.Add(item.Id);
                 }
-            // }
-            // else
-            // {
-            //     Debug.Log("ei oltu botteja :D");
-            // }
+            }
             
             // load inventory from cloud, and initialize it to the list
             // ToDo: Player inventory
@@ -70,6 +66,9 @@ public class PlayerState : NetworkBehaviour
         
         CombatState.OnValueChanged += OnCharacterStateChanged;
         Health.OnValueChanged += OnHealthValueChanged;
+
+        if (IsBot) return;
+       
         InventoryList.OnListChanged += OnInventoryListChanged;
     }
 
@@ -84,7 +83,7 @@ public class PlayerState : NetworkBehaviour
 
     private void OnInventoryListChanged(NetworkListEvent<int> changeevent)
     {
-        Debug.Log("oninventorylistchanged");
+        if (IsBot) return;
         
         Inventory.SetupInventorySlots(InventoryList);
     }
@@ -154,14 +153,21 @@ public class PlayerState : NetworkBehaviour
         HealthBarScript.SetHealthBarValue(Health.Value);
     }
     
-    [Rpc(SendTo.Everyone)]
+    [Rpc(SendTo.Owner)]
     public void DeathRpc()
     {
         if (IsOwner)
         {
-            Debug.Log("oltiin owner ja toistettiin RPC");
-            BaseController.OnDeath();
-            BaseController.TeleportCharacter(Vector3.zero);
+            if (IsBot)
+            {
+                BaseController.OnDeathNpc();
+                // BaseController.TeleportCharacter(Vector3.zero);
+            }
+            else
+            {
+                BaseController.OnDeath();
+                BaseController.TeleportCharacter(Vector3.zero);
+            }
         }
     }
 

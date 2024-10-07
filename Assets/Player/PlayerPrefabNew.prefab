@@ -462,6 +462,7 @@ MonoBehaviour:
   PlayerNetworkObject: {fileID: 5249904666953346763}
   InteractionUIMenu: {fileID: 640029645201093652}
   PlayerCollider: {fileID: 5659450643327834806}
+  PlayerCanvasTransform: {fileID: 7761182508127361537}
 --- !u!114 &4157837910022887812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -515,6 +516,7 @@ MonoBehaviour:
   BaseController: {fileID: 347242223949722645}
   Animator: {fileID: 6266250102436267298}
   Inventory: {fileID: 5557391865261630022}
+  IsBot: 0
 --- !u!114 &5969292346422927972
 MonoBehaviour:
   m_ObjectHideFlags: 0

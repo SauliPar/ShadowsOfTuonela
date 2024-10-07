@@ -12,9 +12,6 @@ public class InventoryManager : Singleton<InventoryManager>
     
     public void HandleDroppedItemData(PlayerState inputWinningPlayerState, PlayerState inputLoserPlayerState)
     {
-        // playerState.DropItemToPlayerRpc(dropData.ItemIdThatDropped);
-        // var randomItem = ItemCatalogManager.Instance.GetRandomItemFromDatabase();
-        
         var winnerNetworkObject = inputWinningPlayerState.GetComponent<NetworkObject>();
         var dropPosition = winnerNetworkObject.transform.position;
         dropPosition -= new Vector3(0, 0.5f, 0);
@@ -22,30 +19,35 @@ public class InventoryManager : Singleton<InventoryManager>
         // we get the inventoryList from loser
         var dropList = inputLoserPlayerState.InventoryList;
         
-        Debug.Log("häviäjän inventoryssa oli näin monta itemiä: " + dropList.Count);
+        // Debug.Log("häviäjän inventoryssa oli näin monta itemiä: " + dropList.Count);
 
-        
-        // then we instantiate and spawn droppeditems based on the list
-        foreach (var drop in dropList)
+        // bots don't get loot, at least not now
+        if (!inputWinningPlayerState.IsBot)
         {
-            var instance = Instantiate(DroppedItemPrefab, dropPosition, Quaternion.identity);
-            var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+            // then we instantiate and spawn droppeditems based on the list
+            foreach (var drop in dropList)
+            {
+                var instance = Instantiate(DroppedItemPrefab, dropPosition, Quaternion.identity);
+                var instanceNetworkObject = instance.GetComponent<NetworkObject>();
         
-            instance.GetComponent<DroppedItem>().SetupDroppedItem(drop);
+                instance.GetComponent<DroppedItem>().SetupDroppedItem(drop);
 
-            instanceNetworkObject.SpawnWithOwnership(winnerNetworkObject.OwnerClientId);
+                instanceNetworkObject.SpawnWithOwnership(winnerNetworkObject.OwnerClientId);
         
-            DropData dropData = new DropData();
-            dropData.PlayerWhoGotTheDrop = winnerNetworkObject;
-            dropData.ItemIdThatDropped = drop;
-            dropData.NetworkId = instanceNetworkObject.NetworkObjectId;
-            dropData.NetworkObject = instanceNetworkObject;
+                DropData dropData = new DropData();
+                dropData.PlayerWhoGotTheDrop = winnerNetworkObject;
+                dropData.ItemIdThatDropped = drop;
+                dropData.NetworkId = instanceNetworkObject.NetworkObjectId;
+                dropData.NetworkObject = instanceNetworkObject;
         
-            Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
+                // Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
 
-            droppedItems.Add(dropData);
+                droppedItems.Add(dropData);
+            }
         }
-       
+        
+        // we clear the loser's inventory :D
+        inputLoserPlayerState.InventoryList?.Clear();
         
         // ToDo: add a timer to change the ownership
     }

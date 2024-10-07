@@ -11,6 +11,13 @@ public class BaseController : NetworkBehaviour
     [SerializeField] protected PlayerState playerState;
     public NetworkObject PlayerNetworkObject;
     
+    // Declare a delegate
+    public delegate void NpcDeathDelegate();
+
+    // Declare an event of type NpcDeathDelegate
+    public event NpcDeathDelegate OnNpcDeath;
+    
+    
     protected virtual void Start()
     {
         agent.updateRotation = false;
@@ -56,6 +63,16 @@ public class BaseController : NetworkBehaviour
     public void OnDeath()
     {
         agent.ResetPath();
+    }
+
+    public void OnDeathNpc()
+    {
+        if (IsServer)
+        {
+            OnNpcDeath?.Invoke();
+
+            PlayerNetworkObject.Despawn();
+        }
     }
 
     public void TeleportCharacter(Vector3 teleportPosition)
