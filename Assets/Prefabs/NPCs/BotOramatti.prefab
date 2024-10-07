@@ -770,6 +770,7 @@ MonoBehaviour:
   BaseController: {fileID: 1051037018415100058}
   Animator: {fileID: 8588949054571524328}
   Inventory: {fileID: 5207005408413626428}
+  IsBot: 1
 --- !u!114 &1051037018415100058
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -37,16 +37,31 @@ public class PlayerState : NetworkBehaviour
     
     private Dictionary<int, Item> itemDictionary;
 
-    private async void Start()
+    public bool IsBot;
+
+    protected override async void OnNetworkPostSpawn()
     {
+        base.OnNetworkPostSpawn();
+   
+        Debug.Log("tultiin playerstaten startiin");
         if (IsServer)
         {
+            // if (IsBot)
+            // {
+                Debug.Log("oltiin botti :D");
+                itemDictionary = await LoadBotInventory();
+                foreach (var item in itemDictionary.Values)
+                {
+                    InventoryList.Add(item.Id);
+                }
+            // }
+            // else
+            // {
+            //     Debug.Log("ei oltu botteja :D");
+            // }
+            
             // load inventory from cloud, and initialize it to the list
-            itemDictionary = await LoadPlayerInventory();
-            foreach (var item in itemDictionary.Values)
-            {
-                InventoryList.Add(item.Id);
-            }
+            // ToDo: Player inventory
         }
         else
         {
@@ -74,11 +89,18 @@ public class PlayerState : NetworkBehaviour
         Inventory.SetupInventorySlots(InventoryList);
     }
 
-    private Task<Dictionary<int, Item>> LoadPlayerInventory()
+    private Task<Dictionary<int, Item>> LoadBotInventory()
     {
         Dictionary<int, Item> newDictionary = new Dictionary<int, Item>();
-        newDictionary.Add(0, ItemCatalogManager.Instance.GetItemById(0));
-        newDictionary.Add(1, ItemCatalogManager.Instance.GetItemById(1));
+
+        var randomDropAmount = Random.Range(1, 3);
+        for (int i = 0; i < randomDropAmount; i++)
+        {
+            newDictionary.Add(i,
+                ItemCatalogManager.Instance.GetItemById(ItemCatalogManager.Instance.GetRandomItemFromDatabase()));
+            Debug.Log("lisättiin botille itemi: " + ItemCatalogManager.Instance.GetItemById(newDictionary[i].Id).ItemName);
+        }
+        
         return Task.FromResult(newDictionary);
     }
 

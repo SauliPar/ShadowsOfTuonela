@@ -7830,6 +7830,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2340442781753053523, guid: e4107c7f786e7ca4d9f0defdb536424c,
+        type: 3}
+      propertyPath: IsBot
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3268195258699114567, guid: e4107c7f786e7ca4d9f0defdb536424c,
         type: 3}
       propertyPath: m_Name

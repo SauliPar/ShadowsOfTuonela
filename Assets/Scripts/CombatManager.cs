@@ -204,7 +204,7 @@ public class Combat
         losingPlayerState.ResetHealth();
         
         // what happens to winning side
-        InventoryManager.Instance.HandleDroppedItemData(winningPlayerState.GetComponent<NetworkObject>(), winningPlayerState);
+        InventoryManager.Instance.HandleDroppedItemData(winningPlayerState, losingPlayerState);
 
         EndCombat();
     }
