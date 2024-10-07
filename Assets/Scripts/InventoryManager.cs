@@ -72,6 +72,7 @@ public class InventoryManager : Singleton<InventoryManager>
         
         // we clear the loser's inventory :D
         inputLoserPlayerState.InventoryList?.Clear();
+        inputLoserPlayerState.EquippedItems?.Clear();
         
         // ToDo: add a timer to change the ownership
     }

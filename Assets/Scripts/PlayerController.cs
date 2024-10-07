@@ -121,10 +121,7 @@ public class PlayerController : BaseController
                     var droppedItem = hit.collider.GetComponent<DroppedItem>();
                     if (droppedItem != null)
                     {
-
-                        Debug.Log("playercontroller");
                         // Handle interaction with dropped item
-                        // For example, pick up the item
                         TryToPickUpItemServerRpc(droppedItem.NetworkObject.NetworkObjectId, PlayerNetworkObject);
                     }
                 }
@@ -284,7 +281,6 @@ public class PlayerController : BaseController
     [Rpc(SendTo.Server)]
     public void SendPlayerCombatRequestServerRPC(NetworkObjectReference player1, NetworkObjectReference player2)
     {
-        Debug.Log("tulit rpc-kutsuun :D");
         if (player1.TryGet(out NetworkObject player1NetworkObject) &&
             player2.TryGet(out NetworkObject player2NetworkObject))
         {
