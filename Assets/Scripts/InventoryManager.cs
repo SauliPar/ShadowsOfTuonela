@@ -39,6 +39,30 @@ public class InventoryManager : Singleton<InventoryManager>
                 dropData.ItemIdThatDropped = drop;
                 dropData.NetworkId = instanceNetworkObject.NetworkObjectId;
                 dropData.NetworkObject = instanceNetworkObject;
+                dropData.IsCommunistic = false;
+        
+                // Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
+
+                droppedItems.Add(dropData);
+            }
+        }
+        else
+        {
+            foreach (var drop in dropList)
+            {
+                var instance = Instantiate(DroppedItemPrefab, dropPosition, Quaternion.identity);
+                var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+        
+                instance.GetComponent<DroppedItem>().SetupDroppedItem(drop);
+
+                instanceNetworkObject.SpawnWithOwnership(winnerNetworkObject.OwnerClientId);
+        
+                DropData dropData = new DropData();
+                dropData.PlayerWhoGotTheDrop = null;
+                dropData.ItemIdThatDropped = drop;
+                dropData.NetworkId = instanceNetworkObject.NetworkObjectId;
+                dropData.NetworkObject = instanceNetworkObject;
+                dropData.IsCommunistic = true;
         
                 // Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
 
@@ -52,13 +76,13 @@ public class InventoryManager : Singleton<InventoryManager>
         // ToDo: add a timer to change the ownership
     }
 
-    public void TryToPickUpItem(ulong droppedItemId)
+    public void TryToPickUpItem(ulong droppedItemId, NetworkObject playerPickingUp)
     {
         var dropData = droppedItems.FirstOrDefault(x => x.NetworkId == droppedItemId);
 
         if (dropData != null)
         {
-            dropData.PlayerWhoGotTheDrop.GetComponent<PlayerState>()?.InventoryList.Add(dropData.ItemIdThatDropped);
+            playerPickingUp.GetComponent<PlayerState>()?.InventoryList.Add(dropData.ItemIdThatDropped);
             dropData.NetworkObject.Despawn();
             droppedItems.Remove(dropData);
         }
@@ -71,5 +95,5 @@ public class DropData
     public int ItemIdThatDropped;
     public ulong NetworkId;
     public NetworkObject NetworkObject;
-
+    public bool IsCommunistic;
 }

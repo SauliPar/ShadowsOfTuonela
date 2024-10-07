@@ -125,8 +125,7 @@ public class PlayerController : BaseController
                         Debug.Log("playercontroller");
                         // Handle interaction with dropped item
                         // For example, pick up the item
-                        TryToPickUpItemServerRpc(droppedItem.NetworkObject.NetworkObjectId);
-                        // droppedItem.PickUpItem();
+                        TryToPickUpItemServerRpc(droppedItem.NetworkObject.NetworkObjectId, PlayerNetworkObject);
                     }
                 }
             }
@@ -303,12 +302,12 @@ public class PlayerController : BaseController
     }
     
     [Rpc(SendTo.Server)]
-    public void TryToPickUpItemServerRpc(ulong droppedItemId)
+    public void TryToPickUpItemServerRpc(ulong droppedItemId, NetworkObjectReference playerPickingUp)
     {
-        // if (networkObjectReference.TryGet(out NetworkObject playerNetworkObject))
-        // {
-            InventoryManager.Instance.TryToPickUpItem(droppedItemId);
-        // }
+        if (playerPickingUp.TryGet(out NetworkObject playerNetworkObject))
+        {
+            InventoryManager.Instance.TryToPickUpItem(droppedItemId, playerNetworkObject);
+        }
     }
     
     private static StandaloneInputModuleV2 currentInput;
