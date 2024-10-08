@@ -7,6 +7,7 @@ public class Item: ScriptableObject
     public Sprite ItemIcon;
     public int Id;
     public ItemType ItemType;
+    public float DropChance;
 }
 
 public enum ItemType

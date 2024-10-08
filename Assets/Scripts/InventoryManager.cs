@@ -46,6 +46,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 droppedItems.Add(dropData);
             }
         }
+        // if the losing player is a bot
         else
         {
             foreach (var drop in dropList)

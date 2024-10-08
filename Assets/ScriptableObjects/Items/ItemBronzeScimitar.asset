@@ -17,6 +17,7 @@ MonoBehaviour:
     type: 3}
   Id: 3
   ItemType: 0
+  DropChance: 0.1
   EquipType: 0
   AnimationTrigger: 3
   StrengthValue: 10

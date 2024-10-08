@@ -35,7 +35,7 @@ public class PlayerState : NetworkBehaviour
 
     public Inventory Inventory;
     
-    private Dictionary<int, Item> itemDictionary;
+    private Dictionary<int, int> itemDictionary;
 
     public bool IsBot;
 
@@ -52,7 +52,7 @@ public class PlayerState : NetworkBehaviour
                 itemDictionary = await LoadBotInventory();
                 foreach (var item in itemDictionary.Values)
                 {
-                    InventoryList.Add(item.Id);
+                    InventoryList.Add(item);
                 }
             }
             
@@ -88,16 +88,24 @@ public class PlayerState : NetworkBehaviour
         Inventory.SetupInventorySlots(InventoryList);
     }
 
-    private Task<Dictionary<int, Item>> LoadBotInventory()
+    private Task<Dictionary<int, int>> LoadBotInventory()
     {
-        Dictionary<int, Item> newDictionary = new Dictionary<int, Item>();
+        Dictionary<int, int> newDictionary = new Dictionary<int, int>();
 
-        var randomDropAmount = Random.Range(1, 3);
+        var randomDropAmount = 1;
         for (int i = 0; i < randomDropAmount; i++)
         {
-            newDictionary.Add(i,
-                ItemCatalogManager.Instance.GetItemById(ItemCatalogManager.Instance.GetRandomItemFromDatabase()));
-            Debug.Log("lisättiin botille itemi: " + ItemCatalogManager.Instance.GetItemById(newDictionary[i].Id).ItemName);
+            var randomItemIndex =
+                ItemCatalogManager.Instance.GetRandomItemWithDropChances();
+
+            // we do this if we returned nothing
+            if (randomItemIndex < 1)
+            {
+                return Task.FromResult(newDictionary);
+            }
+            
+            newDictionary.Add(i, randomItemIndex);
+            Debug.Log("lisättiin botille itemi: " + ItemCatalogManager.Instance.GetItemById(newDictionary[i]).ItemName);
         }
         
         return Task.FromResult(newDictionary);

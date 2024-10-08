@@ -16,6 +16,7 @@ MonoBehaviour:
   ItemIcon: {fileID: 906854510009571906, guid: 958052c145ae9444fb92b51d9aabe701, type: 3}
   Id: 0
   ItemType: 0
+  DropChance: 0.05
   EquipType: 0
   AnimationTrigger: 4
   StrengthValue: 40

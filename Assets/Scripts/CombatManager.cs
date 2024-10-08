@@ -12,11 +12,29 @@ public class CombatManager : Singleton<CombatManager>
     public void CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
         if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return;
-        if (player2.transform.position.x > GlobalSettings.SafeZoneXValue) return;
         
         // first we get playerState components
         var player1State = player1.GetComponent<PlayerState>();
-        var player2State = player2.GetComponent<PlayerState>();
+        var player2State = player2.GetComponent<PlayerState>(); 
+        
+        // Debug.Log("||||||||||||||||");
+        // Debug.Log(player2.transform.position.z);
+        // Debug.Log(player2State.IsBot);
+        // Debug.Log("||||||||||||||||");
+
+        
+        // are we fighting against bot?
+        if (player2State.IsBot)
+        {
+            // is the bot on the north side of gate?
+            if(player2.transform.position.z > GlobalSettings.PVPZoneZValue) return;
+        }
+        // if not, then are we in the pvp zone?
+        else
+        {
+            // is the enemy player south side of the gate?
+            if (player2.transform.position.z < GlobalSettings.PVPZoneZValue) return;
+        }
         
         // then we check if the combat states are "fightable"
         if (player1State.CombatState.Value != CombatState.Default) return;
