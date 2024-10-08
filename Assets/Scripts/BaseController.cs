@@ -10,14 +10,19 @@ public class BaseController : NetworkBehaviour
     [SerializeField] protected NetworkTransform networkTransform;
     [SerializeField] protected PlayerState playerState;
     public NetworkObject PlayerNetworkObject;
-    
+    private int _previousDirectionValue;
+
     // Declare a delegate
     public delegate void NpcDeathDelegate();
 
     // Declare an event of type NpcDeathDelegate
     public event NpcDeathDelegate OnNpcDeath;
-    
-    
+
+    protected virtual void Update()
+    {
+        animator.SetFloat("Speed", Mathf.Clamp(agent.velocity.magnitude, 0, 1f));
+    }
+
     protected virtual void Start()
     {
         agent.updateRotation = false;
@@ -57,7 +62,56 @@ public class BaseController : NetworkBehaviour
 
     public virtual void Move(Vector3 clickPosition, bool forceMovement = false)
     {
+        UpdateAnimator(clickPosition);
         agent.SetDestination(clickPosition);
+    }
+    
+    public virtual void UpdateAnimator(Vector3 clickPosition)
+    {
+        Vector3 moveVector = clickPosition - transform.position;
+        int directionValue = 0;
+    
+        // Normalize the moveVector to obtain the direction
+        Vector3 moveDirection = moveVector.normalized;
+
+        // check if we're going vertical
+        if (Mathf.Abs(moveDirection.z) > Mathf.Abs(moveDirection.x))
+        {
+            // going north
+            if (moveDirection.z > 0)
+            {
+                directionValue = 1;
+            }
+
+            // going south
+            if (moveDirection.z < 0)
+            {
+                directionValue = 0;
+            }
+        }
+        else
+        {
+            // going east
+            if (moveDirection.x > 0)
+            {
+                directionValue = 2;
+            }
+
+            // going west
+            if (moveDirection.x < 0)
+            {
+                directionValue = 3;
+            }
+        }
+
+        if (directionValue != _previousDirectionValue)
+        {
+            
+            animator.SetInteger("Direction", directionValue);
+            _previousDirectionValue = directionValue;
+            
+            animator.SetTrigger("DirChange");
+        }
     }
     
     public void OnDeath()

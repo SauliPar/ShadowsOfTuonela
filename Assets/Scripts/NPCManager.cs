@@ -45,6 +45,7 @@ public class NPCManager : NetworkBehaviour
 
         var instance = Instantiate(botPrefab, position, Quaternion.identity);
         var networkObject = instance.GetComponent<NetworkObject>();
+        instance.GetComponent<NPCMovement>().NpcManager = this;
         networkObject.Spawn();
         
         Debug.Log("on instantioitu");
@@ -62,11 +63,14 @@ public class NPCManager : NetworkBehaviour
         Invoke(nameof(SpawnNpc), 10f);
     }
 
-    // private void SpawnNpc()
-    // {
-    //     var randomSpawnIndex = Random.Range(0, botSpawnPositions.Count);
-    //     var instance = Instantiate(botPrefab, botSpawnPositions[randomSpawnIndex], Quaternion.identity);
-    //     var networkObject = instance.GetComponent<NetworkObject>();
-    //     networkObject.Spawn();
-    // }
+    public Vector3 GetNextBotWalkPosition()
+    {
+        var randomIndex = Random.Range(0, botSpawnPositions.Count);
+
+        var randomPosition = botSpawnPositions[randomIndex];
+
+        var offsetPosition = new Vector3(Random.Range(-5, 5), 0, Random.Range(-5, 5));
+        
+        return randomPosition.position + offsetPosition;
+    }
 }

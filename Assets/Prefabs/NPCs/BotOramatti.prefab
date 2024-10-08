@@ -343,6 +343,7 @@ GameObject:
   - component: {fileID: 2381291470480497498}
   - component: {fileID: 2340442781753053523}
   - component: {fileID: 1051037018415100058}
+  - component: {fileID: 2813797444602567328}
   m_Layer: 3
   m_Name: BotOramatti
   m_TagString: Player
@@ -559,6 +560,22 @@ MonoBehaviour:
   networkTransform: {fileID: 2381291470480497498}
   playerState: {fileID: 2340442781753053523}
   PlayerNetworkObject: {fileID: 4051709765037989995}
+--- !u!114 &2813797444602567328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3268195258699114567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b95d3cb38494d24ea92cedf6f061fad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseController: {fileID: 1051037018415100058}
+  CurrentNpcState: 0
+  PlayerState: {fileID: 2340442781753053523}
+  NpcManager: {fileID: 0}
 --- !u!1 &3857657890026246619
 GameObject:
   m_ObjectHideFlags: 0

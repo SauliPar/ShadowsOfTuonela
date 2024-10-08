@@ -15,9 +15,7 @@ public class PlayerController : BaseController
     
     private float _timer = .5f;
     private float _timeOut = .5f;
-
-    private int _previousDirectionValue;
-
+    
     protected override void Start()
     {
         PlayerCanvasTransform.SetActive(false);
@@ -43,10 +41,10 @@ public class PlayerController : BaseController
     private void Update()
     {
         if (!IsOwner) return;
-
+        
         HandleInputs();
         
-        animator.SetFloat("Speed", Mathf.Clamp(agent.velocity.magnitude, 0, 1f));
+        base.Update();
     }
 
     private void HandleInputs()
@@ -204,55 +202,6 @@ public class PlayerController : BaseController
             
             InteractionUIMenu.ShowInteractionUIMenu(Input.mousePosition, hit.point);
             _menuIsOn = true;
-        }
-    }
-
-
-    private void UpdateAnimator(Vector3 clickPosition)
-    {
-        Vector3 moveVector = clickPosition - transform.position;
-        int directionValue = 0;
-    
-        // Normalize the moveVector to obtain the direction
-        Vector3 moveDirection = moveVector.normalized;
-
-        // check if we're going vertical
-        if (Mathf.Abs(moveDirection.z) > Mathf.Abs(moveDirection.x))
-        {
-            // going north
-            if (moveDirection.z > 0)
-            {
-                directionValue = 1;
-            }
-
-            // going south
-            if (moveDirection.z < 0)
-            {
-                directionValue = 0;
-            }
-        }
-        else
-        {
-            // going east
-            if (moveDirection.x > 0)
-            {
-                directionValue = 2;
-            }
-
-            // going west
-            if (moveDirection.x < 0)
-            {
-                directionValue = 3;
-            }
-        }
-
-        if (directionValue != _previousDirectionValue)
-        {
-            
-            animator.SetInteger("Direction", directionValue);
-            _previousDirectionValue = directionValue;
-            
-            animator.SetTrigger("DirChange");
         }
     }
 
