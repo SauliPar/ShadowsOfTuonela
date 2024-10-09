@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,42 +13,37 @@ public class PlayerState : NetworkBehaviour
     ///  side, but a value everyone should be synchronized with (that is, read permissions).
     /// </summary>
     ///
-    /// 
+    ///
+    [Header("Network Variables")]
     public NetworkVariable<int> Health = new NetworkVariable<int>(GlobalSettings.DefaultHealth);
-    // public NetworkVariable<int> Damage = new NetworkVariable<int>(0);
-    // public NetworkVariable<bool> IsDead = new NetworkVariable<bool>(false);
-    
     public NetworkVariable<CombatState> CombatState = new();
-
     public NetworkList<int> InventoryList = new();
-    
     public NetworkList<int> EquippedItems = new();
+    public NetworkVariable<FixedString128Bytes> PlayerTag = new NetworkVariable<FixedString128Bytes>();
 
+    [Header("Components")]
     public HealthBarScript HealthBarScript;
     public DamageTakenScript DamageTakenScript;
     public BaseController BaseController;
-
     public Animator Animator;
-    // public GameObject DroppedItemPrefab;
-    // public Item DroppedItem;
-    // public NetworkObject MyNetworkObject;
-
     public Inventory Inventory;
+    public TextMeshProUGUI PlayerTagComponent;
     
     private Dictionary<int, int> itemDictionary;
-
     public bool IsBot;
 
     protected override async void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
    
-        Debug.Log("tultiin playerstaten startiin");
+        // Debug.Log("tultiin playerstaten startiin");
         if (IsServer)
         {
+            var fixedString = new FixedString128Bytes("imabot");
+            PlayerTag.Value = fixedString;
+            
             if (IsBot)
             {
-                Debug.Log("oltiin botti :D");
                 itemDictionary = await LoadBotInventory();
                 foreach (var item in itemDictionary.Values)
                 {
@@ -61,15 +56,24 @@ public class PlayerState : NetworkBehaviour
         }
         else
         {
-            // Debug.Log("Tultiin PlayerStaten client-osioon");
+            if (!IsBot)
+            {
+                PlayerTagComponent.text = PlayerTag.Value.ToString();
+            }
         }
         
         CombatState.OnValueChanged += OnCharacterStateChanged;
         Health.OnValueChanged += OnHealthValueChanged;
-
+        PlayerTag.OnValueChanged += OnPlayerTagChanged;
+        
         if (IsBot) return;
        
         InventoryList.OnListChanged += OnInventoryListChanged;
+    }
+
+    private void OnPlayerTagChanged(FixedString128Bytes previousvalue, FixedString128Bytes newvalue)
+    {
+        PlayerTagComponent.text = newvalue.ToString();
     }
 
     public override void OnDestroy()
@@ -234,11 +238,9 @@ public class PlayerState : NetworkBehaviour
         Inventory.EquipItem(index);
     }
 
-    [Rpc(SendTo.Owner)]
-    public void DropItemToPlayerRpc(int droppedItemId)
+    [Rpc(SendTo.Server)]
+    public void ChangeNameTagServerRPC(FixedString128Bytes inputString)
     {
-        // var drop = Instantiate(DroppedItemPrefab, transform.position - new Vector3(0, 0.5f, 0), Quaternion.identity);
-        // // drop.GetComponent<NetworkObject>().SpawnWithOwnership(MyNetworkObject.NetworkObjectId);
-        // drop.GetComponent<DroppedItem>().SetupDroppedItem(ItemCatalogManager.Instance.GetItemById(droppedItemId));
+        PlayerTag.Value = inputString;
     }
 }
