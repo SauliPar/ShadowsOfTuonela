@@ -39,7 +39,7 @@ public class PlayerState : NetworkBehaviour
         // Debug.Log("tultiin playerstaten startiin");
         if (IsServer)
         {
-            var fixedString = new FixedString128Bytes("imabot");
+            var fixedString = new FixedString128Bytes("wiedenluch");
             PlayerTag.Value = fixedString;
             
             if (IsBot)
