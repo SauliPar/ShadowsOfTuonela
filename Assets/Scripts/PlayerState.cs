@@ -64,10 +64,10 @@ public class PlayerState : NetworkBehaviour
         
         CombatState.OnValueChanged += OnCharacterStateChanged;
         Health.OnValueChanged += OnHealthValueChanged;
-        PlayerTag.OnValueChanged += OnPlayerTagChanged;
         
         if (IsBot) return;
        
+        PlayerTag.OnValueChanged += OnPlayerTagChanged;
         InventoryList.OnListChanged += OnInventoryListChanged;
     }
 

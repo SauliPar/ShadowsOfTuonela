@@ -1,25 +1,23 @@
-using System;
+using UnityEngine;
 using TMPro;
 using Unity.Collections;
-using Unity.Netcode;
-using UnityEngine;
 using UnityEngine.UI;
 
-public class NameTagChanger : NetworkBehaviour
+public class SendMessageButton : MonoBehaviour
 {
     [SerializeField] private TMP_InputField inputField;
-    [SerializeField] private PlayerState playerState;
     [SerializeField] private Button button;
+    [SerializeField] private ChatMessage chatMessage;
 
     private void Start()
     {
-        button.onClick.AddListener(TryToChangeName);
+        button.onClick.AddListener(HandleMessage);
     }
 
-    public void TryToChangeName()
+    public void HandleMessage()
     {
         var fixedString = new FixedString128Bytes(inputField.text);
-        playerState.ChangeNameTagServerRPC(fixedString);
+        chatMessage.ShowTextMessageToEveryoneRpc(fixedString);
         inputField.text = "";
     }
 
