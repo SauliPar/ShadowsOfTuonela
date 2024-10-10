@@ -15,7 +15,6 @@ public class NPCManager : NetworkBehaviour
     {
         if (!IsServer) return;
 
-        Debug.Log("oltiin servu");
         for (int i = 0; i < NumberOfBotsInScene; i++)
         {
             SpawnNpc();
@@ -38,18 +37,13 @@ public class NPCManager : NetworkBehaviour
             position = botSpawnPositions[randomSpawnIndex].position;
         } 
         while (occupiedPositions.Contains(position));
-
-        Debug.Log("spawnataan");
-
+        
         occupiedPositions.Add(position);
 
         var instance = Instantiate(botPrefab, position, Quaternion.identity);
         var networkObject = instance.GetComponent<NetworkObject>();
         instance.GetComponent<NPCMovement>().NpcManager = this;
         networkObject.Spawn();
-        
-        Debug.Log("on instantioitu");
-
 
         // assume there's a Bot component with a death event we can subscribe to
         var baseController = instance.GetComponent<BaseController>();

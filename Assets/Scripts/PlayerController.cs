@@ -109,6 +109,11 @@ public class PlayerController : BaseController
     
         var currentGO = CurrentInput.GameObjectUnderPointer();
         if (currentGO != null && currentGO.layer == LayerMask.NameToLayer("UI")) return;
+
+        if (currentGO != null)
+        {
+            Debug.Log("Clicked gameobject: " + currentGO.name);
+        }
         
         // Check if the ray hits anything in the game world
         RaycastHit hit;
@@ -131,13 +136,11 @@ public class PlayerController : BaseController
             // let's see where we hit
             if (hit.collider.CompareTag("Player"))
             {
-                // Is the player not us?
-                if (!hit.transform.GetComponent<NetworkObject>().IsLocalPlayer)
-                {
-                    var playerNetworkObject = hit.transform.GetComponent<NetworkObject>();
-                    SendPlayerCombatRequestServerRPC(PlayerNetworkObject, playerNetworkObject);
-                    return;
-                }
+                Debug.Log("tagi oli player");
+
+                var playerNetworkObject = hit.transform.GetComponent<NetworkObject>();
+                SendPlayerCombatRequestServerRPC(PlayerNetworkObject, playerNetworkObject);
+                return;
             }
 
             if (hit.collider.CompareTag("Door"))
@@ -236,6 +239,7 @@ public class PlayerController : BaseController
         if (player1.TryGet(out NetworkObject player1NetworkObject) &&
             player2.TryGet(out NetworkObject player2NetworkObject))
         {
+            Debug.Log("combat requ lähetettiin");
             CombatManager.Instance.CheckCombatEligibility(player1NetworkObject, player2NetworkObject);
         }
     }

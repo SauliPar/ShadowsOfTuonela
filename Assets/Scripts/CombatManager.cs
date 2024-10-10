@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 
 public class CombatManager : Singleton<CombatManager>
@@ -40,7 +38,7 @@ public class CombatManager : Singleton<CombatManager>
         if (player1State.CombatState.Value != CombatState.Default) return;
         if (player2State.CombatState.Value != CombatState.Default) return;
 
-        Debug.Log("combat seems eligible");
+        // Debug.Log("combat seems eligible");
         
         ForcePlayerMovement(player1State, player2State, player2.transform.position);
         
@@ -130,7 +128,7 @@ public class Combat
 
     public void EndCombat()
     {
-        Debug.Log("ending combat");
+        // Debug.Log("ending combat");
 
         _combatIsOn = false;
         player1.StopCoroutine(StartChangingNetworkVariable());
@@ -143,10 +141,10 @@ public class Combat
     {
         // Debug.Log("Starting combat...");
 
-        Debug.Log("------------------------");
-        Debug.Log("player1 stats: " + _player1CombatStats[0] + ", " + _player1CombatStats[1] + ", " + _player1CombatStats[2]);
-        Debug.Log("player2 stats: " + _player2CombatStats[0] + ", " + _player2CombatStats[1] + ", " + _player2CombatStats[2]);
-        Debug.Log("------------------------");
+        // Debug.Log("------------------------");
+        // Debug.Log("player1 stats: " + _player1CombatStats[0] + ", " + _player1CombatStats[1] + ", " + _player1CombatStats[2]);
+        // Debug.Log("player2 stats: " + _player2CombatStats[0] + ", " + _player2CombatStats[1] + ", " + _player2CombatStats[2]);
+        // Debug.Log("------------------------");
 
         player1.StartCoroutine(StartChangingNetworkVariable());
     }
