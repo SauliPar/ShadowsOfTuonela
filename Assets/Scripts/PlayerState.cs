@@ -28,6 +28,7 @@ public class PlayerState : NetworkBehaviour
     public Animator Animator;
     public Inventory Inventory;
     public TextMeshProUGUI PlayerTagComponent;
+    public RespawnHandler RespawnHandler;
     
     private Dictionary<int, int> itemDictionary;
     public bool IsBot;
@@ -177,6 +178,7 @@ public class PlayerState : NetworkBehaviour
             }
             else
             {
+                RespawnHandler.ShowRespawnCanvas();
                 BaseController.OnDeath();
                 BaseController.TeleportCharacter(Vector3.zero);
             }

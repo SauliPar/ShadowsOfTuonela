@@ -15,6 +15,8 @@ public class PlayerController : BaseController
     
     private float _timer = .5f;
     private float _timeOut = .5f;
+
+    public bool IsRespawning;
     
     protected override void Start()
     {
@@ -41,6 +43,7 @@ public class PlayerController : BaseController
     private void Update()
     {
         if (!IsOwner) return;
+        if (IsRespawning) return;
         
         HandleInputs();
         
