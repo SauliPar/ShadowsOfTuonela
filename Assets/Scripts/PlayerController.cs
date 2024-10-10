@@ -9,6 +9,8 @@ public class PlayerController : BaseController
     public InteractionUIMenu InteractionUIMenu;
     public Collider PlayerCollider;
     public GameObject PlayerCanvasTransform;
+    public Transform CursorTransform;
+    public Animator CursorAnimator;
 
     private Transform _playerTransform;
     private bool _menuIsOn;
@@ -110,10 +112,10 @@ public class PlayerController : BaseController
         var currentGO = CurrentInput.GameObjectUnderPointer();
         if (currentGO != null && currentGO.layer == LayerMask.NameToLayer("UI")) return;
 
-        if (currentGO != null)
-        {
-            Debug.Log("Clicked gameobject: " + currentGO.name);
-        }
+        // if (currentGO != null)
+        // {
+        //     Debug.Log("Clicked gameobject: " + currentGO.name);
+        // }
         
         // Check if the ray hits anything in the game world
         RaycastHit hit;
@@ -136,7 +138,7 @@ public class PlayerController : BaseController
             // let's see where we hit
             if (hit.collider.CompareTag("Player"))
             {
-                Debug.Log("tagi oli player");
+                // Debug.Log("tagi oli player");
 
                 var playerNetworkObject = hit.transform.GetComponent<NetworkObject>();
                 SendPlayerCombatRequestServerRPC(PlayerNetworkObject, playerNetworkObject);
@@ -155,7 +157,9 @@ public class PlayerController : BaseController
 
                 return;
             }
-            
+
+            CursorTransform.position = hit.point;
+            CursorAnimator.Play("ClickMoveAnimation");
             Move(hit.point, false);
         }
     }
@@ -239,7 +243,7 @@ public class PlayerController : BaseController
         if (player1.TryGet(out NetworkObject player1NetworkObject) &&
             player2.TryGet(out NetworkObject player2NetworkObject))
         {
-            Debug.Log("combat requ lähetettiin");
+            // Debug.Log("combat requ lähetettiin");
             CombatManager.Instance.CheckCombatEligibility(player1NetworkObject, player2NetworkObject);
         }
     }
