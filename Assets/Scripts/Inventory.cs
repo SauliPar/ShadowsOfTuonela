@@ -28,10 +28,14 @@ public class Inventory : MonoBehaviour
 
         if (_inventoryOn)     
         {
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
             canvasGroup.alpha = 1f;
         }
         else
         {
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = 0f;
         }
     }

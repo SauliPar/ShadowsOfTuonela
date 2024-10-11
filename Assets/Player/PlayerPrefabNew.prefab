@@ -3835,6 +3835,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5972716560103173366}
     m_Modifications:
+    - target: {fileID: 6137933546253388395, guid: e8eeb5fdaa4122a45817ce7697981db1,
+        type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137933546253388395, guid: e8eeb5fdaa4122a45817ce7697981db1,
+        type: 3}
+      propertyPath: m_BlocksRaycasts
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6974118999599695305, guid: e8eeb5fdaa4122a45817ce7697981db1,
         type: 3}
       propertyPath: m_Name
