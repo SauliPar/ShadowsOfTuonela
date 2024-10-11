@@ -27,7 +27,7 @@ public class RespawnHandler : MonoBehaviour
 
       _timer -= Time.deltaTime;
 
-      textMeshProUGUI.text = _timer.ToString("F2");
+      textMeshProUGUI.text = _timer.ToString("F1");
       
       if (_timer <= 0)
       {

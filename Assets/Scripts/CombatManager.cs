@@ -1,25 +1,52 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class CombatManager : Singleton<CombatManager>
 {
     private HashSet<Combat> _combatList = new HashSet<Combat>();
-   
+
+    private Dictionary<ulong, float> cooldownDictionary = new Dictionary<ulong, float>();
+
+    private void Update()
+    {
+        var keysToRemove = new List<ulong>();
+        var keysToUpdate = new List<ulong>();
+
+        foreach (var valuePair in cooldownDictionary)
+        {
+            if (valuePair.Value - Time.deltaTime <= 0)
+            {
+                keysToRemove.Add(valuePair.Key);
+            }
+            else
+            {
+                keysToUpdate.Add(valuePair.Key);
+            }
+        }
+
+        foreach (var key in keysToRemove)
+        {
+            cooldownDictionary.Remove(key);
+        }
+
+        foreach (var key in keysToUpdate)
+        {
+            cooldownDictionary[key] -= Time.deltaTime;
+        }
+    }
+
     public void CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
         if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return;
+        if(cooldownDictionary.ContainsKey(player1.NetworkObjectId) || cooldownDictionary.ContainsKey(player2.NetworkObjectId)) return;
         
         // first we get playerState components
         var player1State = player1.GetComponent<PlayerState>();
         var player2State = player2.GetComponent<PlayerState>(); 
-        
-        // Debug.Log("||||||||||||||||");
-        // Debug.Log(player2.transform.position.z);
-        // Debug.Log(player2State.IsBot);
-        // Debug.Log("||||||||||||||||");
-
         
         // are we fighting against bot?
         if (player2State.IsBot)
@@ -59,9 +86,17 @@ public class CombatManager : Singleton<CombatManager>
             if (combat.player1 == playerTryingToFlee || combat.player2 == playerTryingToFlee)
             {
                 // we found a matching fight
+                if (combat.CombatCoroutine != null)
+                {
+                    CombatManager.Instance.StopCoroutine(combat.CombatCoroutine);
+                }                
+                
                 combat.EndCombat();
 
                 combatToRemove = combat;
+                
+                cooldownDictionary.Add(combat.player1.NetworkObjectId, GlobalSettings.CombatCooldown);
+                cooldownDictionary.Add(combat.player2.NetworkObjectId, GlobalSettings.CombatCooldown);
                 break;
             }
         }
@@ -93,6 +128,7 @@ public class Combat
     private int _hitcounter;
 
     private int[] _player1CombatStats, _player2CombatStats;
+    public Coroutine CombatCoroutine;
 
     public Combat(NetworkObject inputPlayer1, NetworkObject inputPlayer2, PlayerState inputPlayer1State, PlayerState inputPlayer2State)
     {
@@ -131,10 +167,17 @@ public class Combat
         // Debug.Log("ending combat");
 
         _combatIsOn = false;
-        player1.StopCoroutine(StartChangingNetworkVariable());
-        
-        player1State.CombatState.Value = CombatState.Default;
-        player2State.CombatState.Value = CombatState.Default;
+        // CombatManager.Instance.StopCoroutine(_combatCoroutine);
+
+        if (player1State != null)
+        {
+            player1State.CombatState.Value = CombatState.Default;
+        }
+
+        if (player2State != null)
+        {
+            player2State.CombatState.Value = CombatState.Default;
+        }
     }
 
     public void StartCombat()
@@ -146,7 +189,7 @@ public class Combat
         // Debug.Log("player2 stats: " + _player2CombatStats[0] + ", " + _player2CombatStats[1] + ", " + _player2CombatStats[2]);
         // Debug.Log("------------------------");
 
-        player1.StartCoroutine(StartChangingNetworkVariable());
+        CombatCoroutine = CombatManager.Instance.StartCoroutine(StartChangingNetworkVariable());
     }
     
     private IEnumerator StartChangingNetworkVariable()
@@ -159,6 +202,15 @@ public class Combat
 
         while (_combatIsOn)
         {
+            if (players[0].CombatState.Value == CombatState.Default ||
+                players[1].CombatState.Value == CombatState.Default
+                )
+            {
+                _combatIsOn = false;
+                EndCombat();
+                break;
+            }
+       
             playerIndex++;
             if (playerIndex >= players.Length) playerIndex = 0;
 

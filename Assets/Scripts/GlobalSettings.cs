@@ -3,7 +3,8 @@ using UnityEngine;
 
 public static class GlobalSettings
 {
-    public static int RespawnTimer => 10;
+    public static float CombatCooldown => 2f;
+    public static int RespawnTimer => 1;
     public static int DefaultHealth => 20;
     public static float MaximumDuelInitiateDistance => 2f;
     public static float MaximumLootDistance => 2f;
