@@ -158,8 +158,9 @@ public class PlayerController : BaseController
                 return;
             }
 
-            CursorTransform.position = hit.point;
-            CursorAnimator.Play("ClickMoveAnimation");
+            // CursorTransform.position = hit.point;
+            // CursorAnimator.Play("ClickMoveAnimation");
+            EventManager.TriggerEvent(Events.Click, hit.point);
             Move(hit.point, false);
         }
     }

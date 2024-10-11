@@ -45,4 +45,5 @@ public class EventManager : Singleton<EventManager>
 public enum Events
 {
     DamageEvent,
+    Click,
 }

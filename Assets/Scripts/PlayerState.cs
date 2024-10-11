@@ -110,7 +110,7 @@ public class PlayerState : NetworkBehaviour
             }
             
             newDictionary.Add(i, randomItemIndex);
-            Debug.Log("lisättiin botille itemi: " + ItemCatalogManager.Instance.GetItemById(newDictionary[i]).ItemName);
+            // Debug.Log("lisättiin botille itemi: " + ItemCatalogManager.Instance.GetItemById(newDictionary[i]).ItemName);
         }
         
         return Task.FromResult(newDictionary);
