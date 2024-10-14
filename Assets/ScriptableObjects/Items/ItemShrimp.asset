@@ -18,4 +18,4 @@ MonoBehaviour:
   ItemType: 1
   DropChance: 0.4
   UseDuration: 0
-  HealValue: 5
+  HealValue: 7

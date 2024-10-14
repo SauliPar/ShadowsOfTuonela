@@ -19,6 +19,6 @@ MonoBehaviour:
   DropChance: 0.05
   EquipType: 0
   AnimationTrigger: 4
-  StrengthValue: 40
-  AttackValue: 5
+  StrengthValue: 30
+  AttackValue: 10
   DefenseValue: 0
