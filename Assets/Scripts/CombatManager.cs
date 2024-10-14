@@ -216,6 +216,7 @@ public class Combat
 
             int calculatedDamage = CalculateDamage(playerIndex);
             _combatIsOn = players[playerIndex].DecreaseHealthPoints(calculatedDamage);
+            players[playerIndex].DealDamageRpc(calculatedDamage);
 
             if (!_combatIsOn)
             {

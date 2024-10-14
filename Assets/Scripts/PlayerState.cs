@@ -140,13 +140,12 @@ public class PlayerState : NetworkBehaviour
     {
         // HealthBarScript.StopInvoking();
         
-        var substractValue = previousvalue - newvalue;
+        // var substractValue = previousvalue - newvalue;
         HealthBarScript.SetHealthBarValue(newvalue);
         HealthBarScript.Show();
         
-        if (substractValue < 0) return;
+        // if (substractValue < 0) return;
        
-        DamageTakenScript.ShowDamage(substractValue);
 
         // HealthBarScript.StartHiding();
     }
@@ -164,6 +163,12 @@ public class PlayerState : NetworkBehaviour
 
         // should combat continue?
         return true;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void DealDamageRpc(int damageValue)
+    {
+        DamageTakenScript.ShowDamage(damageValue);
     }
 
     private void HealPlayer(Consumable healItem)
