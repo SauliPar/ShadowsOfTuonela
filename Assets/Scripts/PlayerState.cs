@@ -52,6 +52,10 @@ public class PlayerState : NetworkBehaviour
                     InventoryList.Add(item);
                 }
             }
+            // else
+            // {
+            //     InventoryList.Add(0);
+            // }
             
             // load inventory from cloud, and initialize it to the list
             // ToDo: Player inventory
@@ -255,4 +259,16 @@ public class PlayerState : NetworkBehaviour
     {
         PlayerTag.Value = inputString;
     }
+    
+    #if UNITY_EDITOR
+    
+    // Add a context menu named "Do Something" in the inspector
+    /// of the attached script.
+    [ContextMenu("SPAWN RANDOM ITEM")]
+    void SpawnRandomItemIntoInventory()
+    {
+        InventoryList.Add(ItemCatalogManager.Instance.GetRandomItemWithDropChances());
+    }
+    
+    #endif
 }
