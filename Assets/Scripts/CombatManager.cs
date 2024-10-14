@@ -254,7 +254,7 @@ public class Combat
 
         if (randomNumber <= hitChance)
         {
-            var maxDamageNumber = 5 + (strengthValue / 5);
+            var maxDamageNumber = 3 + (strengthValue / 5);
             
             return Random.Range(1, maxDamageNumber);
         }

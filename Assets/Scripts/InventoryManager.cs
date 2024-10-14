@@ -20,6 +20,15 @@ public class InventoryManager : Singleton<InventoryManager>
         var dropList = inputLoserPlayerState.InventoryList;
         
         // Debug.Log("häviäjän inventoryssa oli näin monta itemiä: " + dropList.Count);
+        if (dropList.Count > 0)
+        {
+            Debug.Log("yritettiin tiputtaa: " + ItemCatalogManager.Instance.GetItemById(dropList[0]));
+        }
+        else
+        {
+            Debug.Log("vihun inventory oli tyhjä D: ");
+
+        }
 
         // bots don't get loot, at least not now
         if (!inputWinningPlayerState.IsBot)
@@ -65,7 +74,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 dropData.NetworkObject = instanceNetworkObject;
                 dropData.IsCommunistic = true;
         
-                // Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
+                Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
 
                 droppedItems.Add(dropData);
             }

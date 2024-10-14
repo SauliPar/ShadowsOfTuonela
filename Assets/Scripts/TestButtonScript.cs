@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -33,22 +34,26 @@ public class TestButtonScript : MonoBehaviour
     
     public int GetRandomItemWithDropChances()
     {
-        float totalDropChance = 0;
+        // first we calculate the sum of all the items dropchance
+        float totalDropChance = ItemCatalogManager.Instance.ItemList.Sum(item => item.DropChance);
+        // then we take a random value from 0 to 1
+        var randomValue = Random.Range(0, totalDropChance);
+
+        // then we check if randomvalue is bigger than totaldropchance, this means that
+        // we did not "hit", then we drop nothing
+        // if (randomValue > totalDropChance) return -1;
+
+        float cumulativeDropChance = 0f;
+        
+        // then we loop through the itemlist to see if our random value was a "hit" in the dropchances
         foreach (var item in ItemCatalogManager.Instance.ItemList)
-            totalDropChance += item.DropChance;
-        
-        float randomPoint = Random.value * totalDropChance;
-        
-        for (int i = 0; i < ItemCatalogManager.Instance.ItemList.Count; i++)
         {
-            // If the randomPoint lands in the interval of this item's DropChance, we return the Item
-            if (randomPoint < ItemCatalogManager.Instance.ItemList[i].DropChance)
-                return ItemCatalogManager.Instance.ItemList[i].Id;
-            
-            // Otherwise, we subtract this item's DropChance from the randomly selected point
-            randomPoint -= ItemCatalogManager.Instance.ItemList[i].DropChance;
+            cumulativeDropChance += item.DropChance;
+            if (randomValue <= cumulativeDropChance)
+                return item.Id;
         }
-        // In a very rare case, when no section is selected, we could return null or any fallback value you'd like
+
+        // last if for some reason we failed, we return -1
         return -1;
     }
 }

@@ -105,7 +105,7 @@ public class PlayerState : NetworkBehaviour
                 ItemCatalogManager.Instance.GetRandomItemWithDropChances();
 
             // we do this if we returned nothing
-            if (randomItemIndex < 1)
+            if (randomItemIndex < 0)
             {
                 return Task.FromResult(newDictionary);
             }
@@ -138,6 +138,7 @@ public class PlayerState : NetworkBehaviour
         
         var substractValue = previousvalue - newvalue;
         HealthBarScript.SetHealthBarValue(newvalue);
+        HealthBarScript.Show();
         
         if (substractValue < 0) return;
        
