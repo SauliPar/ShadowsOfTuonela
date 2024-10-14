@@ -39,8 +39,15 @@ public class InventoryItem : MonoBehaviour
     private void OnButtonPress()
     {
         if (playerState.CombatState.Value != CombatState.Default) return;
-     
-        playerState.UseItemRpc(index);
+
+        if (ItemIsEquipped)
+        {
+            playerState.UnequipItemServerRpc(index);
+        }
+        else
+        {
+            playerState.UseItemRpc(index);
+        }
     }
 
     public void EquipItem()

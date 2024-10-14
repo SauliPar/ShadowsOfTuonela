@@ -108,6 +108,13 @@ public class Inventory : MonoBehaviour
         var inventorySlot = FindItemWithIndex(index);
         
         inventorySlot.EquipItem();
-        Debug.Log("you equipped: " + FindItemWithIndex(index) + ", that was on slot: " + index);
+        // Debug.Log("you equipped: " + FindItemWithIndex(index) + ", that was on slot: " + index);
+    }
+
+    public void UnequipItem(int index)
+    {
+        var inventorySlot = FindItemWithIndex(index);
+        
+        inventorySlot.UnequipItem();
     }
 }

@@ -232,6 +232,29 @@ public class PlayerState : NetworkBehaviour
             // ban player for cheating inventory :D
         }
     }
+    
+    [Rpc(SendTo.Server)]
+    public void UnequipItemServerRpc(int index)
+    {
+        if (CombatState.Value != global::CombatState.Default) return;
+
+        if (index >= 0 && index < InventoryList.Count)
+        {
+            var item = ItemCatalogManager.Instance.GetItemById(InventoryList[index]);
+
+            if (item.ItemType == ItemType.Equipment)
+            {
+                EquippedItems.Clear();
+                UnequipItemRpc(index);
+            }
+        }
+    }
+
+    [Rpc(SendTo.Owner)]
+    private void UnequipItemRpc(int index)
+    {
+        Inventory.UnequipItem(index);
+    }
 
     private void EquipItemCheck(int index)
     {
@@ -267,7 +290,7 @@ public class PlayerState : NetworkBehaviour
     [ContextMenu("SPAWN RANDOM ITEM")]
     void SpawnRandomItemIntoInventory()
     {
-        InventoryList.Add(ItemCatalogManager.Instance.GetRandomItemWithDropChances());
+        InventoryList.Add(ItemCatalogManager.Instance.GetRandomItemFromDatabase());
     }
     
     #endif
