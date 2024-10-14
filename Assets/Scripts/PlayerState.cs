@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -160,6 +161,14 @@ public class PlayerState : NetworkBehaviour
         return true;
     }
 
+    private void HealPlayer(Consumable healItem)
+    {
+        if (!IsServer) return;
+        if (Health.Value >= GlobalSettings.DefaultHealth) return;
+
+        Health.Value = Math.Min(Health.Value + healItem.HealValue, GlobalSettings.DefaultHealth);
+    }
+
     public void ResetHealth()
     {
         Health.Value = GlobalSettings.DefaultHealth;
@@ -204,7 +213,7 @@ public class PlayerState : NetworkBehaviour
             {
                 case ItemType.Consumable:
                     var consumableItem = (Consumable)item;
-                    Health.Value += consumableItem.HealValue;
+                    HealPlayer(consumableItem);
                     InventoryList.RemoveAt(index);
                     break;
                 case ItemType.Equipment:
