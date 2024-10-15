@@ -12,7 +12,7 @@ public class MultiplayerManager : MonoBehaviour
     
     private IServerQueryHandler _serverQueryHandler;
     private float _timer;
-    private float _timeInterval = 0.1f;
+    private float _timeInterval = 1;
 
     private async void Start()
     {
@@ -60,7 +60,7 @@ public class MultiplayerManager : MonoBehaviour
             {
                 _serverQueryHandler.CurrentPlayers = (ushort)NetworkManager.Singleton.ConnectedClientsIds.Count;
                 
-                // Debug.Log("CurrentPlayers are: " + _serverQueryHandler.CurrentPlayers);
+                Debug.Log("CurrentPlayers are: " + _serverQueryHandler.CurrentPlayers);
 
                 _serverQueryHandler.UpdateServerCheck();
             }

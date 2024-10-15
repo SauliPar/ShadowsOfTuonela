@@ -21,6 +21,7 @@ public class MainMenuManager : Singleton<MainMenuManager>
 
     private void StartGame()
     {
+        
         SceneManager.LoadScene(_gameSceneString);
     }
 }
