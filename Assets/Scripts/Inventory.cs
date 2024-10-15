@@ -127,6 +127,8 @@ public class Inventory : MonoBehaviour
 
     public void UnequipItem(int index)
     {
+        inventoryItems.RemoveAll(x => x == null);
+
         var inventorySlot = FindItemWithIndex(index);
         
         inventorySlot.UnequipItem();
