@@ -91,7 +91,7 @@ public class PlayerController : BaseController
     private void DoDefaultStuff()
     {
         HandleLeftClick();
-        HandleRightClick();
+        // HandleRightClick();
     }
     
     private void HandleLeftClick()
