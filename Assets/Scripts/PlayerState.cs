@@ -239,6 +239,17 @@ public class PlayerState : NetworkBehaviour
     }
     
     [Rpc(SendTo.Server)]
+    public void TryToDeleteItemRpc(int index)
+    {
+        if (CombatState.Value != global::CombatState.Default) return;
+
+        if (index >= 0 && index < InventoryList.Count)
+        {
+            InventoryList.RemoveAt(index);
+        }
+    }
+    
+    [Rpc(SendTo.Server)]
     public void UnequipItemServerRpc(int index)
     {
         if (CombatState.Value != global::CombatState.Default) return;
@@ -273,7 +284,10 @@ public class PlayerState : NetworkBehaviour
     
         EquippedItems.Add(itemToEquip.Id);
         
-        ItemIsEligibleToUseRpc(index);
+        InventoryList.RemoveAt(index);
+        InventoryList.Insert(0, itemToEquip.Id);
+        
+        // ItemIsEligibleToUseRpc(index);
     }
 
     [Rpc(SendTo.Owner)]
@@ -296,6 +310,14 @@ public class PlayerState : NetworkBehaviour
     void SpawnRandomItemIntoInventory()
     {
         InventoryList.Add(ItemCatalogManager.Instance.GetRandomItemFromDatabase());
+    }
+    [ContextMenu("SPAWN 10 RANDOM ITEMS")]
+    void Spawn10RandomItemsIntoInventory()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            InventoryList.Add(ItemCatalogManager.Instance.GetRandomItemFromDatabase());
+        }
     }
     
     #endif

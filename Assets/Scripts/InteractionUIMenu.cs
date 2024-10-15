@@ -106,7 +106,7 @@ public class InteractionUIMenu : MonoBehaviour
 
     public void ButtonPressed(InteractionUIElement interactionUIElement)
     {
-        Debug.Log("painoit nabbia :D");
+        // Debug.Log("painoit nabbia :D");
 
         InteractionType interactionType = interactionUIElement.InteractionType;
         

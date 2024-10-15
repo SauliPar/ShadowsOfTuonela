@@ -245,8 +245,8 @@ public class Combat
         int attackValue = damageReceiver[1];
         int defenseValue = damageDealer[2];
         
-        float hitChance = (float)attackValue / defenseValue;
-        hitChance = Mathf.Clamp(hitChance, 0.1f, 1f);
+        float hitChance = (float)attackValue / (defenseValue + 1);
+        hitChance = Mathf.Clamp(hitChance, 0.1f, .9f);
         
         // Debug.Log("hitchance: " + hitChance);
         

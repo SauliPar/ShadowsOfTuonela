@@ -8,7 +8,9 @@ public class InventoryItem : MonoBehaviour
     public TextMeshProUGUI textMesh;
     public Image itemIcon;
     public Button button;
+    public Button deleteButton;
     public GameObject backgroundImage;
+    public GameObject DeleteParent;
 
     private Color _defaultBackgroundColor;
 
@@ -34,6 +36,7 @@ public class InventoryItem : MonoBehaviour
         playerState = inputPlayerState;
 
         button.onClick.AddListener(OnButtonPress);
+        deleteButton.onClick.AddListener(OnDeleteButtonPress);
     }
 
     private void OnButtonPress()
@@ -49,6 +52,15 @@ public class InventoryItem : MonoBehaviour
             playerState.UseItemRpc(index);
         }
     }
+    private void OnDeleteButtonPress()
+    {
+        if (playerState.CombatState.Value != CombatState.Default) return;
+
+        ItemIsEquipped = false;
+        
+        playerState.TryToDeleteItemRpc(index);
+    }
+    
 
     public void EquipItem()
     {
@@ -68,6 +80,16 @@ public class InventoryItem : MonoBehaviour
     public void RemoveElement()
     {
         button.onClick.RemoveAllListeners();
+        deleteButton.onClick.RemoveAllListeners();
         Destroy(gameObject);
+    }
+
+    public void EnableDeleteButton()
+    {
+        DeleteParent.SetActive(true);
+    }
+    public void DisableDeleteButton()
+    {
+        DeleteParent.SetActive(false);
     }
 }

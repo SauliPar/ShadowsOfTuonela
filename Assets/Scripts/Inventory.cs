@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private GameObject inventorySlotPrefab;
     [SerializeField] private Transform inventoryContainer;
     [SerializeField] private PlayerState playerState;
+    [SerializeField] private Toggle toggleDelete;
 
     private bool _inventoryOn;
     private bool _initialRun = true;
@@ -38,6 +40,8 @@ public class Inventory : MonoBehaviour
             canvasGroup.blocksRaycasts = false;
             canvasGroup.alpha = 0f;
         }
+        
+        HandleToggleDeletePress();
     }
     
     public void SetupInventorySlots(NetworkList<int> itemIdList)
@@ -50,19 +54,21 @@ public class Inventory : MonoBehaviour
 
         // check if an item was equipped, we need to store it
 
-        bool itemWasEquipped = false;
-        int itemIndexWasEquipped = 0;
+        // bool itemWasEquipped = false;
+        // int itemIndexWasEquipped = 0;
         inventoryItems.RemoveAll(x => x == null);
         foreach (var inventoryItem in inventoryItems)
         {
-            if (inventoryItem.ItemIsEquipped)
-            {
-                itemWasEquipped = true;
-                itemIndexWasEquipped = inventoryItem.index;
-            }
+            // if (inventoryItem.ItemIsEquipped)
+            // {
+            //     itemWasEquipped = true;
+            //     itemIndexWasEquipped = inventoryItem.index;
+            // }
           
             inventoryItem.RemoveElement();
         }
+
+        bool itemIsEquipped = playerState.EquippedItems.Count > 0;
         
         int index = 0;
 
@@ -73,10 +79,18 @@ public class Inventory : MonoBehaviour
             
             component.InitializeElement(item, playerState, index);
 
-            if (index == itemIndexWasEquipped && itemWasEquipped)
+            if (itemIsEquipped && index == 0)
             {
                 component.EquipItem();
             }
+            else
+            {
+                component.UnequipItem();
+            }
+            // if (index == itemIndexWasEquipped && itemWasEquipped)
+            // {
+            //     component.EquipItem();
+            // }
             
             inventoryItems.Add(component);
 
@@ -116,5 +130,25 @@ public class Inventory : MonoBehaviour
         var inventorySlot = FindItemWithIndex(index);
         
         inventorySlot.UnequipItem();
+    }
+
+    public void HandleToggleDeletePress()
+    {
+        inventoryItems.RemoveAll(x => x == null);
+
+        if (toggleDelete.isOn)
+        {
+            foreach (var inventoryItem in inventoryItems)
+            {
+                inventoryItem.EnableDeleteButton();
+            }
+        }
+        else
+        {
+            foreach (var inventoryItem in inventoryItems)
+            {
+                inventoryItem.DisableDeleteButton();
+            }
+        }
     }
 }
