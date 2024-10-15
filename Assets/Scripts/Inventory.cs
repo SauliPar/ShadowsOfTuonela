@@ -72,12 +72,16 @@ public class Inventory : MonoBehaviour
         
         int index = 0;
 
+        bool isDeleteOn = toggleDelete.isOn;
+
         foreach (Item item in itemList)
         {
             var itemSlot = Instantiate(inventorySlotPrefab, inventoryContainer);
             var component = itemSlot.GetComponent<InventoryItem>();
             
             component.InitializeElement(item, playerState, index);
+           
+            if (isDeleteOn) component.EnableDeleteButton();
 
             if (itemIsEquipped && index == 0)
             {
@@ -87,10 +91,6 @@ public class Inventory : MonoBehaviour
             {
                 component.UnequipItem();
             }
-            // if (index == itemIndexWasEquipped && itemWasEquipped)
-            // {
-            //     component.EquipItem();
-            // }
             
             inventoryItems.Add(component);
 

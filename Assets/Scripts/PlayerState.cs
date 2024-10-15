@@ -243,8 +243,14 @@ public class PlayerState : NetworkBehaviour
     {
         if (CombatState.Value != global::CombatState.Default) return;
 
-        if (index >= 0 && index < InventoryList.Count)
+        if (index > 0 && index < InventoryList.Count)
         {
+            InventoryList.RemoveAt(index);
+        }
+
+        if (index == 0 && InventoryList.Count > 0)
+        {
+            EquippedItems.Clear();
             InventoryList.RemoveAt(index);
         }
     }
