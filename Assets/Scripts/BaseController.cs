@@ -7,6 +7,7 @@ public class BaseController : NetworkBehaviour
 {
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected NetworkAnimator networkAnimator;
     [SerializeField] protected NetworkTransform networkTransform;
     [SerializeField] protected PlayerState playerState;
     public NetworkObject PlayerNetworkObject;
@@ -52,8 +53,8 @@ public class BaseController : NetworkBehaviour
             }
         }
 
-        if (equippedWeapon == null) animator.SetTrigger(GlobalSettings.AnimationTriggers.FistFightTrigger.ToString());
-        else animator.SetTrigger(equippedWeapon.AnimationTrigger.ToString());
+        if (equippedWeapon == null) networkAnimator.SetTrigger(GlobalSettings.AnimationTriggers.FistFightTrigger.ToString());
+        else networkAnimator.SetTrigger(equippedWeapon.AnimationTrigger.ToString());
     }
 
     protected void ForcePosition(Vector3 fightPosition)
@@ -110,7 +111,7 @@ public class BaseController : NetworkBehaviour
             animator.SetInteger("Direction", directionValue);
             _previousDirectionValue = directionValue;
             
-            animator.SetTrigger("DirChange");
+            networkAnimator.SetTrigger("DirChange");
         }
     }
     

@@ -641,6 +641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 1812924480795043231}
   animator: {fileID: 8588949054571524328}
+  networkAnimator: {fileID: 8079819576870603780}
   networkTransform: {fileID: 2381291470480497498}
   playerState: {fileID: 2340442781753053523}
   PlayerNetworkObject: {fileID: 4051709765037989995}
