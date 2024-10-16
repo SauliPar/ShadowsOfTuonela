@@ -93,9 +93,17 @@ public class InventoryManager : Singleton<InventoryManager>
 
         if (dropData != null)
         {
-            playerPickingUp.GetComponent<PlayerState>()?.InventoryList.Add(dropData.ItemIdThatDropped);
-            dropData.NetworkObject.Despawn();
-            droppedItems.Remove(dropData);
+            var playerState = playerPickingUp.GetComponent<PlayerState>();
+            
+            if (playerState)
+            {
+                if (playerState.InventoryList.Count < GlobalSettings.InventoryMaxSize)
+                {
+                    playerState.InventoryList.Add(dropData.ItemIdThatDropped);
+                    dropData.NetworkObject.Despawn();
+                    droppedItems.Remove(dropData);
+                }
+            }
         }
     }
 }

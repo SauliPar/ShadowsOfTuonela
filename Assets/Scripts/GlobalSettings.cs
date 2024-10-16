@@ -13,6 +13,7 @@ public static class GlobalSettings
     public static Vector3 FightInitiatorPosition => new Vector3(1, 0, 0);
 
     public static Vector3 FightReceiverPosition => new Vector3(-1, 0, 0);
+    public static int InventoryMaxSize => 20;
 
     public enum AnimationTriggers
     {
