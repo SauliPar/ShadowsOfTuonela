@@ -206,6 +206,7 @@ public class Combat
             {
                 _combatIsOn = false;
                 EndCombat();
+                break;
             }
             
             if (players[0].CombatState.Value == CombatState.Default ||
