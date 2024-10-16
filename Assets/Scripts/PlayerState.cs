@@ -198,7 +198,7 @@ public class PlayerState : NetworkBehaviour
             else
             {
                 RespawnHandler.ShowRespawnCanvas();
-                BaseController.OnDeath();
+                BaseController.ResetAgentPath();
                 BaseController.TeleportCharacter(Vector3.zero);
             }
         }

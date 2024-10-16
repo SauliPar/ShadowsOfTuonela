@@ -38,6 +38,7 @@ public class BaseController : NetworkBehaviour
     protected void StartCombatAnimation(int faceIndex)
     {
         animator.SetInteger("Direction", faceIndex);
+        _previousDirectionValue = faceIndex;
 
         var equippedItems = playerState.EquippedItems;
         Equippable equippedWeapon = null;
@@ -106,7 +107,6 @@ public class BaseController : NetworkBehaviour
 
         if (directionValue != _previousDirectionValue)
         {
-            
             animator.SetInteger("Direction", directionValue);
             _previousDirectionValue = directionValue;
             
@@ -114,7 +114,7 @@ public class BaseController : NetworkBehaviour
         }
     }
     
-    public void OnDeath()
+    public void ResetAgentPath()
     {
         agent.ResetPath();
     }
