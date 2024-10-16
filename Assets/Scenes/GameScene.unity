@@ -7637,6 +7637,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gate
       objectReference: {fileID: 0}
+    - target: {fileID: 2123347614082941447, guid: 0c3e1c5218e82a04c92e64709a99637f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7145763425002785020, guid: 0c3e1c5218e82a04c92e64709a99637f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8123,10 +8128,20 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3593082373
       objectReference: {fileID: 0}
+    - target: {fileID: 1379293370320265167, guid: 0c3e1c5218e82a04c92e64709a99637f,
+        type: 3}
+      propertyPath: LastGate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2123347614082941447, guid: 0c3e1c5218e82a04c92e64709a99637f,
         type: 3}
       propertyPath: m_Name
       value: Gate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123347614082941447, guid: 0c3e1c5218e82a04c92e64709a99637f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7145763425002785020, guid: 0c3e1c5218e82a04c92e64709a99637f,
         type: 3}

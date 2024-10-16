@@ -14,6 +14,7 @@ public static class GlobalSettings
 
     public static Vector3 FightReceiverPosition => new Vector3(-1, 0, 0);
     public static int InventoryMaxSize => 20;
+    public static int EasterEggKillCount => 10;
 
     public enum AnimationTriggers
     {

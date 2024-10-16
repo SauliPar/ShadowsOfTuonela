@@ -147,7 +147,7 @@ public class PlayerController : BaseController
 
             if (hit.collider.CompareTag("Door"))
             {
-                hit.transform.GetComponent<DoorScript>().ToggleServerRpc();
+                hit.transform.GetComponent<DoorScript>().ToggleServerRpc(playerState.KillCount.Value);
             }
             
             if (hit.collider.CompareTag("DuelingNPC"))
