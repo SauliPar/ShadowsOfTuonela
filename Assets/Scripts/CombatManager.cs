@@ -202,6 +202,12 @@ public class Combat
 
         while (_combatIsOn)
         {
+            if (!player1State || !player2State )
+            {
+                _combatIsOn = false;
+                EndCombat();
+            }
+            
             if (players[0].CombatState.Value == CombatState.Default ||
                 players[1].CombatState.Value == CombatState.Default
                 )
