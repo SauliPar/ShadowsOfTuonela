@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -278,8 +279,14 @@ public class Combat
         // what happens to losing side
         losingPlayerState.DeathRpc();
         losingPlayerState.ResetHealth();
+        losingPlayerState.KillCount.Value = 0;
         
         // what happens to winning side
+        if (!losingPlayerState.IsBot)
+        {
+            winningPlayerState.KillCount.Value++;
+        }
+        
         InventoryManager.Instance.HandleDroppedItemData(winningPlayerState, losingPlayerState);
 
         EndCombat();

@@ -17,6 +17,7 @@ public class PlayerState : NetworkBehaviour
     ///
     [Header("Network Variables")]
     public NetworkVariable<int> Health = new NetworkVariable<int>(GlobalSettings.DefaultHealth);
+    public NetworkVariable<int> KillCount = new NetworkVariable<int>(0);
     public NetworkVariable<CombatState> CombatState = new();
     public NetworkList<int> InventoryList = new();
     public NetworkList<int> EquippedItems = new();
@@ -30,6 +31,7 @@ public class PlayerState : NetworkBehaviour
     public Inventory Inventory;
     public TextMeshProUGUI PlayerTagComponent;
     public RespawnHandler RespawnHandler;
+    public KillCountHandler KillCountHandler;
     
     private Dictionary<int, int> itemDictionary;
     public bool IsBot;
@@ -74,13 +76,26 @@ public class PlayerState : NetworkBehaviour
         if (IsBot) return;
        
         PlayerTag.OnValueChanged += OnPlayerTagChanged;
+        KillCount.OnValueChanged += OnKillCountChanged;
         InventoryList.OnListChanged += OnInventoryListChanged;
+    }
+
+    private void OnKillCountChanged(int previousvalue, int newvalue)
+    {
+        if (newvalue > 0)
+        {
+            KillCountHandler.ShowKillCount(newvalue);
+        }
+        else
+        {
+            KillCountHandler.HideKillCount();
+        }
     }
 
     private void OnPlayerTagChanged(FixedString128Bytes previousvalue, FixedString128Bytes newvalue)
     {
         PlayerTagComponent.text = newvalue.ToString();
-    }
+    } 
 
     public override void OnDestroy()
     {
