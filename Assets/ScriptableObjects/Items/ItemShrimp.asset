@@ -16,6 +16,6 @@ MonoBehaviour:
   ItemIcon: {fileID: 21300000, guid: 3697f0a3ac31ae142abc3d27a8d700b4, type: 3}
   Id: 2
   ItemType: 1
-  DropChance: 0.4
+  DropChance: 0.5
   UseDuration: 0
   HealValue: 7

@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f8e6cdff745c6864db4713ec4a6c8262, type: 3}
-  m_Name: ItemBronzeScimitar
+  m_Name: ItemDragonSword
   m_EditorClassIdentifier: 
-  ItemName: Bronze Scimitar
-  ItemIcon: {fileID: 8165431435635038343, guid: ddc57580462ee8d45a29dbc7e36465fc,
+  ItemName: Dragon Sword
+  ItemIcon: {fileID: -1296730880274164694, guid: 69052bf3ca958ad4cb691f2f53140787,
     type: 3}
-  Id: 3
+  Id: 4
   ItemType: 0
-  DropChance: 0.15
+  DropChance: 0.005
   EquipType: 0
-  AnimationTrigger: 3
-  StrengthValue: 10
+  AnimationTrigger: 5
+  StrengthValue: 50
   AttackValue: 10
-  DefenseValue: 5
+  DefenseValue: 3

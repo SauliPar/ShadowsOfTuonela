@@ -6113,37 +6113,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773018012}
   m_CullTransparentMesh: 1
---- !u!1 &773256597
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 773256598}
-  m_Layer: 0
-  m_Name: PLAYERSPAWNPOSITION
-  m_TagString: Untagged
-  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &773256598
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 773256597}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &778446969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7582,6 +7551,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 998069103}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1020245256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1020245257}
+  m_Layer: 0
+  m_Name: EasterEggSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1020245257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1020245256}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 64}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2108229685}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1024043407
 GameObject:
   m_ObjectHideFlags: 0
@@ -7636,6 +7636,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123347614082941447, guid: 0c3e1c5218e82a04c92e64709a99637f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7145763425002785020, guid: 0c3e1c5218e82a04c92e64709a99637f,
         type: 3}
@@ -8123,10 +8128,20 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 3593082373
       objectReference: {fileID: 0}
+    - target: {fileID: 1379293370320265167, guid: 0c3e1c5218e82a04c92e64709a99637f,
+        type: 3}
+      propertyPath: LastGate
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2123347614082941447, guid: 0c3e1c5218e82a04c92e64709a99637f,
         type: 3}
       propertyPath: m_Name
       value: Gate
+      objectReference: {fileID: 0}
+    - target: {fileID: 2123347614082941447, guid: 0c3e1c5218e82a04c92e64709a99637f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7145763425002785020, guid: 0c3e1c5218e82a04c92e64709a99637f,
         type: 3}
@@ -8667,6 +8682,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d254acccebe63704db2a574294ce8b34, type: 2}
   - {fileID: 11400000, guid: 907be97a3831d334d9b2151da4061ad1, type: 2}
   - {fileID: 11400000, guid: 7d48b2d75e9324c49b2f2fd07e4d4a6f, type: 2}
+  - {fileID: 11400000, guid: ec53e5995f2a97742bcd11793837b655, type: 2}
 --- !u!1 &1226780181
 GameObject:
   m_ObjectHideFlags: 0
@@ -14531,7 +14547,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1020245257}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2108229686
@@ -14548,6 +14565,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DroppedItemPrefab: {fileID: 5703866165846414287, guid: a9d22931115ca6242b2ea51c0aacf186,
     type: 3}
+  GroundLootPairs:
+  - LootSpawnTransform: {fileID: 534484554}
+    Loot: {fileID: 11400000, guid: d254acccebe63704db2a574294ce8b34, type: 2}
+  - LootSpawnTransform: {fileID: 1020245257}
+    Loot: {fileID: 11400000, guid: ec53e5995f2a97742bcd11793837b655, type: 2}
 --- !u!1 &2136157011
 GameObject:
   m_ObjectHideFlags: 0
@@ -14720,7 +14742,7 @@ MonoBehaviour:
   - {fileID: 1532515399}
   botPrefab: {fileID: 3268195258699114567, guid: e4107c7f786e7ca4d9f0defdb536424c,
     type: 3}
-  NumberOfBotsInScene: 3
+  NumberOfBotsInScene: 6
 --- !u!4 &2138364039
 Transform:
   m_ObjectHideFlags: 0
@@ -14840,6 +14862,5 @@ SceneRoots:
   - {fileID: 1202071359}
   - {fileID: 2108229685}
   - {fileID: 2138364039}
-  - {fileID: 773256598}
   - {fileID: 1723853961}
   - {fileID: 1357327328}

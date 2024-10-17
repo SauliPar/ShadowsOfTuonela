@@ -24,11 +24,18 @@ public class NPCMovement : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerState.CombatState.Value == CombatState.Combat ||
+            PlayerState.CombatState.Value == CombatState.Flee)
+        {
+            // here we do something when we are fighting
+            _timer = 8f;
+            CurrentNpcState = NpcState.Idle;
+            return;
+        }
+
         _timer += Time.deltaTime;
 
         if (_timer < _timeInterval) return;
-        
-        if (PlayerState.CombatState.Value != CombatState.Default) return;  
 
         switch (CurrentNpcState)
         {

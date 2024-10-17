@@ -10,6 +10,7 @@ public class DoorScript : NetworkBehaviour
     public GameObject DoorClosedTransform;
     public Collider DoorCollider;
     public NavMeshObstacle NavMeshObstacle;
+    public bool LastGate;
 
     public override void OnNetworkSpawn()
     {
@@ -70,14 +71,23 @@ public class DoorScript : NetworkBehaviour
     }
 
     [Rpc(SendTo.Server)]
-    public void ToggleServerRpc()
+    public void ToggleServerRpc(int killCount)
     {
         // this will cause a replication over the network
         // and ultimately invoke `OnValueChanged` on receivers
-        State.Value = !State.Value;
-        
-        Invoke(nameof(CloseDoor), 5f);
 
-        Debug.Log("toggleserverrpc kutsuttiin :D hyvää työtä ame :D");
+        if (LastGate)
+        {
+            if (killCount >= GlobalSettings.EasterEggKillCount)
+            {
+                State.Value = !State.Value;
+                Invoke(nameof(CloseDoor), 5f);
+            }
+        }
+        else
+        {
+            State.Value = !State.Value;
+            Invoke(nameof(CloseDoor), 5f);
+        }
     }
 }

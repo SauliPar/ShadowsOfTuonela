@@ -4,7 +4,7 @@ using UnityEngine;
 public static class GlobalSettings
 {
     public static float CombatCooldown => 2f;
-    public static int RespawnTimer => 1;
+    public static int RespawnTimer => 5;
     public static int DefaultHealth => 20;
     public static float MaximumDuelInitiateDistance => 2f;
     public static float MaximumLootDistance => 2f;
@@ -13,6 +13,9 @@ public static class GlobalSettings
     public static Vector3 FightInitiatorPosition => new Vector3(1, 0, 0);
 
     public static Vector3 FightReceiverPosition => new Vector3(-1, 0, 0);
+    public static int InventoryMaxSize => 20;
+    public static int EasterEggKillCount => 10;
+    public const float ItemDespawnTimeInSeconds = 600f;
 
     public enum AnimationTriggers
     {
@@ -20,6 +23,7 @@ public static class GlobalSettings
         DirChange,
         FistFightTrigger,
         BronzeScimitarFightTrigger,
-        Rune2hFightTrigger
+        Rune2hFightTrigger,
+        DragonSwordFightTrigger,
     }
 }

@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Cainos.PixelArtTopDown_Basic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,6 +10,58 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public GameObject DroppedItemPrefab;
     
+    private float _timer;
+    private float _timeInterval = 1f;
+    
+    public List<GroundLootPair> GroundLootPairs = new List<GroundLootPair>();
+    
+    private void Update()
+    {
+        _timer += Time.deltaTime;
+
+        if (_timer < _timeInterval) return;
+
+        for (var index = droppedItems.Count -1; index >= 0; index--)
+        {
+            var droppedItem = droppedItems[index];
+            if (Time.time - droppedItem.SpawnTime > droppedItem.DespawnTime)
+            {
+                droppedItem.DroppedItemNetworkObject.Despawn();
+                droppedItems.Remove(droppedItem);
+            }
+        }
+
+        _timer = 0;
+    }
+
+    private void Start ()
+    {
+        NetworkManager.Singleton.OnServerStarted += ServerStarted;
+        
+    }
+
+    private void ServerStarted()
+    {
+        foreach (var groundLootPair in GroundLootPairs)
+        {
+            SpawnOnTheGround(groundLootPair.LootSpawnTransform.position, groundLootPair.Loot.Id);
+        }    
+    }
+
+    public void SpawnOnTheGround(Vector3 spawnPosition, int itemToDrop)
+    {
+        var dropPosition = spawnPosition + new Vector3(0, .2f, 0);
+        
+        var instance = Instantiate(DroppedItemPrefab, dropPosition, Quaternion.identity);
+        var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+        
+        instance.GetComponent<DroppedItem>().SetupDroppedItem(itemToDrop);
+
+        instanceNetworkObject.Spawn();
+        
+        CreateDropData(itemToDrop, instanceNetworkObject.NetworkObjectId, instanceNetworkObject, null, 1200f);
+    }
+
     public void HandleDroppedItemData(PlayerState inputWinningPlayerState, PlayerState inputLoserPlayerState)
     {
         var winnerNetworkObject = inputWinningPlayerState.GetComponent<NetworkObject>();
@@ -43,16 +95,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
                 instanceNetworkObject.SpawnWithOwnership(winnerNetworkObject.OwnerClientId);
         
-                DropData dropData = new DropData();
-                dropData.PlayerWhoGotTheDrop = winnerNetworkObject;
-                dropData.ItemIdThatDropped = drop;
-                dropData.NetworkId = instanceNetworkObject.NetworkObjectId;
-                dropData.NetworkObject = instanceNetworkObject;
-                dropData.IsCommunistic = false;
-        
-                // Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
-
-                droppedItems.Add(dropData);
+                CreateDropData(drop, instanceNetworkObject.NetworkObjectId, instanceNetworkObject, winnerNetworkObject);
             }
         }
         // if the losing player is a bot
@@ -66,17 +109,8 @@ public class InventoryManager : Singleton<InventoryManager>
                 instance.GetComponent<DroppedItem>().SetupDroppedItem(drop);
 
                 instanceNetworkObject.SpawnWithOwnership(winnerNetworkObject.OwnerClientId);
-        
-                DropData dropData = new DropData();
-                dropData.PlayerWhoGotTheDrop = null;
-                dropData.ItemIdThatDropped = drop;
-                dropData.NetworkId = instanceNetworkObject.NetworkObjectId;
-                dropData.NetworkObject = instanceNetworkObject;
-                dropData.IsCommunistic = true;
-        
-                // Debug.Log("dropattiin: " + ItemCatalogManager.Instance.GetItemById(drop));
 
-                droppedItems.Add(dropData);
+                CreateDropData(drop, instanceNetworkObject.NetworkObjectId, instanceNetworkObject);
             }
         }
         
@@ -86,25 +120,70 @@ public class InventoryManager : Singleton<InventoryManager>
         
         // ToDo: add a timer to change the ownership
     }
+    
+    public void CreateDropData(int inputItemIdThatDropped, ulong inputDroppedItemNetworkId, NetworkObject droppedItemNetworkObject, NetworkObject inputPlayerNetworkObject = null,
+        float inputDespawnTime = GlobalSettings.ItemDespawnTimeInSeconds)
+    {
+        var dropData = new DropData(
+            playerNetworkObject: inputPlayerNetworkObject, 
+            itemIdThatDropped: inputItemIdThatDropped, 
+            droppedItemNetworkId: inputDroppedItemNetworkId, 
+            droppedItemNetworkObject: droppedItemNetworkObject, 
+            isCommunistic: true,
+            spawnTime: Time.time,
+            despawnTime: inputDespawnTime
+            );
+
+        droppedItems.Add(dropData);
+    }
 
     public void TryToPickUpItem(ulong droppedItemId, NetworkObject playerPickingUp)
     {
-        var dropData = droppedItems.FirstOrDefault(x => x.NetworkId == droppedItemId);
+        var dropData = droppedItems.FirstOrDefault(x => x.DroppedItemNetworkId == droppedItemId);
 
         if (dropData != null)
         {
-            playerPickingUp.GetComponent<PlayerState>()?.InventoryList.Add(dropData.ItemIdThatDropped);
-            dropData.NetworkObject.Despawn();
-            droppedItems.Remove(dropData);
+            var playerState = playerPickingUp.GetComponent<PlayerState>();
+            
+            if (playerState)
+            {
+                if (playerState.InventoryList.Count < GlobalSettings.InventoryMaxSize)
+                {
+                    playerState.InventoryList.Add(dropData.ItemIdThatDropped);
+                    dropData.DroppedItemNetworkObject.Despawn();
+                    droppedItems.Remove(dropData);
+                }
+            }
         }
     }
 }
 
 public class DropData
 {
-    public NetworkObject PlayerWhoGotTheDrop;
+    public NetworkObject PlayerNetworkObject;
     public int ItemIdThatDropped;
-    public ulong NetworkId;
-    public NetworkObject NetworkObject;
+    public ulong DroppedItemNetworkId;
+    public NetworkObject DroppedItemNetworkObject;
     public bool IsCommunistic;
+    public float SpawnTime;
+    public float DespawnTime;
+    
+    public DropData(NetworkObject playerNetworkObject, int itemIdThatDropped, ulong droppedItemNetworkId, 
+        NetworkObject droppedItemNetworkObject, bool isCommunistic, float spawnTime, float despawnTime)
+    {
+        PlayerNetworkObject = playerNetworkObject;
+        ItemIdThatDropped = itemIdThatDropped;
+        DroppedItemNetworkId = droppedItemNetworkId;
+        DroppedItemNetworkObject = droppedItemNetworkObject;
+        IsCommunistic = isCommunistic;
+        SpawnTime = spawnTime;
+        DespawnTime = despawnTime;
+    }
+}
+
+[Serializable]
+public class GroundLootPair
+{
+    public Transform LootSpawnTransform;
+    public Item Loot;
 }
