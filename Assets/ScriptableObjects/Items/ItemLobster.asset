@@ -17,6 +17,6 @@ MonoBehaviour:
     type: 3}
   Id: 1
   ItemType: 1
-  DropChance: 0.2
+  DropChance: 0.25
   UseDuration: 0
   HealValue: 15
