@@ -22,4 +22,4 @@ MonoBehaviour:
   AnimationTrigger: 5
   StrengthValue: 50
   AttackValue: 10
-  DefenseValue: 0
+  DefenseValue: 3
