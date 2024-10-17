@@ -14818,7 +14818,7 @@ MonoBehaviour:
   - {fileID: 1532515399}
   botPrefab: {fileID: 3268195258699114567, guid: e4107c7f786e7ca4d9f0defdb536424c,
     type: 3}
-  NumberOfBotsInScene: 3
+  NumberOfBotsInScene: 6
 --- !u!4 &2138364039
 Transform:
   m_ObjectHideFlags: 0
