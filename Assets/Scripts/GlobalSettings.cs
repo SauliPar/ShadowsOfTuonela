@@ -22,6 +22,7 @@ public static class GlobalSettings
         DirChange,
         FistFightTrigger,
         BronzeScimitarFightTrigger,
-        Rune2hFightTrigger
+        Rune2hFightTrigger,
+        DragonSwordFightTrigger,
     }
 }
