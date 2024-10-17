@@ -10,14 +10,14 @@ public class CombatManager : Singleton<CombatManager>
 {
     private HashSet<Combat> _combatList = new HashSet<Combat>();
 
-    private Dictionary<ulong, float> cooldownDictionary = new Dictionary<ulong, float>();
+    public Dictionary<ulong, float> CooldownDictionary = new Dictionary<ulong, float>();
 
     private void Update()
     {
         var keysToRemove = new List<ulong>();
         var keysToUpdate = new List<ulong>();
 
-        foreach (var valuePair in cooldownDictionary)
+        foreach (var valuePair in CooldownDictionary)
         {
             if (valuePair.Value - Time.deltaTime <= 0)
             {
@@ -31,19 +31,19 @@ public class CombatManager : Singleton<CombatManager>
 
         foreach (var key in keysToRemove)
         {
-            cooldownDictionary.Remove(key);
+            CooldownDictionary.Remove(key);
         }
 
         foreach (var key in keysToUpdate)
         {
-            cooldownDictionary[key] -= Time.deltaTime;
+            CooldownDictionary[key] -= Time.deltaTime;
         }
     }
 
     public void CheckCombatEligibility(NetworkObject player1, NetworkObject player2)
     {
         if (Vector3.Distance(player1.transform.position, player2.transform.position) > GlobalSettings.MaximumDuelInitiateDistance) return;
-        if(cooldownDictionary.ContainsKey(player1.NetworkObjectId) || cooldownDictionary.ContainsKey(player2.NetworkObjectId)) return;
+        if(CooldownDictionary.ContainsKey(player1.NetworkObjectId) || CooldownDictionary.ContainsKey(player2.NetworkObjectId)) return;
         
         // first we get playerState components
         var player1State = player1.GetComponent<PlayerState>();
@@ -96,8 +96,6 @@ public class CombatManager : Singleton<CombatManager>
 
                 combatToRemove = combat;
                 
-                cooldownDictionary.Add(combat.player1.NetworkObjectId, GlobalSettings.CombatCooldown);
-                cooldownDictionary.Add(combat.player2.NetworkObjectId, GlobalSettings.CombatCooldown);
                 break;
             }
         }
@@ -168,7 +166,9 @@ public class Combat
         // Debug.Log("ending combat");
 
         _combatIsOn = false;
-        // CombatManager.Instance.StopCoroutine(_combatCoroutine);
+        
+        CombatManager.Instance.CooldownDictionary.Add(player1.NetworkObjectId, GlobalSettings.CombatCooldown);
+        CombatManager.Instance.CooldownDictionary.Add(player2.NetworkObjectId, GlobalSettings.CombatCooldown);
 
         if (player1State != null)
         {
