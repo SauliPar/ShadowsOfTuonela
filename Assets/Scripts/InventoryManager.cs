@@ -14,7 +14,7 @@ public class InventoryManager : Singleton<InventoryManager>
     private float _timeInterval = 1f;
     
     public List<GroundLootPair> GroundLootPairs = new List<GroundLootPair>();
-
+    
     private void Update()
     {
         _timer += Time.deltaTime;
@@ -122,7 +122,7 @@ public class InventoryManager : Singleton<InventoryManager>
     }
     
     public void CreateDropData(int inputItemIdThatDropped, ulong inputDroppedItemNetworkId, NetworkObject droppedItemNetworkObject, NetworkObject inputPlayerNetworkObject = null,
-        float inputDespawnTime = 600)
+        float inputDespawnTime = GlobalSettings.ItemDespawnTimeInSeconds)
     {
         var dropData = new DropData(
             playerNetworkObject: inputPlayerNetworkObject, 
