@@ -211,7 +211,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      RS_combat_animation_dragonsword_spritesheet_0: -8223905120427296891
+      RS_combat_animation_dragonsword_spritesheet_1: -4121375518431910282
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
