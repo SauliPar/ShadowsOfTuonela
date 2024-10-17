@@ -36,6 +36,8 @@ public class PlayerState : NetworkBehaviour
     private Dictionary<int, int> itemDictionary;
     public bool IsBot;
 
+    private List<int> playTestInventory = new List<int>() {1,1,1,2,2,2};
+
     protected override async void OnNetworkPostSpawn()
     {
         base.OnNetworkPostSpawn();
@@ -54,10 +56,13 @@ public class PlayerState : NetworkBehaviour
                     InventoryList.Add(item);
                 }
             }
-            // else
-            // {
-            //     InventoryList.Add(0);
-            // }
+            else
+            {
+                foreach (var id in playTestInventory)
+                {
+                    InventoryList.Add(id);
+                }
+            }
             
             // load inventory from cloud, and initialize it to the list
             // ToDo: Player inventory
