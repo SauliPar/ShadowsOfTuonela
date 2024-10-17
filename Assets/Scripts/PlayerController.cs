@@ -131,6 +131,7 @@ public class PlayerController : BaseController
                     {
                         // Handle interaction with dropped item
                         TryToPickUpItemServerRpc(droppedItem.NetworkObject.NetworkObjectId, PlayerNetworkObject);
+                        return;
                     }
                 }
             }
